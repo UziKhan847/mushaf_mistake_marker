@@ -48,4 +48,5 @@ app.*.map.json
 /lib/load_page
 /lib/drawable_path/drawable_path.g.dart
 /lib/mushaf/mushaf_page_data.g.dart
+/lib/mushaf/back_up.dart
 /assets

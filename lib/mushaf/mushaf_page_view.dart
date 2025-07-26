@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io' show Platform, File;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,14 +14,34 @@ class MushafPageView extends StatefulWidget {
 }
 
 class _MushafPageViewState extends State<MushafPageView> {
-  late final pageController = PageController(initialPage: 603);
+  late final pageController = PageController(initialPage: 0);
 
-  late Stream<MushafPageData?> data;
+  int prevPage = 0;
 
   @override
   void initState() {
     super.initState();
-    data = pageStream();
+
+    final initP = pageController.initialPage;
+    final initmushafP = initP + 1;
+
+    loadPage(initP, initmushafP);
+
+    if (initP > 0) {
+      loadPage(initP - 1, initmushafP - 1);
+    }
+
+    if (initP > 1) {
+      loadPage(initP - 2, initmushafP - 2);
+    }
+
+    if (initP < 603) {
+      loadPage(initP + 1, initmushafP + 1);
+    }
+
+    if (initP < 602) {
+      loadPage(initP + 2, initmushafP + 2);
+    }
   }
 
   @override
@@ -31,99 +50,81 @@ class _MushafPageViewState extends State<MushafPageView> {
     super.dispose();
   }
 
-  Stream<MushafPageData?> pageStream() async* {
-    final stopWatch = Stopwatch()..start();
-
-    for (int i = 0; i < 100; i++) {
-      if (mushafPages[i] != null) {
-        continue;
-      }
-
-      final fileString = await rootBundle.loadString('assets/${i + 1}.txt');
-
-      print('String loaded from ${i + 1}.txt');
-
+  Future<void> loadPage(int page, int mushafPage) async {
+    try {
+      final fileString = await rootBundle.loadString('assets/$mushafPage.txt');
+      print('String loaded from $mushafPage.txt');
       final json = await compute(jsonDecode, fileString);
-
-      print('Decoded json in computer');
-
+      print('Decoded json in compute');
       final data = MushafPageData.fromJson(json);
-
-      print('Converted Json to Mushaf Page ${i + 1}');
-
-      yield data;
+      print('Converted Json to Mushaf Page $mushafPage');
+      mushafPages[page] = data;
+      setState(() {});
+    } catch (e) {
+      print('Failed to load page: $e');
     }
-
-    stopWatch.stop();
-
-    print('Finish in: ${stopWatch.elapsedMilliseconds}');
   }
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: data,
-      builder: (context, asyncSnapshot) {
-        if (asyncSnapshot.hasError) {
-          return Center(child: Text('Error: ${asyncSnapshot.error}'));
+    return PageView.builder(
+      reverse: true,
+      onPageChanged: (page) async {
+        final swipedLeft = page > prevPage;
+
+        final mushafPage = page + 1;
+
+        if (swipedLeft) {
+          if (page < 602 && mushafPages[page + 2] == null) {
+            await loadPage(page + 2, mushafPage + 2);
+
+            if (page < 601 && mushafPages[page + 3] == null) {
+              await loadPage(page + 3, mushafPage + 3);
+            }
+
+            if (page < 600 && mushafPages[page + 4] == null) {
+              await loadPage(page + 4, mushafPage + 4);
+            }
+
+            if (page < 599 && mushafPages[page + 5] == null) {
+              await loadPage(page + 5, mushafPage + 5);
+            }
+          }
+        } else {
+          if (page > 1 && mushafPages[page - 2] == null) {
+            await loadPage(page - 2, mushafPage - 2);
+
+            if (page > 2 && mushafPages[page - 3] == null) {
+              await loadPage(page - 3, mushafPage - 3);
+            }
+
+            if (page > 3 && mushafPages[page - 4] == null) {
+              await loadPage(page - 4, mushafPage - 4);
+            }
+
+            if (page > 4 && mushafPages[page - 5] == null) {
+              await loadPage(page - 5, mushafPage - 5);
+            }
+          }
         }
 
-        if (asyncSnapshot.hasData) {
-          final data = asyncSnapshot.data!;
-
-          final index = data.pageNumber - 1;
-
-          mushafPages[index] = data;
-        }
-
-        if (mushafPages[5] != null) {
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              return PageView.builder(
-                // onPageChanged: (index) async {
-                //   final loadingPageN = 603 - index + 20;
-
-                //   if (mushafPages[loadingPageN - 1] == null) {
-                //     final fileString = await rootBundle.loadString(
-                //       'assets/$loadingPageN.txt',
-                //     );
-
-                //     print('String loaded from $loadingPageN.txt');
-
-                //     final json = await compute(jsonDecode, fileString);
-
-                //     print('Decoded json in computer');
-
-                //     final data = MushafPageData.fromJson(json);
-
-                //     print('Converted Json to Mushaf Page $loadingPageN');
-
-                //     mushafPages[loadingPageN - 1] = data;
-                //   }
-                // },
-                controller: pageController,
-                itemCount: 604,
-                itemBuilder: (context, index) {
-                  return MushafPageViewTile(
-                    mushafPage: mushafPages[603 - index],
-                    windowSize: Size(
-                      constraints.maxWidth,
-                      constraints.maxHeight,
-                    ),
-                  ); //604 - index (for backwards)
-                },
-              );
-            },
-          );
-        }
-
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 16,
-            children: [CircularProgressIndicator(), Text('Setting things up!')],
-          ),
-        );
+        prevPage = page;
+      },
+      controller: pageController,
+      itemCount: 604,
+      itemBuilder: (context, index) {
+        return mushafPages[index] == null
+            ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                spacing: 16,
+                children: [CircularProgressIndicator(), Text('Loading Page')],
+              ),
+            )
+            : MushafPageViewTile(
+              mushafPage: mushafPages[index],
+              windowSize: MediaQuery.of(context).size,
+            );
       },
     );
   }
