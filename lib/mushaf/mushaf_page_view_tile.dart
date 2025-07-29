@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:mushaf_mistake_marker/drawable_path/drawable_path.dart';
 import 'package:mushaf_mistake_marker/extensions/num_extension.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_page_data.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_page_painter.dart';
+import 'package:mushaf_mistake_marker/variables.dart';
 
 class MushafPageViewTile extends StatefulWidget {
   const MushafPageViewTile({
     super.key,
     required this.mushafPage,
     required this.windowSize,
+    required this.markedPaths,
   });
 
   //final int pageNumber;
   final MushafPageData? mushafPage;
   final Size windowSize;
+  final Map<String, MarkType> markedPaths;
 
   @override
   State<MushafPageViewTile> createState() => _MushafPageViewTileState();
@@ -32,15 +34,7 @@ class _MushafPageViewTileState extends State<MushafPageViewTile> {
 
   @override
   Widget build(BuildContext context) {
-    // if (widget.mushafPage == null) {
-    //   return Center(
-    //     child: Column(
-    //       mainAxisAlignment: MainAxisAlignment.center,
-    //       spacing: 16,
-    //       children: [CircularProgressIndicator(), Text('Loading Page')],
-    //     ),
-    //   );
-    // }
+    final markedPaths = widget.markedPaths;
 
     final wMm = widget.mushafPage!.width;
     final hMm = widget.mushafPage!.height;
@@ -59,12 +53,47 @@ class _MushafPageViewTileState extends State<MushafPageViewTile> {
               SizedBox(
                 width: w,
                 height: h,
-                child: CustomPaint(
-                  painter: MushafPagePainter(
-                    paths: widget.mushafPage!.paths,
-                    vBoxSize: Size(wMm, hMm),
+                child: GestureDetector(
+                  onTapDown: (details) {
+                    final localPos = details.localPosition;
+
+                    final scaleX = w / wMm;
+                    final scaleY = h / hMm;
+
+                    final scaledPoint = Offset(
+                      localPos.dx / scaleX,
+                      localPos.dy / scaleY,
+                    );
+
+                    for (final drawablePath in widget.mushafPage!.paths) {
+                      if (drawablePath.path.contains(scaledPoint)) {
+                        final id = drawablePath.id;
+
+                        switch (markedPaths[id]) {
+                          case MarkType.doubt:
+                            markedPaths[id] = MarkType.mistake;
+                          case MarkType.mistake:
+                            markedPaths[id] = MarkType.oldMistake;
+                          case MarkType.oldMistake:
+                            markedPaths[id] = MarkType.tajwid;
+                          case MarkType.tajwid:
+                            markedPaths.remove(id);
+                          default:
+                            markedPaths[id] = MarkType.doubt;
+                        }
+
+                        setState(() {});
+                      }
+                    }
+                  },
+                  child: CustomPaint(
+                    painter: MushafPagePainter(
+                      paths: widget.mushafPage!.paths,
+                      vBoxSize: Size(wMm, hMm),
+                      markedPaths: Map.from(markedPaths),
+                      pageNumber: widget.mushafPage!.pageNumber,
+                    ),
                   ),
-                  willChange: false,
                 ),
               ),
               Text(
