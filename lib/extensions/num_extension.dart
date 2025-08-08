@@ -1,5 +1,5 @@
 extension NumExtension on num {
-  String toArabic() {
+  String get toArabic {
     final westernToArabic = {
       '0': '٠',
       '1': '١',

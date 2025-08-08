@@ -43,9 +43,8 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-/lib/pagedata
-/lib/svgjson
-/lib/load_page
+/lib/page_data/page_data.g.dart
+/lib/page_data/pages.g.dart
 /lib/drawable_path/drawable_path.g.dart
 /lib/mushaf/mushaf_page_data.g.dart
 /lib/mushaf/back_up.dart

@@ -1,16 +1,24 @@
 import 'dart:convert';
+import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mushaf_mistake_marker/mushaf/mushaf_page_data.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_page_loading.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_page_view_tile.dart';
+import 'package:mushaf_mistake_marker/page_data/pages.dart';
+import 'package:mushaf_mistake_marker/png/png_data.dart';
+import 'package:mushaf_mistake_marker/png/png_page.dart';
 import 'package:mushaf_mistake_marker/variables.dart';
 
 class MushafPageView extends StatefulWidget {
-  const MushafPageView({super.key, required this.pageController});
+  const MushafPageView({
+    super.key,
+    required this.pageController,
+    required this.pages,
+  });
 
   final PageController pageController;
+  final Pages pages;
 
   @override
   State<MushafPageView> createState() => _MushafPageViewState();
@@ -21,13 +29,17 @@ class _MushafPageViewState extends State<MushafPageView> {
 
   int prevPage = 0;
 
-  final List<Map<String, MarkType>> markedPgs = List.generate(604, (_) => {}, growable: false);
+  final List<Map<String, MarkType>> markedPgs = List.generate(
+    604,
+    (_) => {},
+    growable: false,
+  );
 
   @override
   void initState() {
     super.initState();
     final initPage = pageController.initialPage;
-    preFetchPages(initPage);
+    preFetchPngPages(initPage);
   }
 
   @override
@@ -36,42 +48,94 @@ class _MushafPageViewState extends State<MushafPageView> {
     super.dispose();
   }
 
-  //HELPER METHODS
-  Future<void> fetchPage(int page) async {
+
+
+  Future<void> fetchPngPageData(
+    int pageNumber,
+    List<PngData> _pngDataList,
+  ) async {
     try {
-      final fileString = await rootBundle.loadString('assets/${page + 1}.txt');
-      final json = await compute(jsonDecode, fileString);
-      final data = MushafPageData.fromJson(json);
-      mushafPages[page] = data;
-      setState(() {});
-      print('Succesfully loaded page ${page + 1}');
+      final manifest = await rootBundle.loadString(
+        'assets/manifests/$pageNumber.json',
+      );
+
+      final json = await compute(jsonDecode, manifest) as List<dynamic>;
+
+      for (final e in json) {
+        final pngData = PngData.fromJson(e);
+
+        _pngDataList.add(pngData);
+      }
     } catch (e) {
-      print('Failed to load page ${page + 1}: $e');
+      throw Exception('Exception. Error message: $e');
     }
   }
 
-  void clearPage(int page) {
-    mushafPages[page] = null;
-    print('Cleared page ${page + 1}');
+  Future<ui.Image> fetchPngImg(String id, int pageNumber) async {
+    try {
+      final imgFile = await rootBundle.load('assets/webp/$pageNumber/$id.webp');
+
+      final codec = await ui.instantiateImageCodec(
+        imgFile.buffer.asUint8List(),
+      );
+
+      final frame = await codec.getNextFrame();
+
+      return frame.image;
+    } catch (e) {
+      throw Exception('Exception. Error message: $e');
+    }
   }
 
-  void preFetchPages(int initPage) {
-    fetchPage(initPage);
+  Future<void> fetchPngPageImgs(
+    int index,
+    int pageNumber,
+    List<PngData> _pngDataList,
+  ) async {
+    for (final e in _pngDataList) {
+      final image = await fetchPngImg(e.id, pageNumber);
+      final page = pngMushaf.pages[index];
+
+      page.pageImages[e.id] = image;
+    }
+  }
+
+  Future<void> fetchPngMushafPage(int index) async {
+    final page = pngMushaf.pages[index];
+
+    if (page.pngDataList.isEmpty) {
+      await fetchPngPageData(index + 1, page.pngDataList);
+    }
+
+    if (page.pageImages.isEmpty) {
+      await fetchPngPageImgs(index, index + 1, page.pngDataList);
+    }
+
+    setState(() {});
+  }
+
+  void clearPngPageImg(int index) {
+    final page = pngMushaf.pages[index];
+    page.pageImages.clear();
+  }
+
+  void preFetchPngPages(int initPage) {
+    fetchPngMushafPage(initPage);
 
     if (initPage > 0) {
-      fetchPage(initPage - 1);
+      fetchPngMushafPage(initPage - 1);
     }
 
     if (initPage > 1) {
-      fetchPage(initPage - 2);
+      fetchPngMushafPage(initPage - 2);
     }
 
     if (initPage < 603) {
-      fetchPage(initPage + 1);
+      fetchPngMushafPage(initPage + 1);
     }
 
     if (initPage < 602) {
-      fetchPage(initPage + 2);
+      fetchPngMushafPage(initPage + 2);
     }
   }
 
@@ -80,17 +144,25 @@ class _MushafPageViewState extends State<MushafPageView> {
 
     if (swipedLeft) {
       if (page > 2) {
-        clearPage(page - 3);
+        clearPngPageImg(page - 3);
       }
       if (page < 602) {
-        await fetchPage(page + 2);
+        try {
+          await fetchPngMushafPage(page + 2);
+        } catch (e) {
+          throw Exception('Exception. Error message: $e');
+        }
       }
     } else {
       if (page < 601) {
-        clearPage(page + 3);
+        clearPngPageImg(page + 3);
       }
       if (page > 1) {
-        await fetchPage(page - 2);
+        try {
+          await fetchPngMushafPage(page - 2);
+        } catch (e) {
+          throw Exception('Exception. Error message: $e');
+        }
       }
     }
 
@@ -107,13 +179,23 @@ class _MushafPageViewState extends State<MushafPageView> {
         controller: pageController,
         itemCount: 604,
         itemBuilder: (context, index) {
-          return mushafPages[index] == null
-              ? MushafPageLoading()
-              : MushafPageViewTile(
-                mushafPage: mushafPages[index],
-                windowSize: MediaQuery.of(context).size,
-                markedPaths: markedPgs[index],
-              );
+          final pngPage = pngMushaf.pages[index];
+          final pageData = widget.pages.pageData[index];
+
+          final numOfEle = pngPage.pngDataList.length;
+          final numOfImgs = pngPage.pageImages.length;
+
+          final isLoaded =
+              numOfImgs == numOfEle && pngPage.pageImages.isNotEmpty;
+
+          return isLoaded
+              ? MushafPageViewTile(
+                  windowSize: MediaQuery.of(context).size,
+                  markedPaths: markedPgs[index],
+                  pngPage: pngPage,
+                  pageData: pageData,
+                )
+              : MushafPageLoading();
         },
       ),
     );

@@ -6,7 +6,7 @@ publish_to: 'none'
 version: 1.0.0+4
 
 environment:
-  sdk: ^3.7.2
+  sdk: ^3.8.1
 
 dependencies:
   flutter:
@@ -14,8 +14,6 @@ dependencies:
 
   cupertino_icons: ^1.0.8
   flutter_svg: ^2.2.0
-  svg_path_parser:
-    path: packages/svg_path_parser
   xml: ^6.5.0
   flutter_riverpod: ^2.6.1
   http: ^1.4.0
@@ -38,7 +36,18 @@ flutter:
 
   assets:
     - images/
-    - assets/
+    - assets/page_data.txt
+    - assets/manifests/
+    - assets/webp/1/
+    - assets/webp/2/
+    - assets/webp/3/
+    - assets/webp/4/
+    - assets/webp/5/
+    - assets/webp/6/
+    - assets/webp/7/
+    - assets/webp/8/
+    - assets/webp/9/
+    - assets/webp/10/
 
   fonts:
     - family: ScheherazadeNew

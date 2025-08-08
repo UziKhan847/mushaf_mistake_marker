@@ -1,16 +1,12 @@
-import 'package:mushaf_mistake_marker/mushaf/mushaf_page_data.dart';
 
-final List<MushafPageData?> mushafPages = List.generate(
-  604,
-  (_) => null,
-  growable: false,
-);
+import 'package:mushaf_mistake_marker/png/png_mushaf.dart';
+import 'package:mushaf_mistake_marker/png/png_page.dart';
+
 
 //final Map<String, MarkType> markedPaths = {};
 
-enum MarkType {
-mistake,
-oldMistake,
-doubt,
-tajwid;
-}
+final PngMushaf pngMushaf = PngMushaf(
+  pages: List.generate(604, (_) => PngPage(pageImages: {}, pngDataList: [])),
+);
+
+enum MarkType { mistake, oldMistake, doubt, tajwid }
