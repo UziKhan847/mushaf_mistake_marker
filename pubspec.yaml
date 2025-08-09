@@ -3,7 +3,7 @@ description: "A new Flutter project."
 
 publish_to: 'none' 
 
-version: 1.0.0+4
+version: 1.0.0+5
 
 environment:
   sdk: ^3.8.1
@@ -36,18 +36,30 @@ flutter:
 
   assets:
     - images/
-    - assets/page_data.txt
-    - assets/manifests/
-    - assets/webp/1/
-    - assets/webp/2/
-    - assets/webp/3/
-    - assets/webp/4/
-    - assets/webp/5/
-    - assets/webp/6/
-    - assets/webp/7/
-    - assets/webp/8/
-    - assets/webp/9/
-    - assets/webp/10/
+    - assets/page_data_12_scale.txt
+    - assets/manifests_12_scale/
+    - assets/webp_pages_12_scale/1/
+    - assets/webp_pages_12_scale/2/
+    - assets/webp_pages_12_scale/3/
+    - assets/webp_pages_12_scale/4/
+    - assets/webp_pages_12_scale/5/
+    - assets/webp_pages_12_scale/6/
+    - assets/webp_pages_12_scale/7/
+    - assets/webp_pages_12_scale/8/
+    - assets/webp_pages_12_scale/9/
+    - assets/webp_pages_12_scale/10/
+    - assets/webp_pages_12_scale/11/
+    - assets/webp_pages_12_scale/12/
+    - assets/webp_pages_12_scale/13/
+    - assets/webp_pages_12_scale/14/
+    - assets/webp_pages_12_scale/15/
+    - assets/webp_pages_12_scale/16/
+    - assets/webp_pages_12_scale/17/
+    - assets/webp_pages_12_scale/18/
+    - assets/webp_pages_12_scale/19/
+    - assets/webp_pages_12_scale/20/
+
+
 
   fonts:
     - family: ScheherazadeNew

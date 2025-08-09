@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_page_painter.dart';
 import 'package:mushaf_mistake_marker/page_data/page_data.dart';
-import 'package:mushaf_mistake_marker/png/png_page.dart';
+import 'package:mushaf_mistake_marker/image/image_page.dart';
 import 'package:mushaf_mistake_marker/variables.dart';
 
 class MushafPageViewTile extends StatefulWidget {
@@ -9,13 +9,13 @@ class MushafPageViewTile extends StatefulWidget {
     super.key,
     required this.windowSize,
     required this.markedPaths,
-    required this.pngPage,
+    required this.imagePage,
     required this.pageData,
   });
 
   //final int pageNumber;
   final Size windowSize;
-  final PngPage pngPage;
+  final ImagePage imagePage;
   final PageData pageData;
   final Map<String, MarkType> markedPaths;
 
@@ -52,13 +52,14 @@ class _MushafPageViewTileState extends State<MushafPageViewTile> {
   Widget build(BuildContext context) {
     final markedPaths = widget.markedPaths;
 
-    final pngDataList = widget.pngPage.pngDataList;
-    final pngImgs = widget.pngPage.pageImages;
+    final imageDataList = widget.imagePage.imageDataList;
+    final images = widget.imagePage.pageImages;
+    //final image = widget.imagePage.image;
 
     final pageW = widget.pageData.width;
     final pageH = widget.pageData.height;
 
-    final w = widget.windowSize.width * 0.8;
+    final w = widget.windowSize.width * 0.85;
 
     final h = w * (pageH / pageW);
 
@@ -82,13 +83,13 @@ class _MushafPageViewTileState extends State<MushafPageViewTile> {
                   localPos.dy / scaleY,
                 );
 
-                for (final e in pngDataList) {
+                for (final e in imageDataList) {
                   final (id, left, top, right, bottom, scaledX, scaledY) = (
                     e.id,
                     e.offset.dx,
                     e.offset.dy,
-                    e.origSize.width,
-                    e.origSize.height,
+                    e.origSize.width + e.offset.dx,
+                    e.origSize.height + e.offset.dy,
                     scaledPoint.dx,
                     scaledPoint.dy,
                   );
@@ -103,40 +104,31 @@ class _MushafPageViewTileState extends State<MushafPageViewTile> {
                   );
 
                   if (!id.contains(RegExp(r'[bc]')) && isClicked) {
+                    switch (markedPaths[id]) {
+                      case MarkType.doubt:
+                        markedPaths[id] = MarkType.mistake;
+                      case MarkType.mistake:
+                        markedPaths[id] = MarkType.oldMistake;
+                      case MarkType.oldMistake:
+                        markedPaths[id] = MarkType.tajwid;
+                      case MarkType.tajwid:
+                        markedPaths.remove(id);
+                      default:
+                        markedPaths[id] = MarkType.doubt;
+                    }
+
                     print('-----------------------------------');
                     print('Clicked Element: $id');
+
+                    setState(() {});
                   }
                 }
-
-                // for (final drawablePath in widget.mushafPage!.paths) {
-                //   if (drawablePath.path.getBounds().contains(scaledPoint)) {
-                //     final id = drawablePath.id;
-
-                //     if (!id.contains(RegExp(r'[bc]'))) {
-                //       switch (markedPaths[id]) {
-                //         case MarkType.doubt:
-                //           markedPaths[id] = MarkType.mistake;
-                //         case MarkType.mistake:
-                //           markedPaths[id] = MarkType.oldMistake;
-                //         case MarkType.oldMistake:
-                //           markedPaths[id] = MarkType.tajwid;
-                //         case MarkType.tajwid:
-                //           markedPaths.remove(id);
-                //         default:
-                //           markedPaths[id] = MarkType.doubt;
-                //       }
-
-                //       setState(() {});
-                //     }
-                //   }
-                // }
               },
               child: CustomPaint(
                 painter: MushafPagePainter(
-                  //paths: widget.mushafPage!.paths,
                   vBoxSize: Size(pageW, pageH),
                   markedPaths: Map.from(markedPaths),
-                  pngPage: widget.pngPage,
+                  imagePage: widget.imagePage,
                 ),
               ),
             ),

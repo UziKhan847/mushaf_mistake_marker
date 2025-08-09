@@ -6,8 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_page_loading.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_page_view_tile.dart';
 import 'package:mushaf_mistake_marker/page_data/pages.dart';
-import 'package:mushaf_mistake_marker/png/png_data.dart';
-import 'package:mushaf_mistake_marker/png/png_page.dart';
+import 'package:mushaf_mistake_marker/image/image_data.dart';
+import 'package:mushaf_mistake_marker/image/image_page.dart';
 import 'package:mushaf_mistake_marker/variables.dart';
 
 class MushafPageView extends StatefulWidget {
@@ -39,7 +39,7 @@ class _MushafPageViewState extends State<MushafPageView> {
   void initState() {
     super.initState();
     final initPage = pageController.initialPage;
-    preFetchPngPages(initPage);
+    preFetchImagePages(initPage);
   }
 
   @override
@@ -48,32 +48,40 @@ class _MushafPageViewState extends State<MushafPageView> {
     super.dispose();
   }
 
-
-
-  Future<void> fetchPngPageData(
+  Future<void> fetchImagePageData(
     int pageNumber,
-    List<PngData> _pngDataList,
+    List<ImageData> _imageDataList,
   ) async {
     try {
       final manifest = await rootBundle.loadString(
-        'assets/manifests/$pageNumber.json',
+        'assets/manifests_12_scale/$pageNumber.json',
       );
+
+      // final manifest = await rootBundle.loadString(
+      //   'assets/manifests_12_scale/$pageNumber.json',
+      // );
 
       final json = await compute(jsonDecode, manifest) as List<dynamic>;
 
       for (final e in json) {
-        final pngData = PngData.fromJson(e);
+        final imageData = ImageData.fromJson(e);
 
-        _pngDataList.add(pngData);
+        _imageDataList.add(imageData);
       }
     } catch (e) {
       throw Exception('Exception. Error message: $e');
     }
   }
 
-  Future<ui.Image> fetchPngImg(String id, int pageNumber) async {
+  Future<ui.Image> fetchImg(String id, int pageNumber) async {
     try {
-      final imgFile = await rootBundle.load('assets/webp/$pageNumber/$id.webp');
+      final imgFile = await rootBundle.load(
+        'assets/webp_pages_12_scale/$pageNumber/$id.webp',
+      );
+
+      // final imgFile = await rootBundle.load(
+      //   'assets/webp_12_scale/$pageNumber.webp',
+      // );
 
       final codec = await ui.instantiateImageCodec(
         imgFile.buffer.asUint8List(),
@@ -81,61 +89,70 @@ class _MushafPageViewState extends State<MushafPageView> {
 
       final frame = await codec.getNextFrame();
 
+      // imageMushaf.pages[index].image = frame.image;
+
       return frame.image;
     } catch (e) {
       throw Exception('Exception. Error message: $e');
     }
   }
 
-  Future<void> fetchPngPageImgs(
+  Future<void> fetchImagePageImgs(
     int index,
     int pageNumber,
-    List<PngData> _pngDataList,
+    List<ImageData> _imageDataList,
   ) async {
-    for (final e in _pngDataList) {
-      final image = await fetchPngImg(e.id, pageNumber);
-      final page = pngMushaf.pages[index];
+    for (final e in _imageDataList) {
+      final image = await fetchImg(e.id, pageNumber);
+      final page = imageMushaf.pages[index];
 
       page.pageImages[e.id] = image;
     }
   }
 
-  Future<void> fetchPngMushafPage(int index) async {
-    final page = pngMushaf.pages[index];
+  Future<void> fetchImageMushafPage(int index) async {
+    final page = imageMushaf.pages[index];
 
-    if (page.pngDataList.isEmpty) {
-      await fetchPngPageData(index + 1, page.pngDataList);
+    if (page.imageDataList.isEmpty) {
+      await fetchImagePageData(index + 1, page.imageDataList);
+      print('Succesfully fetched Data of Page ${index + 1}');
     }
 
     if (page.pageImages.isEmpty) {
-      await fetchPngPageImgs(index, index + 1, page.pngDataList);
+      //await fetchImg(index, index + 1);
+      await fetchImagePageImgs(index, index + 1, page.imageDataList);
+      print('Succesfully fetched Image of Page ${index + 1}');
     }
+
+    //print(page.image);
 
     setState(() {});
   }
 
-  void clearPngPageImg(int index) {
-    final page = pngMushaf.pages[index];
+  void clearImagePageImg(int index) {
+    final page = imageMushaf.pages[index];
     page.pageImages.clear();
+    //page.image = null;
+    print('Cleared Page: ${index + 1}');
   }
 
-  void preFetchPngPages(int initPage) {
-    fetchPngMushafPage(initPage);
+  void preFetchImagePages(int initPage) {
+    fetchImageMushafPage(initPage);
 
     if (initPage > 0) {
-      fetchPngMushafPage(initPage - 1);
+      fetchImageMushafPage(initPage - 1);
     }
 
     if (initPage > 1) {
-      fetchPngMushafPage(initPage - 2);
+      fetchImageMushafPage(initPage - 2);
     }
 
     if (initPage < 603) {
-      fetchPngMushafPage(initPage + 1);
+      fetchImageMushafPage(initPage + 1);
     }
 
     if (initPage < 602) {
-      fetchPngMushafPage(initPage + 2);
+      fetchImageMushafPage(initPage + 2);
     }
   }
 
@@ -144,22 +161,22 @@ class _MushafPageViewState extends State<MushafPageView> {
 
     if (swipedLeft) {
       if (page > 2) {
-        clearPngPageImg(page - 3);
+        clearImagePageImg(page - 3);
       }
       if (page < 602) {
         try {
-          await fetchPngMushafPage(page + 2);
+          await fetchImageMushafPage(page + 2);
         } catch (e) {
           throw Exception('Exception. Error message: $e');
         }
       }
     } else {
       if (page < 601) {
-        clearPngPageImg(page + 3);
+        clearImagePageImg(page + 3);
       }
       if (page > 1) {
         try {
-          await fetchPngMushafPage(page - 2);
+          await fetchImageMushafPage(page - 2);
         } catch (e) {
           throw Exception('Exception. Error message: $e');
         }
@@ -179,23 +196,23 @@ class _MushafPageViewState extends State<MushafPageView> {
         controller: pageController,
         itemCount: 604,
         itemBuilder: (context, index) {
-          final pngPage = pngMushaf.pages[index];
+          final imagePage = imageMushaf.pages[index];
           final pageData = widget.pages.pageData[index];
 
-          final numOfEle = pngPage.pngDataList.length;
-          final numOfImgs = pngPage.pageImages.length;
+          final numOfEle = imagePage.imageDataList.length;
+          final numOfImgs = imagePage.pageImages.length;
 
           final isLoaded =
-              numOfImgs == numOfEle && pngPage.pageImages.isNotEmpty;
+              numOfImgs == numOfEle && imagePage.pageImages.isNotEmpty;
 
-          return isLoaded
-              ? MushafPageViewTile(
+          return !isLoaded
+              ? MushafPageLoading()
+              : MushafPageViewTile(
                   windowSize: MediaQuery.of(context).size,
                   markedPaths: markedPgs[index],
-                  pngPage: pngPage,
+                  imagePage: imagePage,
                   pageData: pageData,
-                )
-              : MushafPageLoading();
+                );
         },
       ),
     );

@@ -27,7 +27,9 @@ class _LoadingPageState extends State<LoadingPage> {
   }
 
   Future<Pages> fetchPages() async {
-    final pageString = await rootBundle.loadString('assets/page_data.txt');
+    final pageString = await rootBundle.loadString(
+      'assets/page_data_12_scale.txt',
+    );
 
     final json = await jsonDecode(pageString);
 
