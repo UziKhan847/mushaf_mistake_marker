@@ -61,19 +61,9 @@ class _MushafPageViewState extends State<MushafPageView> {
           await compute(jsonDecode, spriteManifest) as Map<String, dynamic>;
 
       for (final e in json['sprites'] as List<dynamic>) {
-        final id = e['id'] as String;
-        final origSize = OrigSize.fromJson(e['origSize']);
-        final rectOffset = RectOffset.fromJson(e['rectOffset']);
-        final rstOffset = RstOffset.fromJson(e['rstOffset']);
+        final sprite = Sprite.fromJson(e);
 
-        final spriteData = Sprite(
-          id: id,
-          origSize: origSize,
-          rectOffset: rectOffset,
-          rstOffset: rstOffset,
-        );
-
-        spriteSheets[index].sprites.add(spriteData);
+        spriteSheets[index].sprites.add(sprite);
       }
     } catch (e) {
       throw Exception('Exception. Error message: $e');
