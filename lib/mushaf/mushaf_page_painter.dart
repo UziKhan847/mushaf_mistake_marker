@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:mushaf_mistake_marker/image/image_page.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite_sheet.dart';
 import 'package:mushaf_mistake_marker/variables.dart';
@@ -34,9 +35,11 @@ class MushafPagePainter extends CustomPainter {
       final floatListLength = sprites.length * 4;
       final rectList = Float32List(floatListLength);
       final transformList = Float32List(floatListLength);
+      final colorList = Int32List(sprites.length);
 
       for (int i = 0; i < sprites.length; i++) {
         final sprite = sprites[i];
+        final id = sprite.id;
         final byteIndex = i * 4;
         final rectOffset = sprite.rectOffset;
         final rstOffset = sprite.rstOffset;
@@ -57,6 +60,14 @@ class MushafPagePainter extends CustomPainter {
           rectList[byteIndex + x] = rectLTRB[x];
           transformList[byteIndex + x] = rstValues[x];
         }
+
+        colorList[i] = switch (markedPaths[id]) {
+          MarkType.doubt => purpleInt,
+          MarkType.mistake => redInt,
+          MarkType.oldMistake => blueInt,
+          MarkType.tajwid => greenInt,
+          _ => greenInt,
+        };
       }
 
       final paint = Paint()..filterQuality = FilterQuality.high;
@@ -64,8 +75,8 @@ class MushafPagePainter extends CustomPainter {
         image,
         transformList,
         rectList,
-        null,
-        null,
+        colorList,
+        BlendMode.srcIn,
         null,
         paint,
       );
