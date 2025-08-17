@@ -7,7 +7,10 @@ import 'package:mushaf_mistake_marker/mushaf/mushaf_page_loading.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_page_view_tile.dart';
 import 'package:mushaf_mistake_marker/page_data/pages.dart';
 import 'package:mushaf_mistake_marker/image/image_data.dart';
-import 'package:mushaf_mistake_marker/image/image_page.dart';
+import 'package:mushaf_mistake_marker/sprite/orig_size.dart';
+import 'package:mushaf_mistake_marker/sprite/rect_offset.dart';
+import 'package:mushaf_mistake_marker/sprite/rst_offset.dart';
+import 'package:mushaf_mistake_marker/sprite/sprite.dart';
 import 'package:mushaf_mistake_marker/variables.dart';
 
 class MushafPageView extends StatefulWidget {
@@ -39,7 +42,7 @@ class _MushafPageViewState extends State<MushafPageView> {
   void initState() {
     super.initState();
     final initPage = pageController.initialPage;
-    preFetchImagePages(initPage);
+    preFetchPage(initPage);
   }
 
   @override
@@ -48,40 +51,40 @@ class _MushafPageViewState extends State<MushafPageView> {
     super.dispose();
   }
 
-  Future<void> fetchImagePageData(
-    int pageNumber,
-    List<ImageData> _imageDataList,
-  ) async {
+  Future<void> fetchSprite(int index, int pageNumber) async {
     try {
-      final manifest = await rootBundle.loadString(
-        'assets/manifests_12_scale/$pageNumber.json',
+      final spriteManifest = await rootBundle.loadString(
+        'assets/sprite_manifests/$pageNumber.json',
       );
 
-      // final manifest = await rootBundle.loadString(
-      //   'assets/manifests_12_scale/$pageNumber.json',
-      // );
+      final json =
+          await compute(jsonDecode, spriteManifest) as Map<String, dynamic>;
 
-      final json = await compute(jsonDecode, manifest) as List<dynamic>;
+      for (final e in json['sprites'] as List<dynamic>) {
+        final id = e['id'] as String;
+        final origSize = OrigSize.fromJson(e['origSize']);
+        final rectOffset = RectOffset.fromJson(e['rectOffset']);
+        final rstOffset = RstOffset.fromJson(e['rstOffset']);
 
-      for (final e in json) {
-        final imageData = ImageData.fromJson(e);
+        final spriteData = Sprite(
+          id: id,
+          origSize: origSize,
+          rectOffset: rectOffset,
+          rstOffset: rstOffset,
+        );
 
-        _imageDataList.add(imageData);
+        spriteSheets[index].sprites.add(spriteData);
       }
     } catch (e) {
       throw Exception('Exception. Error message: $e');
     }
   }
 
-  Future<ui.Image> fetchImg(String id, int pageNumber) async {
+  Future<void> fetchImg(int index, int pageNumber) async {
     try {
       final imgFile = await rootBundle.load(
-        'assets/webp_pages_12_scale/$pageNumber/$id.webp',
+        'assets/sprite_sheets_webp/$pageNumber.webp',
       );
-
-      // final imgFile = await rootBundle.load(
-      //   'assets/webp_12_scale/$pageNumber.webp',
-      // );
 
       final codec = await ui.instantiateImageCodec(
         imgFile.buffer.asUint8List(),
@@ -89,70 +92,53 @@ class _MushafPageViewState extends State<MushafPageView> {
 
       final frame = await codec.getNextFrame();
 
-      // imageMushaf.pages[index].image = frame.image;
+      spriteSheets[index].image = frame.image;
 
-      return frame.image;
+      //return frame.image;
     } catch (e) {
       throw Exception('Exception. Error message: $e');
     }
   }
 
-  Future<void> fetchImagePageImgs(
-    int index,
-    int pageNumber,
-    List<ImageData> _imageDataList,
-  ) async {
-    for (final e in _imageDataList) {
-      final image = await fetchImg(e.id, pageNumber);
-      final page = imageMushaf.pages[index];
+  Future<void> fetchSpriteSheet(int index) async {
+    final spriteSheet = spriteSheets[index];
 
-      page.pageImages[e.id] = image;
-    }
-  }
-
-  Future<void> fetchImageMushafPage(int index) async {
-    final page = imageMushaf.pages[index];
-
-    if (page.imageDataList.isEmpty) {
-      await fetchImagePageData(index + 1, page.imageDataList);
-      print('Succesfully fetched Data of Page ${index + 1}');
+    if (spriteSheet.sprites.isEmpty) {
+      await fetchSprite(index, index + 1);
+      print('Succesfully fetched Sprite Data of Page ${index + 1}');
     }
 
-    if (page.pageImages.isEmpty) {
-      //await fetchImg(index, index + 1);
-      await fetchImagePageImgs(index, index + 1, page.imageDataList);
+    if (spriteSheet.image == null) {
+      await fetchImg(index, index + 1);
       print('Succesfully fetched Image of Page ${index + 1}');
     }
-
-    //print(page.image);
 
     setState(() {});
   }
 
-  void clearImagePageImg(int index) {
-    final page = imageMushaf.pages[index];
-    page.pageImages.clear();
-    //page.image = null;
+  void clearImg(int index) {
+    final spriteSheet = spriteSheets[index];
+    spriteSheet.image = null;
     print('Cleared Page: ${index + 1}');
   }
 
-  void preFetchImagePages(int initPage) {
-    fetchImageMushafPage(initPage);
+  void preFetchPage(int initPage) {
+    fetchSpriteSheet(initPage);
 
     if (initPage > 0) {
-      fetchImageMushafPage(initPage - 1);
+      fetchSpriteSheet(initPage - 1);
     }
 
     if (initPage > 1) {
-      fetchImageMushafPage(initPage - 2);
+      fetchSpriteSheet(initPage - 2);
     }
 
     if (initPage < 603) {
-      fetchImageMushafPage(initPage + 1);
+      fetchSpriteSheet(initPage + 1);
     }
 
     if (initPage < 602) {
-      fetchImageMushafPage(initPage + 2);
+      fetchSpriteSheet(initPage + 2);
     }
   }
 
@@ -161,22 +147,22 @@ class _MushafPageViewState extends State<MushafPageView> {
 
     if (swipedLeft) {
       if (page > 2) {
-        clearImagePageImg(page - 3);
+        clearImg(page - 3);
       }
       if (page < 602) {
         try {
-          await fetchImageMushafPage(page + 2);
+          await fetchSpriteSheet(page + 2);
         } catch (e) {
           throw Exception('Exception. Error message: $e');
         }
       }
     } else {
       if (page < 601) {
-        clearImagePageImg(page + 3);
+        clearImg(page + 3);
       }
       if (page > 1) {
         try {
-          await fetchImageMushafPage(page - 2);
+          await fetchSpriteSheet(page - 2);
         } catch (e) {
           throw Exception('Exception. Error message: $e');
         }
@@ -196,22 +182,13 @@ class _MushafPageViewState extends State<MushafPageView> {
         controller: pageController,
         itemCount: 604,
         itemBuilder: (context, index) {
-          final imagePage = imageMushaf.pages[index];
-          final pageData = widget.pages.pageData[index];
-
-          final numOfEle = imagePage.imageDataList.length;
-          final numOfImgs = imagePage.pageImages.length;
-
-          final isLoaded =
-              numOfImgs == numOfEle && imagePage.pageImages.isNotEmpty;
-
-          return !isLoaded
+          return spriteSheets[index].image == null
               ? MushafPageLoading()
               : MushafPageViewTile(
                   windowSize: MediaQuery.of(context).size,
                   markedPaths: markedPgs[index],
-                  imagePage: imagePage,
-                  pageData: pageData,
+                  spriteSheet: spriteSheets[index],
+                  pageData: widget.pages.pageData[index],
                 );
         },
       ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_page_painter.dart';
 import 'package:mushaf_mistake_marker/page_data/page_data.dart';
 import 'package:mushaf_mistake_marker/image/image_page.dart';
+import 'package:mushaf_mistake_marker/sprite/sprite_sheet.dart';
 import 'package:mushaf_mistake_marker/variables.dart';
 
 class MushafPageViewTile extends StatefulWidget {
@@ -9,13 +10,13 @@ class MushafPageViewTile extends StatefulWidget {
     super.key,
     required this.windowSize,
     required this.markedPaths,
-    required this.imagePage,
+    required this.spriteSheet,
     required this.pageData,
   });
 
   //final int pageNumber;
   final Size windowSize;
-  final ImagePage imagePage;
+  final SpriteSheet spriteSheet;
   final PageData pageData;
   final Map<String, MarkType> markedPaths;
 
@@ -52,9 +53,8 @@ class _MushafPageViewTileState extends State<MushafPageViewTile> {
   Widget build(BuildContext context) {
     final markedPaths = widget.markedPaths;
 
-    final imageDataList = widget.imagePage.imageDataList;
-    final images = widget.imagePage.pageImages;
-    //final image = widget.imagePage.image;
+    final sprites = widget.spriteSheet.sprites;
+    final image = widget.spriteSheet.image;
 
     final pageW = widget.pageData.width;
     final pageH = widget.pageData.height;
@@ -83,13 +83,13 @@ class _MushafPageViewTileState extends State<MushafPageViewTile> {
                   localPos.dy / scaleY,
                 );
 
-                for (final e in imageDataList) {
+                for (final e in sprites) {
                   final (id, left, top, right, bottom, scaledX, scaledY) = (
                     e.id,
-                    e.offset.dx,
-                    e.offset.dy,
-                    e.origSize.width + e.offset.dx,
-                    e.origSize.height + e.offset.dy,
+                    e.rstOffset.x,
+                    e.rstOffset.y,
+                    e.origSize.w + e.rstOffset.x,
+                    e.origSize.h + e.rstOffset.y,
                     scaledPoint.dx,
                     scaledPoint.dy,
                   );
@@ -128,7 +128,7 @@ class _MushafPageViewTileState extends State<MushafPageViewTile> {
                 painter: MushafPagePainter(
                   vBoxSize: Size(pageW, pageH),
                   markedPaths: Map.from(markedPaths),
-                  imagePage: widget.imagePage,
+                  spriteSheet: widget.spriteSheet,
                 ),
               ),
             ),
