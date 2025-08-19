@@ -6,10 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_page_loading.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_page_view_tile.dart';
 import 'package:mushaf_mistake_marker/page_data/pages.dart';
-import 'package:mushaf_mistake_marker/image/image_data.dart';
-import 'package:mushaf_mistake_marker/sprite/orig_size.dart';
-import 'package:mushaf_mistake_marker/sprite/rect_offset.dart';
-import 'package:mushaf_mistake_marker/sprite/rst_offset.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite.dart';
 import 'package:mushaf_mistake_marker/variables.dart';
 
@@ -30,7 +26,7 @@ class MushafPageView extends StatefulWidget {
 class _MushafPageViewState extends State<MushafPageView> {
   late final pageController = widget.pageController;
 
-  int prevPage = 0;
+  late int prevPage;
 
   final List<Map<String, MarkType>> markedPgs = List.generate(
     604,
@@ -42,6 +38,7 @@ class _MushafPageViewState extends State<MushafPageView> {
   void initState() {
     super.initState();
     final initPage = pageController.initialPage;
+    prevPage = initPage;
     preFetchPage(initPage);
   }
 
@@ -115,20 +112,12 @@ class _MushafPageViewState extends State<MushafPageView> {
   void preFetchPage(int initPage) {
     fetchSpriteSheet(initPage);
 
-    if (initPage > 0) {
-      fetchSpriteSheet(initPage - 1);
-    }
+    final offsets = [-2, -1, 1, 2];
 
-    if (initPage > 1) {
-      fetchSpriteSheet(initPage - 2);
-    }
-
-    if (initPage < 603) {
-      fetchSpriteSheet(initPage + 1);
-    }
-
-    if (initPage < 602) {
-      fetchSpriteSheet(initPage + 2);
+    for (final e in offsets) {
+      if (initPage + e >= 0 && initPage + e <= 603) {
+        fetchSpriteSheet(initPage + e);
+      }
     }
   }
 
@@ -136,6 +125,7 @@ class _MushafPageViewState extends State<MushafPageView> {
     final swipedLeft = page > prevPage;
 
     if (swipedLeft) {
+      print('swiped left');
       if (page > 2) {
         clearImg(page - 3);
       }
@@ -147,6 +137,7 @@ class _MushafPageViewState extends State<MushafPageView> {
         }
       }
     } else {
+      print('swiped right');
       if (page < 601) {
         clearImg(page + 3);
       }

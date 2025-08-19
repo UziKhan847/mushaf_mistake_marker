@@ -1,7 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:mushaf_mistake_marker/image/image_page.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite_sheet.dart';
 import 'package:mushaf_mistake_marker/variables.dart';
 
@@ -66,7 +64,7 @@ class MushafPagePainter extends CustomPainter {
           MarkType.mistake => redInt,
           MarkType.oldMistake => blueInt,
           MarkType.tajwid => greenInt,
-          _ => greenInt,
+          _ => blackInt,
         };
       }
 
@@ -76,7 +74,7 @@ class MushafPagePainter extends CustomPainter {
         transformList,
         rectList,
         colorList,
-        BlendMode.srcIn,
+        BlendMode.dstATop,
         null,
         paint,
       );
@@ -84,5 +82,6 @@ class MushafPagePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant MushafPagePainter oldDelegate) => true;
+  bool shouldRepaint(covariant MushafPagePainter oldDelegate) =>
+      !mapEquals(oldDelegate.markedPaths, markedPaths);
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_page_painter.dart';
 import 'package:mushaf_mistake_marker/page_data/page_data.dart';
-import 'package:mushaf_mistake_marker/image/image_page.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite_sheet.dart';
 import 'package:mushaf_mistake_marker/variables.dart';
 
@@ -54,7 +53,7 @@ class _MushafPageViewTileState extends State<MushafPageViewTile> {
     final markedPaths = widget.markedPaths;
 
     final sprites = widget.spriteSheet.sprites;
-    final image = widget.spriteSheet.image;
+    //final image = widget.spriteSheet.image;
 
     final pageW = widget.pageData.width;
     final pageH = widget.pageData.height;
@@ -117,8 +116,8 @@ class _MushafPageViewTileState extends State<MushafPageViewTile> {
                         markedPaths[id] = MarkType.doubt;
                     }
 
-                    print('-----------------------------------');
-                    print('Clicked Element: $id');
+                    //print('-----------------------------------');
+                    //print('Clicked Element: $id');
 
                     setState(() {});
                   }

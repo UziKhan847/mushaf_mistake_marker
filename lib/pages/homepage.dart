@@ -12,7 +12,8 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  late final pageController = PageController(initialPage: 0);
+  late final mushafPageController = PageController(initialPage: 150);
+  late final homePageController = PageController();
 
   @override
   void initState() {
@@ -21,7 +22,8 @@ class _HomepageState extends State<Homepage> {
 
   @override
   void dispose() {
-    pageController.dispose();
+    mushafPageController.dispose();
+    homePageController.dispose();
     super.dispose();
   }
 
@@ -29,13 +31,24 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: MushafPageView(pageController: pageController, pages: widget.pages),
+      body: PageView(
+        controller: homePageController,
+        children: [
+          MushafPageView(
+            pageController: mushafPageController,
+            pages: widget.pages,
+          ),
+        ],
+      ),
       bottomNavigationBar: BottomAppBar(
         color: Color(0xFF004D40),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Icon(Icons.book, color: Color(0xFFDAB77D)),
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.book, color: Color(0xFFDAB77D)),
+            ),
             Icon(Icons.search, color: Color(0xFFDAB77D)),
             Icon(Icons.settings, color: Color(0xFFDAB77D)),
             Icon(Icons.person, color: Color(0xFFDAB77D)),
