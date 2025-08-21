@@ -1,15 +1,18 @@
 import 'dart:convert';
 import 'dart:ui' as ui;
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite.dart';
 import 'package:mushaf_mistake_marker/variables.dart';
+import 'package:riverpod/riverpod.dart';
+
+final spriteManagerProvider = ChangeNotifierProvider<SpriteManager>((ref) {
+  return SpriteManager();
+});
 
 class SpriteManager extends ChangeNotifier {
-
-
-    static Future<void> fetchSprite(int index, int pageNumber) async {
+  Future<void> fetchSprite(int index, int pageNumber) async {
     try {
       final spriteManifest = await rootBundle.loadString(
         'assets/sprite_manifests/$pageNumber.json',
@@ -28,7 +31,7 @@ class SpriteManager extends ChangeNotifier {
     }
   }
 
-  static Future<void> fetchImg(int index, int pageNumber) async {
+  Future<void> fetchImg(int index, int pageNumber) async {
     try {
       final imgFile = await rootBundle.load(
         'assets/sprite_sheets_webp/$pageNumber.webp',
@@ -48,7 +51,7 @@ class SpriteManager extends ChangeNotifier {
     }
   }
 
-  static Future<void> fetchSpriteSheet(int index) async {
+  Future<void> fetchSpriteSheet(int index) async {
     final spriteSheet = spriteSheets[index];
 
     if (spriteSheet.sprites.isEmpty) {
@@ -60,16 +63,16 @@ class SpriteManager extends ChangeNotifier {
       await fetchImg(index, index + 1);
       print('Succesfully fetched Image of Page ${index + 1}');
     }
-
+    notifyListeners();
   }
 
-  static void clearImg(int index) {
+  void clearImg(int index) {
     final spriteSheet = spriteSheets[index];
     spriteSheet.image = null;
     print('Cleared Page: ${index + 1}');
   }
 
-  static void preFetchPage(int initPage) {
+  void preFetchPage(int initPage) {
     fetchSpriteSheet(initPage);
 
     final offsets = [-2, -1, 1, 2];
@@ -80,7 +83,4 @@ class SpriteManager extends ChangeNotifier {
       }
     }
   }
-  
-
-
 }

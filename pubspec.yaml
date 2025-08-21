@@ -39,6 +39,7 @@ flutter:
     - assets/page_data_12_scale.txt
     - assets/sprite_manifests/
     - assets/sprite_sheets_webp/
+    - assets/images/
 
   fonts:
     - family: ScheherazadeNew

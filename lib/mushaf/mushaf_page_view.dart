@@ -14,10 +14,12 @@ class MushafPageView extends StatefulWidget {
     super.key,
     required this.pageController,
     required this.pages,
+    required this.constraints,
   });
 
   final PageController pageController;
   final Pages pages;
+  final BoxConstraints constraints;
 
   @override
   State<MushafPageView> createState() => _MushafPageViewState();
@@ -44,7 +46,6 @@ class _MushafPageViewState extends State<MushafPageView> {
 
   @override
   void dispose() {
-    pageController.dispose();
     super.dispose();
   }
 
@@ -155,24 +156,21 @@ class _MushafPageViewState extends State<MushafPageView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: PageView.builder(
-        reverse: true,
-        onPageChanged: _onPageChanged,
-        controller: pageController,
-        itemCount: 604,
-        itemBuilder: (context, index) {
-          return spriteSheets[index].image == null
-              ? MushafPageLoading()
-              : MushafPageViewTile(
-                  windowSize: MediaQuery.of(context).size,
-                  markedPaths: markedPgs[index],
-                  spriteSheet: spriteSheets[index],
-                  pageData: widget.pages.pageData[index],
-                );
-        },
-      ),
+    return PageView.builder(
+      reverse: true,
+      onPageChanged: _onPageChanged,
+      controller: pageController,
+      itemCount: 604,
+      itemBuilder: (context, index) {
+        return spriteSheets[index].image == null
+            ? MushafPageLoading()
+            : MushafPageViewTile(
+                constraints: widget.constraints,
+                markedPaths: markedPgs[index],
+                spriteSheet: spriteSheets[index],
+                pageData: widget.pages.pageData[index],
+              );
+      },
     );
   }
 }

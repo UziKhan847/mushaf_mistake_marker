@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_page_view.dart';
 import 'package:mushaf_mistake_marker/page_data/pages.dart';
+import 'package:mushaf_mistake_marker/widgets/custom_flex.dart';
+import 'package:mushaf_mistake_marker/widgets/custom_nav_bar/custom_nav_bar.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key, required this.pages});
@@ -13,7 +15,7 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   late final mushafPageController = PageController(initialPage: 150);
-  late final homePageController = PageController();
+  late final pageController = PageController();
 
   @override
   void initState() {
@@ -23,7 +25,7 @@ class _HomepageState extends State<Homepage> {
   @override
   void dispose() {
     mushafPageController.dispose();
-    homePageController.dispose();
+    pageController.dispose();
     super.dispose();
   }
 
@@ -31,29 +33,38 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: PageView(
-        controller: homePageController,
+      body: CustomFlex(
         children: [
-          MushafPageView(
-            pageController: mushafPageController,
-            pages: widget.pages,
-          ),
-        ],
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: Color(0xFF004D40),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.book, color: Color(0xFFDAB77D)),
+          Expanded(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return PageView(
+                  physics: NeverScrollableScrollPhysics(),
+                  controller: pageController,
+                  children: [
+                    MushafPageView(
+                      pageController: mushafPageController,
+                      pages: widget.pages,
+                      constraints: constraints
+                    ),
+                    Column(
+                      children: [
+                        Container(
+                          color: Colors.redAccent,
+                          width: double.infinity,
+                          height: 500,
+                        ),
+                      ],
+                    ),
+                    Container(color: Colors.blueAccent),
+                    Container(color: Colors.amberAccent),
+                  ],
+                );
+              },
             ),
-            Icon(Icons.search, color: Color(0xFFDAB77D)),
-            Icon(Icons.settings, color: Color(0xFFDAB77D)),
-            Icon(Icons.person, color: Color(0xFFDAB77D)),
-          ],
-        ),
+          ),
+          CustomNavBar(pageController: pageController),
+        ],
       ),
     );
   }
