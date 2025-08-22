@@ -31,41 +31,38 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: CustomFlex(
-        children: [
-          Expanded(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                return PageView(
-                  physics: NeverScrollableScrollPhysics(),
-                  controller: pageController,
-                  children: [
-                    MushafPageView(
-                      pageController: mushafPageController,
-                      pages: widget.pages,
-                      constraints: constraints
-                    ),
-                    Column(
-                      children: [
-                        Container(
-                          color: Colors.redAccent,
-                          width: double.infinity,
-                          height: 500,
-                        ),
-                      ],
-                    ),
-                    Container(color: Colors.blueAccent),
-                    Container(color: Colors.amberAccent),
-                  ],
-                );
-              },
-            ),
+    return CustomFlex(
+      children: [
+        Expanded(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return PageView(
+                physics: NeverScrollableScrollPhysics(),
+                controller: pageController,
+                children: [
+                  MushafPageView(
+                    pageController: mushafPageController,
+                    pages: widget.pages,
+                    constraints: constraints,
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        color: Colors.redAccent,
+                        width: double.infinity,
+                        height: 500,
+                      ),
+                    ],
+                  ),
+                  Container(color: Colors.blueAccent),
+                  Container(color: Colors.amberAccent),
+                ],
+              );
+            },
           ),
-          CustomNavBar(pageController: pageController),
-        ],
-      ),
+        ),
+        CustomNavBar(pageController: pageController),
+      ],
     );
   }
 }

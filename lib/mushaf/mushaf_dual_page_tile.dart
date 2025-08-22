@@ -4,8 +4,8 @@ import 'package:mushaf_mistake_marker/page_data/page_data.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite_sheet.dart';
 import 'package:mushaf_mistake_marker/variables.dart';
 
-class MushafPageViewTile extends StatefulWidget {
-  const MushafPageViewTile({
+class MushafDualPageTile extends StatefulWidget {
+  const MushafDualPageTile({
     super.key,
     //required this.windowSize,
     required this.markedPaths,
@@ -22,10 +22,10 @@ class MushafPageViewTile extends StatefulWidget {
   final BoxConstraints constraints;
 
   @override
-  State<MushafPageViewTile> createState() => _MushafPageViewTileState();
+  State<MushafDualPageTile> createState() => _MushafPageViewTileState();
 }
 
-class _MushafPageViewTileState extends State<MushafPageViewTile> {
+class _MushafPageViewTileState extends State<MushafDualPageTile> {
   @override
   void initState() {
     super.initState();

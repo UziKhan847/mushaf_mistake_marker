@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite.dart';
 import 'package:mushaf_mistake_marker/variables.dart';
-import 'package:riverpod/riverpod.dart';
 
 final spriteManagerProvider = ChangeNotifierProvider<SpriteManager>((ref) {
   return SpriteManager();

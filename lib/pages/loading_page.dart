@@ -44,9 +44,7 @@ class _LoadingPageState extends State<LoadingPage> {
       future: data,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return Scaffold(
-            body: Center(child: Text('Error: ${snapshot.error}')),
-          );
+          return Center(child: Text('Error: ${snapshot.error}'));
         }
 
         if (snapshot.hasData) {
@@ -55,7 +53,7 @@ class _LoadingPageState extends State<LoadingPage> {
           return Homepage(pages: pages);
         }
 
-        return Scaffold(body: Center(child: CircularProgressIndicator()));
+        return Center(child: CircularProgressIndicator());
       },
     );
   }

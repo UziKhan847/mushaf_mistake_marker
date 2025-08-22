@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_page_loading.dart';
-import 'package:mushaf_mistake_marker/mushaf/mushaf_page_view_tile.dart';
+import 'package:mushaf_mistake_marker/mushaf/mushaf_single_page_tile.dart';
 import 'package:mushaf_mistake_marker/page_data/pages.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite.dart';
 import 'package:mushaf_mistake_marker/variables.dart';
@@ -164,12 +164,17 @@ class _MushafPageViewState extends State<MushafPageView> {
       itemBuilder: (context, index) {
         return spriteSheets[index].image == null
             ? MushafPageLoading()
-            : MushafPageViewTile(
-                constraints: widget.constraints,
-                markedPaths: markedPgs[index],
-                spriteSheet: spriteSheets[index],
-                pageData: widget.pages.pageData[index],
-              );
+            : OrientationBuilder(
+              builder: (_, orientation) {
+                return MushafSinglePageTile(
+                    constraints: widget.constraints,
+                    markedPaths: markedPgs[index],
+                    spriteSheet: spriteSheets[index],
+                    pageData: widget.pages.pageData[index],
+                    orientation: orientation,
+                  );
+              }
+            );
       },
     );
   }
