@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_page_painter.dart';
+import 'package:mushaf_mistake_marker/providers/theme_provider.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite_sheet.dart';
 import 'package:mushaf_mistake_marker/variables.dart';
 
-class SinglePage extends StatefulWidget {
+class SinglePage extends ConsumerStatefulWidget {
   const SinglePage({
     super.key,
     required this.w,
@@ -22,10 +24,10 @@ class SinglePage extends StatefulWidget {
   final Map<String, MarkType> markedPaths;
 
   @override
-  State<SinglePage> createState() => _SinglePageState();
+  ConsumerState<SinglePage> createState() => _SinglePageState();
 }
 
-class _SinglePageState extends State<SinglePage> {
+class _SinglePageState extends ConsumerState<SinglePage> {
   bool elemBounds({
     required double top,
     required double bottom,
@@ -44,6 +46,8 @@ class _SinglePageState extends State<SinglePage> {
   Widget build(BuildContext context) {
     final sprites = widget.spriteSheet.sprites;
     final markedPaths = widget.markedPaths;
+
+    final isDarkMode = ref.watch(themeProvider);
 
     return SizedBox(
       width: widget.w,
@@ -106,6 +110,7 @@ class _SinglePageState extends State<SinglePage> {
             vBoxSize: Size(widget.pageW, widget.pageH),
             markedPaths: Map.from(markedPaths),
             spriteSheet: widget.spriteSheet,
+            isDarkMode: isDarkMode
           ),
         ),
       ),

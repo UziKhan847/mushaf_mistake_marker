@@ -1,40 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:mushaf_mistake_marker/variables.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mushaf_mistake_marker/providers/shared_prefs_provider.dart';
+import 'package:mushaf_mistake_marker/providers/theme_provider.dart';
 import 'package:mushaf_mistake_marker/widgets/custom_flex.dart';
 import 'package:mushaf_mistake_marker/widgets/custom_nav_bar/main_nav_bar_icon.dart';
 
-class CustomNavBar extends StatefulWidget {
-  CustomNavBar({super.key, required this.pageController});
+class CustomNavBar extends ConsumerStatefulWidget {
+  const CustomNavBar({super.key, required this.pageController});
 
   final PageController pageController;
 
   @override
-  State<CustomNavBar> createState() => _CustomNavBarState();
+  ConsumerState<CustomNavBar> createState() => _CustomNavBarState();
 }
 
-class _CustomNavBarState extends State<CustomNavBar> {
+class _CustomNavBarState extends ConsumerState<CustomNavBar> {
   int get page => widget.pageController.hasClients
       ? widget.pageController.page!.toInt()
       : 0;
-
-  late final List<MainNavBarIcon> items = navItems.map((data) {
-    return MainNavBarIcon(
-      selectedIcon: SvgPicture.asset(
-        data.selectedAsset,
-        width: 24,
-        height: 24,
-        semanticsLabel: '${data.label} selected',
-      ),
-      unSelectedIcon: SvgPicture.asset(
-        data.unSelectedAsset,
-        width: 24,
-        height: 24,
-        semanticsLabel: '${data.label} unselected',
-      ),
-      labelText: data.label,
-    );
-  }).toList();
 
   BorderRadius getBoxRadius(Orientation orientation) {
     final radius = Radius.circular(20);
@@ -48,13 +31,16 @@ class _CustomNavBarState extends State<CustomNavBar> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProv = ref.read(themeProvider.notifier);
+    final isDarkMode = ref.watch(themeProvider);
+
     return OrientationBuilder(
       builder: (_, orientation) {
         final isPortrait = orientation == Orientation.portrait;
 
         return Container(
           decoration: BoxDecoration(
-            color: Color(0xFFFEF9F3),
+            color: Theme.of(context).navigationBarTheme.backgroundColor,
             borderRadius: getBoxRadius(orientation),
             boxShadow: [
               BoxShadow(
@@ -72,37 +58,49 @@ class _CustomNavBarState extends State<CustomNavBar> {
                 : MainAxisAlignment.start,
             children: [
               ...List.generate(4, (index) {
-                final item = items[index];
                 final isSelected = page == index;
 
-                return Padding(
+                return MainNavBarIcon(
+                  index: index,
+                  isSelected: isSelected,
+                  onTap: () {
+                    if (widget.pageController.hasClients) {
+                      widget.pageController.jumpToPage(index);
+                      setState(() {});
+                    }
+                  },
+                );
+              }),
+
+              if (!isPortrait) ...[
+                Divider(),
+                Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: GestureDetector(
                     onTap: () {
-                      if (widget.pageController.hasClients) {
-                        widget.pageController.jumpToPage(index);
-                        setState(() {});
-                      }
+                      themeProv.switchTheme();
+
+                      //setState(() {});
                     },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        isSelected ? item.selectedIcon : item.unSelectedIcon,
+                        isDarkMode
+                            ? Icon(Icons.light_mode)
+                            : Icon(Icons.dark_mode),
                         Text(
-                          item.labelText,
+                          'Dark Mode',
                           style: TextStyle(
                             fontSize: 10,
-                            color: isSelected ? Color(0xFFaf955e) : Colors.grey,
-                            fontWeight: isSelected
-                                ? FontWeight.bold
-                                : FontWeight.normal,
+                            color: Color(0xFFaf955e),
+                            fontWeight: FontWeight.normal,
                           ),
                         ),
                       ],
                     ),
                   ),
-                );
-              }),
+                ),
+              ],
             ],
           ),
         );

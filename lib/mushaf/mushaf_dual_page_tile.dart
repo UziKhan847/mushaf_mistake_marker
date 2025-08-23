@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:mushaf_mistake_marker/mushaf/mushaf_page_painter.dart';
+import 'package:mushaf_mistake_marker/mushaf/single_page.dart';
 import 'package:mushaf_mistake_marker/page_data/page_data.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite_sheet.dart';
 import 'package:mushaf_mistake_marker/variables.dart';
 
-class MushafDualPageTile extends StatefulWidget {
-  const MushafDualPageTile({
+class MushafSinglePageTile extends StatefulWidget {
+  const MushafSinglePageTile({
     super.key,
     //required this.windowSize,
     required this.markedPaths,
     required this.spriteSheet,
     required this.pageData,
     required this.constraints,
+    required this.orientation,
   });
 
   //final int pageNumber;
@@ -20,12 +21,13 @@ class MushafDualPageTile extends StatefulWidget {
   final PageData pageData;
   final Map<String, MarkType> markedPaths;
   final BoxConstraints constraints;
+  final Orientation orientation;
 
   @override
-  State<MushafDualPageTile> createState() => _MushafPageViewTileState();
+  State<MushafSinglePageTile> createState() => _MushafPageViewTileState();
 }
 
-class _MushafPageViewTileState extends State<MushafDualPageTile> {
+class _MushafPageViewTileState extends State<MushafSinglePageTile> {
   @override
   void initState() {
     super.initState();
@@ -52,11 +54,6 @@ class _MushafPageViewTileState extends State<MushafDualPageTile> {
 
   @override
   Widget build(BuildContext context) {
-    final markedPaths = widget.markedPaths;
-
-    final sprites = widget.spriteSheet.sprites;
-    //final image = widget.spriteSheet.image;
-
     final pageW = widget.pageData.width;
     final pageH = widget.pageData.height;
 
@@ -72,8 +69,7 @@ class _MushafPageViewTileState extends State<MushafDualPageTile> {
       double w = widget.constraints.maxWidth * 0.9;
       double h = widget.constraints.maxHeight * 0.875;
 
-      final isPortrait =
-          widget.constraints.maxHeight / widget.constraints.maxWidth > 1;
+      final isPortrait = widget.orientation == Orientation.portrait;
 
       if (isPortrait && (h * (pageW / pageH) < w)) {
         w = h * (pageW / pageH);
@@ -93,71 +89,13 @@ class _MushafPageViewTileState extends State<MushafDualPageTile> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Container(
-              color: Colors.amberAccent,
-              width: w,
-              height: h,
-              child: GestureDetector(
-                onTapDown: (details) {
-                  final localPos = details.localPosition;
-
-                  final scaleX = w / pageW;
-                  final scaleY = h / pageH;
-
-                  final scaledPoint = Offset(
-                    localPos.dx / scaleX,
-                    localPos.dy / scaleY,
-                  );
-
-                  for (final e in sprites) {
-                    final (id, left, top, right, bottom, scaledX, scaledY) = (
-                      e.id,
-                      e.rstOffset.x,
-                      e.rstOffset.y,
-                      e.origSize.w + e.rstOffset.x,
-                      e.origSize.h + e.rstOffset.y,
-                      scaledPoint.dx,
-                      scaledPoint.dy,
-                    );
-
-                    final isClicked = elemBounds(
-                      top: top,
-                      bottom: bottom,
-                      left: left,
-                      right: right,
-                      scaledX: scaledX,
-                      scaledY: scaledY,
-                    );
-
-                    if (!id.contains(RegExp(r'[bc]')) && isClicked) {
-                      switch (markedPaths[id]) {
-                        case MarkType.doubt:
-                          markedPaths[id] = MarkType.mistake;
-                        case MarkType.mistake:
-                          markedPaths[id] = MarkType.oldMistake;
-                        case MarkType.oldMistake:
-                          markedPaths[id] = MarkType.tajwid;
-                        case MarkType.tajwid:
-                          markedPaths.remove(id);
-                        default:
-                          markedPaths[id] = MarkType.doubt;
-                      }
-
-                      //print('-----------------------------------');
-                      //print('Clicked Element: $id');
-
-                      setState(() {});
-                    }
-                  }
-                },
-                child: CustomPaint(
-                  painter: MushafPagePainter(
-                    vBoxSize: Size(pageW, pageH),
-                    markedPaths: Map.from(markedPaths),
-                    spriteSheet: widget.spriteSheet,
-                  ),
-                ),
-              ),
+            SinglePage(
+              w: w,
+              h: h,
+              pageW: pageW,
+              pageH: pageH,
+              markedPaths: widget.markedPaths,
+              spriteSheet: widget.spriteSheet,
             ),
             SizedBox(height: widget.constraints.maxHeight * 0.02),
           ],

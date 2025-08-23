@@ -9,12 +9,14 @@ class MushafPagePainter extends CustomPainter {
     //required this.paths,
     required this.vBoxSize,
     required this.markedPaths,
+    required this.isDarkMode,
   });
 
   //final List<DrawablePath> paths;
   final SpriteSheet spriteSheet;
   final Size vBoxSize;
   final Map<String, MarkType> markedPaths;
+  final bool isDarkMode;
 
   ColorFilter changeColor(Color color) =>
       ColorFilter.mode(color, BlendMode.srcIn);
@@ -64,7 +66,7 @@ class MushafPagePainter extends CustomPainter {
           MarkType.mistake => redInt,
           MarkType.oldMistake => blueInt,
           MarkType.tajwid => greenInt,
-          _ => blackInt,
+          _ => isDarkMode ? whiteInt : blackInt,
         };
       }
 
