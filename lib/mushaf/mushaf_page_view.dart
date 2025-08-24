@@ -77,42 +77,50 @@ class _MushafPageViewState extends ConsumerState<MushafPageView> {
   }
 
   Future<void> _onPageChanged(int index, bool isDualPageMode) async {
-    final mushafPgCtrlProv = ref.read(mushafPgCtrlProvider.notifier);
-    mushafPgCtrlProv.setPage(index, isDualPageMode);
-    final swipedLeft = index > prevPage;
+    final isSwipe = (index - prevPage).abs() == 1;
 
-    final actualPage = isDualPageMode ? index * 2 : index;
-    List<int> fetchOffsets = [];
-    List<int> clearOffsets = [];
-    final List<Future> futures = [];
+    print('------------------');
+    print('USER SWIPED: $isSwipe');
+    print('------------------');
 
-    if (swipedLeft) {
-      fetchOffsets = [1, 2, 3, -1, -2];
-      clearOffsets = [-3, -4];
-    } else {
-      fetchOffsets = [-1, -2, -3, 1, 2];
-      clearOffsets = [3, 4];
-    }
+    if (isSwipe) {
+      final mushafPgCtrlProv = ref.read(mushafPgCtrlProvider.notifier);
+      mushafPgCtrlProv.setPage(index, isDualPageMode);
+      final swipedLeft = index > prevPage;
 
-    for (final e in fetchOffsets) {
-      final _index = actualPage + e;
+      final actualPage = isDualPageMode ? index * 2 : index;
+      List<int> fetchOffsets = [];
+      List<int> clearOffsets = [];
+      final List<Future> futures = [];
 
-      if (_index >= 0 && _index <= 603) {
-        if (spriteSheets[_index].image == null) {
-          futures.add(SpriteManager.fetchSpriteSheet(_index));
+      if (swipedLeft) {
+        fetchOffsets = [1, 2, 3, -1, -2];
+        clearOffsets = [-3, -4];
+      } else {
+        fetchOffsets = [-1, -2, -3, 1, 2];
+        clearOffsets = [3, 4];
+      }
+
+      for (final e in fetchOffsets) {
+        final _index = actualPage + e;
+
+        if (_index >= 0 && _index <= 603) {
+          if (spriteSheets[_index].image == null) {
+            futures.add(SpriteManager.fetchSpriteSheet(_index));
+          }
         }
       }
-    }
 
-    await Future.wait(futures);
-    setState(() {});
+      await Future.wait(futures);
+      setState(() {});
 
-    for (final e in clearOffsets) {
-      final _index = actualPage + e;
+      for (final e in clearOffsets) {
+        final _index = actualPage + e;
 
-      if (_index >= 0 && _index <= 603) {
-        if (spriteSheets[_index].image != null) {
-          SpriteManager.clearImg(_index);
+        if (_index >= 0 && _index <= 603) {
+          if (spriteSheets[_index].image != null) {
+            SpriteManager.clearImg(_index);
+          }
         }
       }
     }
