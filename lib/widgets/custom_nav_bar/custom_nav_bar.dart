@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mushaf_mistake_marker/providers/shared_prefs_provider.dart';
+import 'package:mushaf_mistake_marker/providers/dual_page_provider.dart';
+import 'package:mushaf_mistake_marker/providers/mushaf_page_controller_provider.dart';
 import 'package:mushaf_mistake_marker/providers/theme_provider.dart';
 import 'package:mushaf_mistake_marker/widgets/custom_flex.dart';
 import 'package:mushaf_mistake_marker/widgets/custom_nav_bar/main_nav_bar_icon.dart';
@@ -18,6 +19,9 @@ class _CustomNavBarState extends ConsumerState<CustomNavBar> {
   int get page => widget.pageController.hasClients
       ? widget.pageController.page!.toInt()
       : 0;
+  late int targetPage;
+  late int mushafPage;
+  late final mushafPageCtrl = ref.read(mushafPgCtrlProvider);
 
   BorderRadius getBoxRadius(Orientation orientation) {
     final radius = Radius.circular(20);
@@ -31,8 +35,15 @@ class _CustomNavBarState extends ConsumerState<CustomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    final themeProv = ref.read(themeProvider.notifier);
-    final isDarkMode = ref.watch(themeProvider);
+    final (themeProv, isDarkMode) = (
+      ref.read(themeProvider.notifier),
+      ref.watch(themeProvider),
+    );
+
+    final (pageModeProv, isDualPage) = (
+      ref.read(pageModeProvider.notifier),
+      ref.watch(pageModeProvider),
+    );
 
     return OrientationBuilder(
       builder: (_, orientation) {
@@ -73,14 +84,12 @@ class _CustomNavBarState extends ConsumerState<CustomNavBar> {
               }),
 
               if (!isPortrait) ...[
-                Divider(),
+                Divider(color: Colors.black, height: 1, thickness: 1),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: GestureDetector(
                     onTap: () {
                       themeProv.switchTheme();
-
-                      //setState(() {});
                     },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -90,6 +99,38 @@ class _CustomNavBarState extends ConsumerState<CustomNavBar> {
                             : Icon(Icons.dark_mode),
                         Text(
                           'Dark Mode',
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: Color(0xFFaf955e),
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      pageModeProv.setPageMode();
+                      mushafPage = mushafPageCtrl.page!.toInt();
+                      print('MUSHAF PAGE IS: $mushafPage');
+                      if (isDualPage) {
+                        targetPage = mushafPage * 2;
+                        print('FROM DUAL TO SING MODE, TARGET: $targetPage');
+                      } else {
+                        targetPage = (mushafPage / 2).floor();
+                        print('FROM SING TO DUAL MODE, TARGET: $targetPage');
+                      }
+                      mushafPageCtrl.jumpToPage(targetPage);
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        isDualPage ? Icon(Icons.pages) : Icon(Icons.lock_clock),
+                        Text(
+                          isDualPage ? 'DUAL ON' : 'DUAL OFF',
                           style: TextStyle(
                             fontSize: 10,
                             color: Color(0xFFaf955e),

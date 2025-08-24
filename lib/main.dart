@@ -14,15 +14,13 @@ void main() async {
 
   final prefs = await SharedPreferencesWithCache.create(
     cacheOptions: SharedPreferencesWithCacheOptions(
-      allowList: {'savedTheme', 'savedPageMode'},
+      allowList: {'savedTheme', 'savedPageMode', 'initPage'},
     ),
   );
 
   runApp(
     ProviderScope(
-      overrides: [
-        sharedPrefsProv.overrideWithValue(prefs),
-      ],
+      overrides: [sharedPrefsProv.overrideWithValue(prefs)],
       child: MyApp(),
     ),
   );

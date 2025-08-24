@@ -4,30 +4,26 @@ import 'package:mushaf_mistake_marker/page_data/page_data.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite_sheet.dart';
 import 'package:mushaf_mistake_marker/variables.dart';
 
-class MushafSinglePageTile extends StatefulWidget {
-  const MushafSinglePageTile({
+class MushafDualPageTile extends StatefulWidget {
+  const MushafDualPageTile({
     super.key,
     //required this.windowSize,
     required this.markedPaths,
     required this.spriteSheet,
     required this.pageData,
     required this.constraints,
-    required this.orientation,
   });
 
-  //final int pageNumber;
-  //final Size windowSize;
-  final SpriteSheet spriteSheet;
-  final PageData pageData;
-  final Map<String, MarkType> markedPaths;
+  final List<SpriteSheet> spriteSheet;
+  final List<PageData> pageData;
+  final List<Map<String, MarkType>> markedPaths;
   final BoxConstraints constraints;
-  final Orientation orientation;
 
   @override
-  State<MushafSinglePageTile> createState() => _MushafPageViewTileState();
+  State<MushafDualPageTile> createState() => _MushafPageViewTileState();
 }
 
-class _MushafPageViewTileState extends State<MushafSinglePageTile> {
+class _MushafPageViewTileState extends State<MushafDualPageTile> {
   @override
   void initState() {
     super.initState();
@@ -38,66 +34,50 @@ class _MushafPageViewTileState extends State<MushafSinglePageTile> {
     super.dispose();
   }
 
-  bool elemBounds({
-    required double top,
-    required double bottom,
-    required double left,
-    required double right,
-    required double scaledX,
-    required double scaledY,
-  }) {
-    return scaledX >= left &&
-        scaledY >= top &&
-        scaledX <= right &&
-        scaledY <= bottom;
-  }
-
   @override
   Widget build(BuildContext context) {
-    final pageW = widget.pageData.width;
-    final pageH = widget.pageData.height;
+    final (pageOne, pageTwo) = (
+      {'w': widget.pageData.first.width, 'h': widget.pageData.first.height},
+      {'w': widget.pageData.last.width, 'h': widget.pageData.last.height},
+    );
 
     // final w = widget.constraints.maxWidth * 0.95;
 
     // final h = w * (pageH / pageW);
 
-    // final h = widget.constraints.maxHeight * 0.875;
+    final h = widget.constraints.maxHeight;
 
-    // final w = h * (pageW / pageH);
-
-    (double, double) getWH() {
-      double w = widget.constraints.maxWidth * 0.9;
-      double h = widget.constraints.maxHeight * 0.875;
-
-      final isPortrait = widget.orientation == Orientation.portrait;
-
-      if (isPortrait && (h * (pageW / pageH) < w)) {
-        w = h * (pageW / pageH);
-      } else {
-        h = w * (pageH / pageW);
-      }
-
-      return (w, h);
-    }
-
-    final (w, h) = (getWH().$1, getWH().$2);
+    final (p1w, p2w) = (
+      h * ((pageOne['w'] as double) / (pageOne['h'] as double)),
+      h * ((pageTwo['w'] as double) / (pageTwo['h'] as double)),
+    );
 
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: ConstrainedBox(
-        constraints: BoxConstraints(minHeight: widget.constraints.maxHeight),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+        constraints: BoxConstraints(
+          minHeight: widget.constraints.maxHeight,
+          minWidth: widget.constraints.maxWidth,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SinglePage(
-              w: w,
+              w: p2w,
               h: h,
-              pageW: pageW,
-              pageH: pageH,
-              markedPaths: widget.markedPaths,
-              spriteSheet: widget.spriteSheet,
+              pageW: pageTwo['w'] as double,
+              pageH: pageTwo['h'] as double,
+              markedPaths: widget.markedPaths.last,
+              spriteSheet: widget.spriteSheet.last,
             ),
-            SizedBox(height: widget.constraints.maxHeight * 0.02),
+            SinglePage(
+              w: p1w,
+              h: h,
+              pageW: pageOne['w'] as double,
+              pageH: pageOne['h'] as double,
+              markedPaths: widget.markedPaths.first,
+              spriteSheet: widget.spriteSheet.first,
+            ),
           ],
         ),
       ),

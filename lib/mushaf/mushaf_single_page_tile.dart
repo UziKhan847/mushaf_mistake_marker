@@ -12,16 +12,14 @@ class MushafSinglePageTile extends StatefulWidget {
     required this.spriteSheet,
     required this.pageData,
     required this.constraints,
-    required this.orientation,
+    required this.isPortrait,
   });
 
-  //final int pageNumber;
-  //final Size windowSize;
   final SpriteSheet spriteSheet;
   final PageData pageData;
   final Map<String, MarkType> markedPaths;
   final BoxConstraints constraints;
-  final Orientation orientation;
+  final bool isPortrait;
 
   @override
   State<MushafSinglePageTile> createState() => _MushafPageViewTileState();
@@ -54,8 +52,7 @@ class _MushafPageViewTileState extends State<MushafSinglePageTile> {
 
   @override
   Widget build(BuildContext context) {
-    final pageW = widget.pageData.width;
-    final pageH = widget.pageData.height;
+    final (pageW, pageH) = (widget.pageData.width, widget.pageData.height);
 
     // final w = widget.constraints.maxWidth * 0.95;
 
@@ -69,7 +66,7 @@ class _MushafPageViewTileState extends State<MushafSinglePageTile> {
       double w = widget.constraints.maxWidth * 0.9;
       double h = widget.constraints.maxHeight * 0.875;
 
-      final isPortrait = widget.orientation == Orientation.portrait;
+      final isPortrait = widget.isPortrait;
 
       if (isPortrait && (h * (pageW / pageH) < w)) {
         w = h * (pageW / pageH);

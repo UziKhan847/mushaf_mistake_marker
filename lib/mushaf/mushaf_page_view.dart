@@ -3,34 +3,41 @@ import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mushaf_mistake_marker/mushaf/mushaf_dual_page_tile.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_page_loading.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_single_page_tile.dart';
 import 'package:mushaf_mistake_marker/page_data/pages.dart';
+import 'package:mushaf_mistake_marker/providers/dual_page_provider.dart';
+import 'package:mushaf_mistake_marker/providers/mushaf_page_controller_provider.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite.dart';
+import 'package:mushaf_mistake_marker/sprite/sprite_manager.dart';
 import 'package:mushaf_mistake_marker/variables.dart';
 
-class MushafPageView extends StatefulWidget {
+class MushafPageView extends ConsumerStatefulWidget {
   const MushafPageView({
     super.key,
-    required this.pageController,
     required this.pages,
     required this.constraints,
+    required this.isPortrait,
   });
 
-  final PageController pageController;
   final Pages pages;
   final BoxConstraints constraints;
+  final bool isPortrait;
 
   @override
-  State<MushafPageView> createState() => _MushafPageViewState();
+  ConsumerState<MushafPageView> createState() => _MushafPageViewState();
 }
 
-class _MushafPageViewState extends State<MushafPageView> {
-  late final pageController = widget.pageController;
+class _MushafPageViewState extends ConsumerState<MushafPageView> {
+  bool preFecthedComplete = false;
 
-  late int prevPage;
-
-  final List<Map<String, MarkType>> markedPgs = List.generate(
+  late final mushfaPgCrtl = ref.read(mushafPgCtrlProvider);
+  late final initPage = mushfaPgCrtl.initialPage;
+  late int pageViewIndex;
+  late int prevPage = pageViewIndex;
+  late final List<Map<String, MarkType>> markedPgs = List.generate(
     604,
     (_) => {},
     growable: false,
@@ -39,9 +46,7 @@ class _MushafPageViewState extends State<MushafPageView> {
   @override
   void initState() {
     super.initState();
-    final initPage = pageController.initialPage;
-    prevPage = initPage;
-    preFetchPage(initPage);
+    preFetchPages();
   }
 
   @override
@@ -49,133 +54,190 @@ class _MushafPageViewState extends State<MushafPageView> {
     super.dispose();
   }
 
-  Future<void> fetchSprite(int index, int pageNumber) async {
-    try {
-      final spriteManifest = await rootBundle.loadString(
-        'assets/sprite_manifests/$pageNumber.json',
-      );
-
-      final json =
-          await compute(jsonDecode, spriteManifest) as Map<String, dynamic>;
-
-      for (final e in json['sprites'] as List<dynamic>) {
-        final sprite = Sprite.fromJson(e);
-
-        spriteSheets[index].sprites.add(sprite);
-      }
-    } catch (e) {
-      throw Exception('Exception. Error message: $e');
+  int getDualPageNumber(int pageIndex) {
+    if (pageIndex.isEven) {
+      return pageIndex ~/ 2;
+    } else {
+      return (pageIndex / 2).floor();
     }
   }
 
-  Future<void> fetchImg(int index, int pageNumber) async {
-    try {
-      final imgFile = await rootBundle.load(
-        'assets/sprite_sheets_webp/$pageNumber.webp',
-      );
-
-      final codec = await ui.instantiateImageCodec(
-        imgFile.buffer.asUint8List(),
-      );
-
-      final frame = await codec.getNextFrame();
-
-      spriteSheets[index].image = frame.image;
-
-      //return frame.image;
-    } catch (e) {
-      throw Exception('Exception. Error message: $e');
-    }
-  }
-
-  Future<void> fetchSpriteSheet(int index) async {
-    final spriteSheet = spriteSheets[index];
-
-    if (spriteSheet.sprites.isEmpty) {
-      await fetchSprite(index, index + 1);
-      print('Succesfully fetched Sprite Data of Page ${index + 1}');
-    }
-
-    if (spriteSheet.image == null) {
-      await fetchImg(index, index + 1);
-      print('Succesfully fetched Image of Page ${index + 1}');
-    }
-
-    setState(() {});
-  }
-
-  void clearImg(int index) {
-    final spriteSheet = spriteSheets[index];
-    spriteSheet.image = null;
-    print('Cleared Page: ${index + 1}');
-  }
-
-  void preFetchPage(int initPage) {
-    fetchSpriteSheet(initPage);
-
-    final offsets = [-2, -1, 1, 2];
+  void preFetchPages() async {
+    final offsets = [0, 1, -1, 2, -2, 3, 4];
+    final List<Future> futures = [];
 
     for (final e in offsets) {
       if (initPage + e >= 0 && initPage + e <= 603) {
-        fetchSpriteSheet(initPage + e);
+        futures.add(SpriteManager.fetchSpriteSheet(initPage + e));
       }
     }
+
+    await Future.wait(futures);
+    setState(() {});
   }
 
-  Future<void> _onPageChanged(int page) async {
-    final swipedLeft = page > prevPage;
+  Future<void> _onPageChanged(int index, bool isDualPageMode) async {
+    final mushafPgCtrlProv = ref.read(mushafPgCtrlProvider.notifier);
+    mushafPgCtrlProv.setPage(index, isDualPageMode);
+    final swipedLeft = index > prevPage;
+
+    final actualPage = isDualPageMode ? index * 2 : index;
+    List<int> fetchOffsets = [];
+    List<int> clearOffsets = [];
+    final List<Future> futures = [];
 
     if (swipedLeft) {
-      print('swiped left');
-      if (page > 2) {
-        clearImg(page - 3);
-      }
-      if (page < 602) {
-        try {
-          await fetchSpriteSheet(page + 2);
-        } catch (e) {
-          throw Exception('Exception. Error message: $e');
-        }
-      }
+      fetchOffsets = [1, 2, 3, -1, -2];
+      clearOffsets = [-3, -4];
     } else {
-      print('swiped right');
-      if (page < 601) {
-        clearImg(page + 3);
-      }
-      if (page > 1) {
-        try {
-          await fetchSpriteSheet(page - 2);
-        } catch (e) {
-          throw Exception('Exception. Error message: $e');
+      fetchOffsets = [-1, -2, -3, 1, 2];
+      clearOffsets = [3, 4];
+    }
+
+    for (final e in fetchOffsets) {
+      final _index = actualPage + e;
+
+      if (_index >= 0 && _index <= 603) {
+        if (spriteSheets[_index].image == null) {
+          futures.add(SpriteManager.fetchSpriteSheet(_index));
         }
       }
     }
 
-    prevPage = page;
+    await Future.wait(futures);
+    setState(() {});
+
+    for (final e in clearOffsets) {
+      final _index = actualPage + e;
+
+      if (_index >= 0 && _index <= 603) {
+        if (spriteSheets[_index].image != null) {
+          SpriteManager.clearImg(_index);
+        }
+      }
+    }
+
+    prevPage = index;
   }
 
   @override
   Widget build(BuildContext context) {
-    return PageView.builder(
-      reverse: true,
-      onPageChanged: _onPageChanged,
-      controller: pageController,
-      itemCount: 604,
-      itemBuilder: (context, index) {
-        return spriteSheets[index].image == null
-            ? MushafPageLoading()
-            : OrientationBuilder(
-              builder: (_, orientation) {
-                return MushafSinglePageTile(
-                    constraints: widget.constraints,
-                    markedPaths: markedPgs[index],
-                    spriteSheet: spriteSheets[index],
-                    pageData: widget.pages.pageData[index],
-                    orientation: orientation,
-                  );
+    final isDualPage = ref.watch(pageModeProvider);
+    final isDualPageMode = isDualPage && !widget.isPortrait;
+
+    pageViewIndex = isDualPageMode ? getDualPageNumber(initPage) : initPage;
+
+    return isDualPageMode
+        ? PageView.builder(
+            reverse: true,
+            onPageChanged: (int index) async {
+              await _onPageChanged(index, isDualPageMode);
+            },
+            controller: mushfaPgCrtl,
+            itemCount: 302,
+            itemBuilder: (_, index) {
+              final rightPage = index * 2;
+              final leftPage = rightPage + 1;
+
+              final pairMissing =
+                  spriteSheets[rightPage].image == null ||
+                  spriteSheets[leftPage].image == null;
+
+              return pairMissing
+                  ? MushafPageLoading()
+                  : MushafDualPageTile(
+                      constraints: widget.constraints,
+                      markedPaths: [markedPgs[rightPage], markedPgs[leftPage]],
+                      spriteSheet: [
+                        spriteSheets[rightPage],
+                        spriteSheets[leftPage],
+                      ],
+                      pageData: [
+                        widget.pages.pageData[rightPage],
+                        widget.pages.pageData[leftPage],
+                      ],
+                    );
+            },
+          )
+        : PageView.builder(
+            reverse: true,
+            onPageChanged: (int index) async {
+              await _onPageChanged(index, isDualPageMode);
+            },
+            controller: mushfaPgCrtl,
+            itemCount: isDualPageMode ? 302 : 604,
+            itemBuilder: (_, index) {
+              if (isDualPageMode) {
+                final i1 = index * 2;
+                final i2 = i1 + 1;
+
+                final pairMissing =
+                    spriteSheets[i1].image == null ||
+                    spriteSheets[i2].image == null;
+
+                return pairMissing
+                    ? MushafPageLoading()
+                    : MushafDualPageTile(
+                        constraints: widget.constraints,
+                        markedPaths: [markedPgs[i1], markedPgs[i2]],
+                        spriteSheet: [spriteSheets[i1], spriteSheets[i2]],
+                        pageData: [
+                          widget.pages.pageData[i1],
+                          widget.pages.pageData[i2],
+                        ],
+                      );
+              } else {
+                return spriteSheets[index].image == null
+                    ? MushafPageLoading()
+                    : MushafSinglePageTile(
+                        constraints: widget.constraints,
+                        markedPaths: markedPgs[index],
+                        spriteSheet: spriteSheets[index],
+                        pageData: widget.pages.pageData[index],
+                        isPortrait: widget.isPortrait,
+                      );
               }
-            );
-      },
-    );
+            },
+          );
+
+    // return PageView.builder(
+    //   reverse: true,
+    //   onPageChanged: (int index) async {
+    //     await _onPageChanged(index, isDualPageMode);
+    //   },
+    //   controller: mushfaPgCrtl,
+    //   itemCount: isDualPageMode ? 302 : 604,
+    //   itemBuilder: (_, index) {
+    //     if (isDualPageMode) {
+    //       final i1 = index * 2;
+    //       final i2 = i1 + 1;
+
+    //       final pairMissing =
+    //           spriteSheets[i1].image == null || spriteSheets[i2].image == null;
+
+    //       return pairMissing
+    //           ? MushafPageLoading()
+    //           : MushafDualPageTile(
+    //               constraints: widget.constraints,
+    //               markedPaths: [markedPgs[i1], markedPgs[i2]],
+    //               spriteSheet: [spriteSheets[i1], spriteSheets[i2]],
+    //               pageData: [
+    //                 widget.pages.pageData[i1],
+    //                 widget.pages.pageData[i2],
+    //               ],
+    //             );
+    //     } else {
+    //       return spriteSheets[index].image == null
+    //           ? MushafPageLoading()
+    //           : MushafSinglePageTile(
+    //               constraints: widget.constraints,
+    //               markedPaths: markedPgs[index],
+    //               spriteSheet: spriteSheets[index],
+    //               pageData: widget.pages.pageData[index],
+    //               isPortrait: widget.isPortrait,
+    //             );
+    //     }
+    //   },
+    // );
   }
 }

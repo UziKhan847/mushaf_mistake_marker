@@ -6,12 +6,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite.dart';
 import 'package:mushaf_mistake_marker/variables.dart';
 
-final spriteManagerProvider = ChangeNotifierProvider<SpriteManager>((ref) {
-  return SpriteManager();
-});
+// final spriteManagerProvider = ChangeNotifierProvider<SpriteManager>((ref) {
+//   return SpriteManager();
+// });
 
-class SpriteManager extends ChangeNotifier {
-  Future<void> fetchSprite(int index, int pageNumber) async {
+class SpriteManager {
+  static Future<void> fetchSprite(int index, int pageNumber) async {
     try {
       final spriteManifest = await rootBundle.loadString(
         'assets/sprite_manifests/$pageNumber.json',
@@ -30,7 +30,7 @@ class SpriteManager extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchImg(int index, int pageNumber) async {
+  static Future<void> fetchImg(int index, int pageNumber) async {
     try {
       final imgFile = await rootBundle.load(
         'assets/sprite_sheets_webp/$pageNumber.webp',
@@ -43,14 +43,12 @@ class SpriteManager extends ChangeNotifier {
       final frame = await codec.getNextFrame();
 
       spriteSheets[index].image = frame.image;
-
-      //return frame.image;
     } catch (e) {
       throw Exception('Exception. Error message: $e');
     }
   }
 
-  Future<void> fetchSpriteSheet(int index) async {
+  static Future<void> fetchSpriteSheet(int index) async {
     final spriteSheet = spriteSheets[index];
 
     if (spriteSheet.sprites.isEmpty) {
@@ -62,24 +60,11 @@ class SpriteManager extends ChangeNotifier {
       await fetchImg(index, index + 1);
       print('Succesfully fetched Image of Page ${index + 1}');
     }
-    notifyListeners();
   }
 
-  void clearImg(int index) {
+  static void clearImg(int index) {
     final spriteSheet = spriteSheets[index];
     spriteSheet.image = null;
     print('Cleared Page: ${index + 1}');
-  }
-
-  void preFetchPage(int initPage) {
-    fetchSpriteSheet(initPage);
-
-    final offsets = [-2, -1, 1, 2];
-
-    for (final e in offsets) {
-      if (initPage + e >= 0 && initPage + e <= 603) {
-        fetchSpriteSheet(initPage + e);
-      }
-    }
   }
 }

@@ -14,7 +14,6 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  late final mushafPageController = PageController(initialPage: 150);
   late final pageController = PageController();
 
   @override
@@ -24,7 +23,6 @@ class _HomepageState extends State<Homepage> {
 
   @override
   void dispose() {
-    mushafPageController.dispose();
     pageController.dispose();
     super.dispose();
   }
@@ -35,15 +33,16 @@ class _HomepageState extends State<Homepage> {
       children: [
         Expanded(
           child: LayoutBuilder(
-            builder: (context, constraints) {
+            builder: (_, constraints) {
+              final isPortrait = constraints.maxHeight >= constraints.maxWidth;
               return PageView(
                 physics: NeverScrollableScrollPhysics(),
                 controller: pageController,
                 children: [
                   MushafPageView(
-                    pageController: mushafPageController,
                     pages: widget.pages,
                     constraints: constraints,
+                    isPortrait: isPortrait,
                   ),
                   Column(
                     children: [
