@@ -70,6 +70,7 @@ class _MushafPageViewTileState extends State<MushafDualPageTile> {
               markedPaths: widget.markedPaths.last,
               spriteSheet: widget.spriteSheet.last,
             ),
+            SizedBox(width: 30),
             SinglePage(
               w: p1w,
               h: h,

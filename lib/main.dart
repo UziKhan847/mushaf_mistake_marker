@@ -14,7 +14,7 @@ void main() async {
 
   final prefs = await SharedPreferencesWithCache.create(
     cacheOptions: SharedPreferencesWithCacheOptions(
-      allowList: {'savedTheme', 'savedPageMode', 'initPage'},
+      allowList: {'savedTheme', 'savedPageMode', 'initPage', 'isDualPageMode'},
     ),
   );
 

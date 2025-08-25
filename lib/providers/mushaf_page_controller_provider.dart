@@ -12,22 +12,25 @@ class MushafPageControllerProvider extends Notifier<PageController> {
   PageController build() {
     final prefs = ref.read(sharedPrefsProv);
 
-    final pageController = PageController(
-      initialPage: prefs.getInt('initPage') ?? 0,
-    );
+    final isDualPageMode = prefs.getBool('isDualPageMode') ?? false;
+    final initPage = prefs.getInt('initPage') ?? 0;
+    final actualPage = isDualPageMode ? (initPage / 2).ceil() : initPage;
+
+    print('--------------------------');
+    print('IS DUAL PAGE MODE: $isDualPageMode');
+    print('THE INITIAL PAGE GOTTEN: $initPage');
+    print('THE ACTUAL PAGE GOTTEN: $actualPage');
+    print('--------------------------');
+
+    final pageController = PageController(initialPage: actualPage);
 
     ref.onDispose(pageController.dispose);
 
     return pageController;
   }
 
-  void setPage(int index, bool isDualPageMode) {
+  void setPage(int index) {
     final prefs = ref.read(sharedPrefsProv);
-    final newPage = isDualPageMode ? (index / 2).floor() : index;
-    // print('----------------------------');
-    // print('THE DUAL PAGE NUMBER: ${(index / 2).floor()}');
-    // print('THE SINGLE PAGE NUMBER: $index');
-    // print('----------------------------');
-    prefs.setInt('initPage', newPage);
+    prefs.setInt('initPage', index);
   }
 }

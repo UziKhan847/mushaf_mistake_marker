@@ -7,4 +7,11 @@ class SpriteSheet {
 
   List<Sprite> sprites;
   ui.Image? image;
+
+  SpriteSheet copyWith({List<Sprite>? sprites, ui.Image? image}) {
+    return SpriteSheet(
+      sprites: sprites ?? List.from(this.sprites),
+      image: image ?? this.image,
+    );
+  }
 }

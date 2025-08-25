@@ -22,6 +22,7 @@ class _CustomNavBarState extends ConsumerState<CustomNavBar> {
   late int targetPage;
   late int mushafPage;
   late final mushafPageCtrl = ref.read(mushafPgCtrlProvider);
+  late final mushafPageCrtlProv = ref.read(mushafPgCtrlProvider.notifier);
 
   BorderRadius getBoxRadius(Orientation orientation) {
     final radius = Radius.circular(20);
@@ -114,6 +115,7 @@ class _CustomNavBarState extends ConsumerState<CustomNavBar> {
                   child: GestureDetector(
                     onTap: () {
                       pageModeProv.setPageMode();
+
                       mushafPage = mushafPageCtrl.page!.toInt();
                       print('MUSHAF PAGE IS: $mushafPage');
                       if (isDualPage) {
@@ -123,7 +125,9 @@ class _CustomNavBarState extends ConsumerState<CustomNavBar> {
                         targetPage = (mushafPage / 2).floor();
                         print('FROM SING TO DUAL MODE, TARGET: $targetPage');
                       }
+
                       mushafPageCtrl.jumpToPage(targetPage);
+                      mushafPageCrtlProv.setPage(targetPage);
                     },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
