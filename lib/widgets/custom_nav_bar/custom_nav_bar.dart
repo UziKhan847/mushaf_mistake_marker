@@ -114,20 +114,31 @@ class _CustomNavBarState extends ConsumerState<CustomNavBar> {
                   padding: const EdgeInsets.all(8.0),
                   child: GestureDetector(
                     onTap: () {
+                      print('---------------------------');
+                      print('IS DUAL PAGE BEFORE CLICK: $isDualPage');
+                      print('---------------------------');
                       pageModeProv.setPageMode();
 
                       mushafPage = mushafPageCtrl.page!.toInt();
-                      print('MUSHAF PAGE IS: $mushafPage');
-                      if (isDualPage) {
-                        targetPage = mushafPage * 2;
-                        print('FROM DUAL TO SING MODE, TARGET: $targetPage');
-                      } else {
-                        targetPage = (mushafPage / 2).floor();
-                        print('FROM SING TO DUAL MODE, TARGET: $targetPage');
-                      }
+                      targetPage = isDualPage
+                          ? mushafPage * 2
+                          : (mushafPage / 2).floor();
+
+                      print('---------------------------');
+                      print('SET TARGET PAGE: $targetPage');
+                      print('---------------------------');
+
+                      print('---------------------------');
+                      print('IS DUAL PAGE AFTER CLICK: $isDualPage');
+                      print('---------------------------');
 
                       mushafPageCtrl.jumpToPage(targetPage);
-                      mushafPageCrtlProv.setPage(targetPage);
+
+                      final setInitPage = isDualPage
+                          ? targetPage
+                          : targetPage * 2;
+
+                      mushafPageCrtlProv.setPage(setInitPage);
                     },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,

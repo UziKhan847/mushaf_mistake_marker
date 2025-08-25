@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_dual_page_tile.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_page_loading.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_single_page_tile.dart';
+import 'package:mushaf_mistake_marker/mushaf/on_page_changed_handler.dart';
 import 'package:mushaf_mistake_marker/page_data/pages.dart';
 import 'package:mushaf_mistake_marker/providers/dual_page_provider.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf_page_controller_provider.dart';
@@ -30,8 +31,8 @@ class _MushafPageViewState extends ConsumerState<MushafPageView> {
   late final mushfaPgCrtl = ref.read(mushafPgCtrlProvider);
   late final initPage = mushfaPgCrtl.initialPage;
   late final prefs = ref.read(sharedPrefsProv);
-  //late int pageViewIndex;
-  late int prevPage; // = pageViewIndex;
+  late int prevPage;
+  late final onPgHandler = OnPageChangedHandler();
   late final List<Map<String, MarkType>> markedPgs = List.generate(
     604,
     (_) => {},
@@ -57,7 +58,6 @@ class _MushafPageViewState extends ConsumerState<MushafPageView> {
     }
   }
 
-  //PreFecth
   Future<void> preFetchPages() async {
     final isDualPageMode = ref.read(pageModeProvider) && !widget.isPortrait;
     final offsets = [0, 1, -1, 2, -2, 3, 4];
@@ -76,51 +76,6 @@ class _MushafPageViewState extends ConsumerState<MushafPageView> {
     setState(() {});
   }
 
-  //OnPageChanged Helper Methods
-  void savePageIndex(int index, bool isDualPageMode) {
-    final mushafPgCtrlProv = ref.read(mushafPgCtrlProvider.notifier);
-
-    final targetPage = isDualPageMode ? index * 2 : index;
-
-    print('---------------');
-    print('SAVED TARGET PAGE IS $targetPage');
-    print('---------------');
-
-    mushafPgCtrlProv.setPage(targetPage);
-  }
-
-  List<int> getFetchOffsets(bool swipedLeft) =>
-      swipedLeft ? [1, 2, 3, -1, -2] : [-1, -2, -3, 1, 2];
-
-  List<int> getClearOffsets(bool swipedLeft) => swipedLeft ? [-3, -4] : [4, 5];
-
-  bool isValidIndex(int index) => index >= 0 && index <= 603;
-
-  Future<void> fetchMissingImages(int baseIndex, List<int> offsets) async {
-    final futures = <Future>[];
-
-    for (final offset in offsets) {
-      final index = baseIndex + offset;
-
-      if (isValidIndex(index) && spriteSheets[index].image == null) {
-        futures.add(SpriteManager.fetchSpriteSheet(index));
-      }
-    }
-
-    await Future.wait(futures);
-  }
-
-  void clearUnusedImages(int baseIndex, List<int> offsets) {
-    for (final offset in offsets) {
-      final index = baseIndex + offset;
-
-      if (isValidIndex(index) && spriteSheets[index].image != null) {
-        SpriteManager.clearImg(index);
-      }
-    }
-  }
-
-  //OnPageChanged
   Future<void> _onPageChanged(int index, bool isDualPageMode) async {
     final isSwipe = (index - prevPage).abs() == 1;
 
@@ -128,25 +83,18 @@ class _MushafPageViewState extends ConsumerState<MushafPageView> {
       prevPage = index;
       return;
     }
-    print('---------------');
-    print('FIRST SWIPE');
-    print('---------------');
 
-    savePageIndex(index, isDualPageMode);
-
-    print('---------------');
-    print('SAVED PAGE INDEX');
-    print('---------------');
+    onPgHandler.savePageIndex(ref, index, isDualPageMode);
 
     final swipedLeft = index > prevPage;
     final actualPage = isDualPageMode ? index * 2 : index;
 
-    List<int> fetchOffsets = getFetchOffsets(swipedLeft);
-    List<int> clearOffsets = getClearOffsets(swipedLeft);
+    List<int> fetchOffsets = onPgHandler.getFetchOffsets(swipedLeft);
+    List<int> clearOffsets = onPgHandler.getClearOffsets(swipedLeft);
 
-    await fetchMissingImages(actualPage, fetchOffsets);
+    await onPgHandler.fetchMissingImages(actualPage, fetchOffsets);
     setState(() {});
-    clearUnusedImages(actualPage, clearOffsets);
+    onPgHandler.clearUnusedImages(actualPage, clearOffsets);
 
     prevPage = index;
   }

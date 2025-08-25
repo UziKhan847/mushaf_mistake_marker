@@ -87,6 +87,5 @@ class SpriteNotifier extends Notifier<List<SpriteSheet>> {
     state = newState;
 
     //oldSheet.image?.dispose();
-    print('Disposed Page: ${index + 1}');
   }
 }
