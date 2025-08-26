@@ -16,14 +16,6 @@ class MushafPageControllerProvider extends Notifier<PageController> {
     final initPage = prefs.getInt('initPage') ?? 0;
     final actualPage = isDualPageMode ? (initPage / 2).ceil() : initPage;
 
-    print('---------------------------');
-    print('INITIAL PAGE: $initPage');
-    print('---------------------------');
-
-    print('---------------------------');
-    print('ACTUAL PAGE: $actualPage');
-    print('---------------------------');
-
     final pageController = PageController(initialPage: actualPage);
 
     ref.onDispose(pageController.dispose);
@@ -35,4 +27,23 @@ class MushafPageControllerProvider extends Notifier<PageController> {
     final prefs = ref.read(sharedPrefsProv);
     prefs.setInt('initPage', index);
   }
+
+  void preservePage(PageLayout targetLayout) {
+    if (!state.hasClients) {
+      return;
+    }
+
+    final pageIndex = state.page!.round();
+    final isSinglePage = targetLayout == PageLayout.singlePage;
+
+    final int targetPage = isSinglePage ? pageIndex * 2 : pageIndex ~/ 2;
+
+    state.jumpToPage(targetPage);
+
+    final setInitPage = isSinglePage ? targetPage : targetPage * 2;
+
+    setPage(setInitPage);
+  }
 }
+
+enum PageLayout { singlePage, dualPage }

@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_page_view.dart';
 import 'package:mushaf_mistake_marker/page_data/pages.dart';
+import 'package:mushaf_mistake_marker/providers/mushaf_page_controller_provider.dart';
+import 'package:mushaf_mistake_marker/providers/shared_prefs_provider.dart';
 import 'package:mushaf_mistake_marker/widgets/custom_flex.dart';
 import 'package:mushaf_mistake_marker/widgets/custom_nav_bar/custom_nav_bar.dart';
 
-class Homepage extends StatefulWidget {
+class Homepage extends ConsumerStatefulWidget {
   const Homepage({super.key, required this.pages});
 
   final Pages pages;
 
   @override
-  State<Homepage> createState() => _HomepageState();
+  ConsumerState<Homepage> createState() => _HomepageState();
 }
 
-class _HomepageState extends State<Homepage> {
+class _HomepageState extends ConsumerState<Homepage> {
   late final pageController = PageController();
+  late final mushafPgCrtl = ref.read(mushafPgCtrlProvider);
+  late final mushafPgCrtlProv = ref.read(mushafPgCtrlProvider.notifier);
+  late final prefs = ref.read(sharedPrefsProv);
+  bool? oldIsPortrait;
+  bool firstLaunch = true;
 
   @override
   void initState() {
@@ -27,6 +35,19 @@ class _HomepageState extends State<Homepage> {
     super.dispose();
   }
 
+  void perservePageOnOrientChange(bool isPortrait, bool isDualPage) {
+    if (firstLaunch) {
+      oldIsPortrait = isPortrait;
+      firstLaunch = false;
+      return;
+    }
+
+    if (oldIsPortrait != isPortrait && isDualPage) {
+      mushafPgCrtlProv.preservePage(isPortrait ? PageLayout.singlePage : PageLayout.dualPage);
+      oldIsPortrait = isPortrait;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomFlex(
@@ -35,6 +56,10 @@ class _HomepageState extends State<Homepage> {
           child: LayoutBuilder(
             builder: (_, constraints) {
               final isPortrait = constraints.maxHeight >= constraints.maxWidth;
+              final isDualPage = prefs.getBool('savedPageMode') ?? false;
+
+              perservePageOnOrientChange(isPortrait, isDualPage);
+
               return PageView(
                 physics: NeverScrollableScrollPhysics(),
                 controller: pageController,

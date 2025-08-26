@@ -5,10 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite.dart';
 import 'package:mushaf_mistake_marker/variables.dart';
 
-// final spriteManagerProvider = ChangeNotifierProvider<SpriteManager>((ref) {
-//   return SpriteManager();
-// });
-
 class SpriteManager {
   static Future<void> fetchSprite(int index, int pageNumber) async {
     try {
@@ -52,18 +48,41 @@ class SpriteManager {
 
     if (spriteSheet.sprites.isEmpty) {
       await fetchSprite(index, index + 1);
-      print('Succesfully fetched Sprite Data of Page ${index + 1}');
+      //print('Succesfully fetched Sprite Data of Page ${index + 1}');
     }
 
     if (spriteSheet.image == null) {
       await fetchImg(index, index + 1);
-      print('Succesfully fetched Image of Page ${index + 1}');
+      //print('Succesfully fetched Image of Page ${index + 1}');
     }
   }
 
   static void clearImg(int index) {
     final spriteSheet = spriteSheets[index];
     spriteSheet.image = null;
-    print('Cleared Page: ${index + 1}');
+    //print('Cleared Page: ${index + 1}');
+  }
+
+  static Future<int> preFetchPages(bool isDualPageMode, int initPage) async {
+    //final isDualPageMode = ref.read(pageModeProvider) && !widget.isPortrait;
+    final offsets = [0, 1, -1, 2, -2, 3, 4];
+    final List<Future> futures = [];
+    final List<int> pageNumbers = [];
+
+    final actualPage = isDualPageMode ? initPage * 2 : initPage;
+
+    for (final e in offsets) {
+      if (actualPage + e >= 0 && actualPage + e <= 603) {
+        futures.add(SpriteManager.fetchSpriteSheet(actualPage + e));
+        pageNumbers.add(actualPage + e);
+      }
+    }
+
+    await Future.wait(futures);
+    print(
+      'Prefetched the following pages and their images: ${pageNumbers.join(',')}',
+    );
+
+    return initPage;
   }
 }

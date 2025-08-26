@@ -3,7 +3,7 @@ import 'package:mushaf_mistake_marker/providers/mushaf_page_controller_provider.
 import 'package:mushaf_mistake_marker/sprite/sprite_manager.dart';
 import 'package:mushaf_mistake_marker/variables.dart';
 
-class OnPageChangedHandler {
+class PageChangedHandler {
   void savePageIndex(WidgetRef ref, int index, bool isDualPageMode) {
     final mushafPgCtrlProv = ref.read(mushafPgCtrlProvider.notifier);
 
@@ -41,5 +41,26 @@ class OnPageChangedHandler {
         SpriteManager.clearImg(index);
       }
     }
+  }
+
+    Future<int> onPageChanged(WidgetRef ref, int prevPage, int index, bool isDualPageMode) async {
+    final isSwipe = (index - prevPage).abs() == 1;
+
+    if (!isSwipe) {
+      return index;
+    }
+
+    savePageIndex(ref, index, isDualPageMode);
+
+    final swipedLeft = index > prevPage;
+    final actualPage = isDualPageMode ? index * 2 : index;
+
+    List<int> fetchOffsets = getFetchOffsets(swipedLeft);
+    List<int> clearOffsets = getClearOffsets(swipedLeft);
+
+    await fetchMissingImages(actualPage, fetchOffsets);
+    clearUnusedImages(actualPage, clearOffsets);
+
+    return index;
   }
 }

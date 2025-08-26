@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mushaf_mistake_marker/providers/dual_page_provider.dart';
+import 'package:mushaf_mistake_marker/providers/page_mode_provider.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf_page_controller_provider.dart';
 import 'package:mushaf_mistake_marker/providers/theme_provider.dart';
 import 'package:mushaf_mistake_marker/widgets/custom_flex.dart';
@@ -17,7 +17,7 @@ class CustomNavBar extends ConsumerStatefulWidget {
 
 class _CustomNavBarState extends ConsumerState<CustomNavBar> {
   int get page => widget.pageController.hasClients
-      ? widget.pageController.page!.toInt()
+      ? widget.pageController.page!.round()
       : 0;
   late int targetPage;
   late int mushafPage;
@@ -114,31 +114,13 @@ class _CustomNavBarState extends ConsumerState<CustomNavBar> {
                   padding: const EdgeInsets.all(8.0),
                   child: GestureDetector(
                     onTap: () {
-                      print('---------------------------');
-                      print('IS DUAL PAGE BEFORE CLICK: $isDualPage');
-                      print('---------------------------');
                       pageModeProv.setPageMode();
-
-                      mushafPage = mushafPageCtrl.page!.toInt();
-                      targetPage = isDualPage
-                          ? mushafPage * 2
-                          : (mushafPage / 2).floor();
-
-                      print('---------------------------');
-                      print('SET TARGET PAGE: $targetPage');
-                      print('---------------------------');
-
-                      print('---------------------------');
-                      print('IS DUAL PAGE AFTER CLICK: $isDualPage');
-                      print('---------------------------');
-
-                      mushafPageCtrl.jumpToPage(targetPage);
-
-                      final setInitPage = isDualPage
-                          ? targetPage
-                          : targetPage * 2;
-
-                      mushafPageCrtlProv.setPage(setInitPage);
+                      final newIsDualPage = !isDualPage;
+                      mushafPageCrtlProv.preservePage(
+                        newIsDualPage
+                            ? PageLayout.dualPage
+                            : PageLayout.singlePage,
+                      );
                     },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,

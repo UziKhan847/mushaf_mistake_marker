@@ -110,7 +110,7 @@ class _SinglePageState extends ConsumerState<SinglePage> {
             vBoxSize: Size(widget.pageW, widget.pageH),
             markedPaths: Map.from(markedPaths),
             spriteSheet: widget.spriteSheet,
-            isDarkMode: isDarkMode
+            isDarkMode: isDarkMode,
           ),
         ),
       ),
