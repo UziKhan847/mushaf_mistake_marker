@@ -1,12 +1,12 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_dual_page_tile.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_page_loading.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_single_page_tile.dart';
 import 'package:mushaf_mistake_marker/mushaf/page_changed_handler.dart';
 import 'package:mushaf_mistake_marker/page_data/pages.dart';
 import 'package:mushaf_mistake_marker/providers/sprite_provider.dart';
-import 'package:mushaf_mistake_marker/variables.dart';
 
 class MushafPager extends ConsumerStatefulWidget {
   const MushafPager({
@@ -19,7 +19,7 @@ class MushafPager extends ConsumerStatefulWidget {
     required this.ref,
     this.isPortrait = false,
     this.reverse = true,
-    this.initialPrevPage = 0,
+    this.initPage = 0,
   });
 
   final bool isDualPageMode;
@@ -30,7 +30,7 @@ class MushafPager extends ConsumerStatefulWidget {
   final WidgetRef ref;
   final bool isPortrait;
   final bool reverse;
-  final int initialPrevPage;
+  final int initPage;
 
   @override
   ConsumerState<MushafPager> createState() => _MushafPagerState();
@@ -43,7 +43,7 @@ class _MushafPagerState extends ConsumerState<MushafPager> {
   @override
   void initState() {
     super.initState();
-    prevPage = widget.initialPrevPage;
+    prevPage = widget.initPage;
   }
 
   @override
@@ -60,7 +60,7 @@ class _MushafPagerState extends ConsumerState<MushafPager> {
           index,
           widget.isDualPageMode,
         );
-       // setState(() {});
+        // setState(() {});
       },
       itemCount: itemCount,
       itemBuilder: (_, index) {
@@ -90,16 +90,15 @@ class _MushafPagerState extends ConsumerState<MushafPager> {
                   ],
                 );
         } else {
-          final int pageIndex = index;
-          final bool missing = spriteSheets[pageIndex].image == null;
+          final bool missing = spriteSheets[index].image == null;
 
           return missing
               ? MushafPageLoading()
               : MushafSinglePageTile(
                   constraints: widget.constraints,
-                  markedPaths: widget.markedPgs[pageIndex],
-                  spriteSheet: spriteSheets[pageIndex],
-                  pageData: widget.pages.pageData[pageIndex],
+                  markedPaths: widget.markedPgs[index],
+                  spriteSheet: spriteSheets[index],
+                  pageData: widget.pages.pageData[index],
                   isPortrait: widget.isPortrait,
                 );
         }

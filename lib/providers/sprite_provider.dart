@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mushaf_mistake_marker/providers/page_mode_provider.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite_sheet.dart';
 
@@ -85,7 +86,26 @@ class SpriteNotifier extends Notifier<List<SpriteSheet>> {
     final newState = [...state];
     newState[index] = updated;
     state = newState;
+  }
 
-    //oldSheet.image?.dispose();
+    Future<void> preFetchPages(int initPage, bool isPortrait) async {
+    final isDualPageMode = ref.read(pageModeProvider) && !isPortrait;
+    final offsets = [0, 1, -1, 2, -2, 3, 4];
+    final List<Future> futures = [];
+    final List<int> pageNumbers = [];
+
+    final actualPage = isDualPageMode ? initPage * 2 : initPage;
+
+    for (final e in offsets) {
+      if (actualPage + e >= 0 && actualPage + e <= 603) {
+        futures.add(fetchSpriteSheet(actualPage + e));
+        pageNumbers.add(actualPage + e);
+      }
+    }
+
+    await Future.wait(futures);
+    print(
+      'Prefetched the following pages and their images: ${pageNumbers.join(',')}',
+    );
   }
 }

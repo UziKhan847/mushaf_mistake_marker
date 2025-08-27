@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_pager.dart';
-import 'package:mushaf_mistake_marker/mushaf/page_changed_handler.dart';
 import 'package:mushaf_mistake_marker/page_data/pages.dart';
 import 'package:mushaf_mistake_marker/providers/page_mode_provider.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf_page_controller_provider.dart';
 import 'package:mushaf_mistake_marker/providers/shared_prefs_provider.dart';
 import 'package:mushaf_mistake_marker/providers/sprite_provider.dart';
-
-import 'package:mushaf_mistake_marker/variables.dart';
 
 class MushafPageView extends ConsumerStatefulWidget {
   const MushafPageView({
@@ -30,8 +28,9 @@ class _MushafPageViewState extends ConsumerState<MushafPageView>
     with AutomaticKeepAliveClientMixin {
   late final mushfaPgCrtl = ref.read(mushafPgCtrlProvider);
   late final initPage = mushfaPgCrtl.initialPage;
+  late final spriteProv = ref.read(spriteProvider.notifier);
   late final prefs = ref.read(sharedPrefsProv);
-  late int prevPage;
+  //late int prevPage;
 
   late final List<Map<String, MarkType>> markedPgs = List.generate(
     604,
@@ -45,35 +44,12 @@ class _MushafPageViewState extends ConsumerState<MushafPageView>
   @override
   void initState() {
     super.initState();
-    preFetchPages();
+    spriteProv.preFetchPages(initPage, widget.isPortrait);
   }
 
   @override
   void dispose() {
     super.dispose();
-  }
-
-  Future<void> preFetchPages() async {
-    final isDualPageMode = ref.read(pageModeProvider) && !widget.isPortrait;
-    final spriteProv = ref.read(spriteProvider.notifier);
-    final offsets = [0, 1, -1, 2, -2, 3, 4];
-    final List<Future> futures = [];
-    final List<int> pageNumbers = [];
-
-    final actualPage = isDualPageMode ? initPage * 2 : initPage;
-    prevPage = initPage;
-
-    for (final e in offsets) {
-      if (actualPage + e >= 0 && actualPage + e <= 603) {
-        futures.add(spriteProv.fetchSpriteSheet(actualPage + e));
-        pageNumbers.add(actualPage + e);
-      }
-    }
-
-    await Future.wait(futures);
-    print(
-      'Prefetched the following pages and their images: ${pageNumbers.join(',')}',
-    );
   }
 
   @override
@@ -91,6 +67,7 @@ class _MushafPageViewState extends ConsumerState<MushafPageView>
       constraints: widget.constraints,
       ref: ref,
       isPortrait: isDualPageMode ? false : widget.isPortrait,
+      initPage: initPage,
     );
   }
 }

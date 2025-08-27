@@ -1,15 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf_page_controller_provider.dart';
 import 'package:mushaf_mistake_marker/providers/sprite_provider.dart';
-import 'package:mushaf_mistake_marker/sprite/sprite_manager.dart';
-import 'package:mushaf_mistake_marker/variables.dart';
+import 'package:mushaf_mistake_marker/sprite/sprite_sheet.dart';
 
 class PageChangedHandler {
-  PageChangedHandler({required this.ref});
+  PageChangedHandler({required this.ref})
+    : spriteProv = ref.read(spriteProvider.notifier),
+      spriteSheets = ref.read(spriteProvider);
 
   final WidgetRef ref;
+  final SpriteNotifier spriteProv;
+  final List<SpriteSheet> spriteSheets;
 
-  void savePageIndex(WidgetRef ref, int index, bool isDualPageMode) {
+  void savePageIndex(int index, bool isDualPageMode) {
     final mushafPgCtrlProv = ref.read(mushafPgCtrlProvider.notifier);
 
     final targetPage = isDualPageMode ? index * 2 : index;
@@ -25,8 +28,6 @@ class PageChangedHandler {
   bool isValidIndex(int index) => index >= 0 && index <= 603;
 
   Future<void> fetchMissingImages(int baseIndex, List<int> offsets) async {
-    final spriteSheets = ref.read(spriteProvider);
-    final spriteProv = ref.read(spriteProvider.notifier);
     final futures = <Future>[];
 
     for (final offset in offsets) {
@@ -41,8 +42,6 @@ class PageChangedHandler {
   }
 
   void clearUnusedImages(int baseIndex, List<int> offsets) {
-    final spriteSheets = ref.read(spriteProvider);
-    final spriteProv = ref.read(spriteProvider.notifier);
     for (final offset in offsets) {
       final index = baseIndex + offset;
 
@@ -63,7 +62,7 @@ class PageChangedHandler {
       return index;
     }
 
-    savePageIndex(ref, index, isDualPageMode);
+    savePageIndex(index, isDualPageMode);
 
     final swipedLeft = index > prevPage;
     final actualPage = isDualPageMode ? index * 2 : index;

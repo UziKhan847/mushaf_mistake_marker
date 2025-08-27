@@ -1,9 +1,6 @@
-import 'package:mushaf_mistake_marker/sprite/sprite_sheet.dart';
 import 'package:mushaf_mistake_marker/widgets/custom_nav_bar/nav_item_data.dart';
 
-//final spriteSheets = List.generate(604, (_) => SpriteSheet(sprites: []));
 
-enum MarkType { mistake, oldMistake, doubt, tajwid }
 
 const redInt = 0xFFFF0000;
 const purpleInt = 0xFF800080;

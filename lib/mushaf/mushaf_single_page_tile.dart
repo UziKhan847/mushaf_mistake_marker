@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/mushaf/single_page.dart';
 import 'package:mushaf_mistake_marker/page_data/page_data.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite_sheet.dart';
-import 'package:mushaf_mistake_marker/variables.dart';
 
 class MushafSinglePageTile extends StatefulWidget {
   const MushafSinglePageTile({

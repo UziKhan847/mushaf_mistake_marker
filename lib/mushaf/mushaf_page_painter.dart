@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite_sheet.dart';
 import 'package:mushaf_mistake_marker/variables.dart';
 

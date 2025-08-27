@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_page_painter.dart';
 import 'package:mushaf_mistake_marker/providers/theme_provider.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite_sheet.dart';
-import 'package:mushaf_mistake_marker/variables.dart';
 
 class SinglePage extends ConsumerStatefulWidget {
   const SinglePage({
@@ -28,6 +28,9 @@ class SinglePage extends ConsumerStatefulWidget {
 }
 
 class _SinglePageState extends ConsumerState<SinglePage> {
+  late final sprites = widget.spriteSheet.sprites;
+  late final markedPaths = widget.markedPaths;
+
   bool elemBounds({
     required double top,
     required double bottom,
@@ -44,8 +47,8 @@ class _SinglePageState extends ConsumerState<SinglePage> {
 
   @override
   Widget build(BuildContext context) {
-    final sprites = widget.spriteSheet.sprites;
-    final markedPaths = widget.markedPaths;
+    // final sprites = widget.spriteSheet.sprites;
+    // final markedPaths = widget.markedPaths;
 
     final isDarkMode = ref.watch(themeProvider);
 
@@ -56,8 +59,10 @@ class _SinglePageState extends ConsumerState<SinglePage> {
         onTapDown: (details) {
           final localPos = details.localPosition;
 
-          final scaleX = widget.w / widget.pageW;
-          final scaleY = widget.h / widget.pageH;
+          final (scaleX, scaleY) = (
+            widget.w / widget.pageW,
+            widget.h / widget.pageH,
+          );
 
           final scaledPoint = Offset(
             localPos.dx / scaleX,
@@ -97,9 +102,6 @@ class _SinglePageState extends ConsumerState<SinglePage> {
                 default:
                   markedPaths[id] = MarkType.doubt;
               }
-
-              //print('-----------------------------------');
-              //print('Clicked Element: $id');
 
               setState(() {});
             }
