@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mushaf_mistake_marker/mushaf/mushaf_dual_page_tile.dart';
-import 'package:mushaf_mistake_marker/mushaf/mushaf_page_loading.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_pager.dart';
-import 'package:mushaf_mistake_marker/mushaf/mushaf_single_page_tile.dart';
 import 'package:mushaf_mistake_marker/mushaf/page_changed_handler.dart';
 import 'package:mushaf_mistake_marker/page_data/pages.dart';
 import 'package:mushaf_mistake_marker/providers/page_mode_provider.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf_page_controller_provider.dart';
 import 'package:mushaf_mistake_marker/providers/shared_prefs_provider.dart';
-import 'package:mushaf_mistake_marker/sprite/sprite_manager.dart';
+import 'package:mushaf_mistake_marker/providers/sprite_provider.dart';
 
 import 'package:mushaf_mistake_marker/variables.dart';
 
@@ -35,7 +32,7 @@ class _MushafPageViewState extends ConsumerState<MushafPageView>
   late final initPage = mushfaPgCrtl.initialPage;
   late final prefs = ref.read(sharedPrefsProv);
   late int prevPage;
-  late final onPgChngdHandler = PageChangedHandler();
+
   late final List<Map<String, MarkType>> markedPgs = List.generate(
     604,
     (_) => {},
@@ -58,6 +55,7 @@ class _MushafPageViewState extends ConsumerState<MushafPageView>
 
   Future<void> preFetchPages() async {
     final isDualPageMode = ref.read(pageModeProvider) && !widget.isPortrait;
+    final spriteProv = ref.read(spriteProvider.notifier);
     final offsets = [0, 1, -1, 2, -2, 3, 4];
     final List<Future> futures = [];
     final List<int> pageNumbers = [];
@@ -67,7 +65,7 @@ class _MushafPageViewState extends ConsumerState<MushafPageView>
 
     for (final e in offsets) {
       if (actualPage + e >= 0 && actualPage + e <= 603) {
-        futures.add(SpriteManager.fetchSpriteSheet(actualPage + e));
+        futures.add(spriteProv.fetchSpriteSheet(actualPage + e));
         pageNumbers.add(actualPage + e);
       }
     }
@@ -76,7 +74,6 @@ class _MushafPageViewState extends ConsumerState<MushafPageView>
     print(
       'Prefetched the following pages and their images: ${pageNumbers.join(',')}',
     );
-    setState(() {});
   }
 
   @override

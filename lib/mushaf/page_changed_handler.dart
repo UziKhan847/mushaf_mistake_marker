@@ -1,9 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf_page_controller_provider.dart';
+import 'package:mushaf_mistake_marker/providers/sprite_provider.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite_manager.dart';
 import 'package:mushaf_mistake_marker/variables.dart';
 
 class PageChangedHandler {
+  PageChangedHandler({required this.ref});
+
+  final WidgetRef ref;
+
   void savePageIndex(WidgetRef ref, int index, bool isDualPageMode) {
     final mushafPgCtrlProv = ref.read(mushafPgCtrlProvider.notifier);
 
@@ -13,20 +18,22 @@ class PageChangedHandler {
   }
 
   List<int> getFetchOffsets(bool swipedLeft) =>
-      swipedLeft ? [1, 2, 3, -1, -2] : [-1, -2, -3, 1, 2];
+      swipedLeft ? [0, 1, 2, 3, -1, -2] : [0, -1, -2, -3, 1, 2];
 
   List<int> getClearOffsets(bool swipedLeft) => swipedLeft ? [-3, -4] : [4, 5];
 
   bool isValidIndex(int index) => index >= 0 && index <= 603;
 
   Future<void> fetchMissingImages(int baseIndex, List<int> offsets) async {
+    final spriteSheets = ref.read(spriteProvider);
+    final spriteProv = ref.read(spriteProvider.notifier);
     final futures = <Future>[];
 
     for (final offset in offsets) {
       final index = baseIndex + offset;
 
       if (isValidIndex(index) && spriteSheets[index].image == null) {
-        futures.add(SpriteManager.fetchSpriteSheet(index));
+        futures.add(spriteProv.fetchSpriteSheet(index));
       }
     }
 
@@ -34,16 +41,22 @@ class PageChangedHandler {
   }
 
   void clearUnusedImages(int baseIndex, List<int> offsets) {
+    final spriteSheets = ref.read(spriteProvider);
+    final spriteProv = ref.read(spriteProvider.notifier);
     for (final offset in offsets) {
       final index = baseIndex + offset;
 
       if (isValidIndex(index) && spriteSheets[index].image != null) {
-        SpriteManager.clearImg(index);
+        spriteProv.clearImg(index);
       }
     }
   }
 
-    Future<int> onPageChanged(WidgetRef ref, int prevPage, int index, bool isDualPageMode) async {
+  Future<int> onPageChanged(
+    int prevPage,
+    int index,
+    bool isDualPageMode,
+  ) async {
     final isSwipe = (index - prevPage).abs() == 1;
 
     if (!isSwipe) {

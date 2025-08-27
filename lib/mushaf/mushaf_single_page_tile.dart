@@ -84,8 +84,27 @@ class _MushafPageViewTileState extends State<MushafSinglePageTile> {
       child: ConstrainedBox(
         constraints: BoxConstraints(minHeight: widget.constraints.maxHeight),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+          spacing: 20,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Container(
+              height: widget.constraints.maxHeight * 0.05,
+              width: w,
+              color: Colors.amber,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Surah: [Surah Name]'),
+                      Text('Juzu: [Juzu Number]'),
+                    ],
+                  ),
+                  Text('Page: [Page Number]'),
+                ],
+              ),
+            ),
             SinglePage(
               w: w,
               h: h,
@@ -94,7 +113,6 @@ class _MushafPageViewTileState extends State<MushafSinglePageTile> {
               markedPaths: widget.markedPaths,
               spriteSheet: widget.spriteSheet,
             ),
-            SizedBox(height: widget.constraints.maxHeight * 0.02),
           ],
         ),
       ),

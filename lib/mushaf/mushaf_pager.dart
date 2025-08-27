@@ -5,9 +5,10 @@ import 'package:mushaf_mistake_marker/mushaf/mushaf_page_loading.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_single_page_tile.dart';
 import 'package:mushaf_mistake_marker/mushaf/page_changed_handler.dart';
 import 'package:mushaf_mistake_marker/page_data/pages.dart';
+import 'package:mushaf_mistake_marker/providers/sprite_provider.dart';
 import 'package:mushaf_mistake_marker/variables.dart';
 
-class MushafPager extends StatefulWidget {
+class MushafPager extends ConsumerStatefulWidget {
   const MushafPager({
     super.key,
     required this.isDualPageMode,
@@ -32,12 +33,12 @@ class MushafPager extends StatefulWidget {
   final int initialPrevPage;
 
   @override
-  State<MushafPager> createState() => _MushafPagerState();
+  ConsumerState<MushafPager> createState() => _MushafPagerState();
 }
 
-class _MushafPagerState extends State<MushafPager> {
+class _MushafPagerState extends ConsumerState<MushafPager> {
   late int prevPage;
-  late final onPageHandler = PageChangedHandler();
+  late final onPageHandler = PageChangedHandler(ref: ref);
 
   @override
   void initState() {
@@ -48,20 +49,18 @@ class _MushafPagerState extends State<MushafPager> {
   @override
   Widget build(BuildContext context) {
     final int itemCount = widget.isDualPageMode ? 302 : 604;
+    final spriteSheets = ref.watch(spriteProvider);
 
     return PageView.builder(
       reverse: widget.reverse,
       controller: widget.controller,
       onPageChanged: (int index) async {
-        print('------------------------');
-        print('THE FUNCTION WAS TRIGGERED');
         prevPage = await onPageHandler.onPageChanged(
-          widget.ref,
           prevPage,
           index,
           widget.isDualPageMode,
         );
-        setState(() {});
+       // setState(() {});
       },
       itemCount: itemCount,
       itemBuilder: (_, index) {
