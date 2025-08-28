@@ -1,7 +1,7 @@
 import 'package:flutter_svg/flutter_svg.dart';
 
-class MainNavBarIconData {
-  MainNavBarIconData({
+class NavBarIconData {
+  NavBarIconData({
     required this.selectedIcon,
     required this.unSelectedIcon,
     required this.labelText,

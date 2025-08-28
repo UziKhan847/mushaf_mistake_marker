@@ -1,6 +1,3 @@
-import 'package:mushaf_mistake_marker/widgets/custom_nav_bar/nav_item_data.dart';
-
-
 
 const redInt = 0xFFFF0000;
 const purpleInt = 0xFF800080;
@@ -9,25 +6,4 @@ const greenInt = 0xFF00FF00;
 const blackInt = 0xFF000000;
 const whiteInt = 0xFFFFFFFF;
 
-const List<NavItemData> navItems = [
-  NavItemData(
-    label: 'Mushaf',
-    selectedAsset: 'assets/icons/mushaf_selected.svg',
-    unSelectedAsset: 'assets/icons/mushaf_unselected.svg',
-  ),
-  NavItemData(
-    label: 'Index',
-    selectedAsset: 'assets/icons/index_selected.svg',
-    unSelectedAsset: 'assets/icons/index_unselected.svg',
-  ),
-  NavItemData(
-    label: 'Page Info',
-    selectedAsset: 'assets/icons/pageinfo_selected.svg',
-    unSelectedAsset: 'assets/icons/pageinfo_unselected.svg',
-  ),
-  NavItemData(
-    label: 'More',
-    selectedAsset: 'assets/icons/more_selected.svg',
-    unSelectedAsset: 'assets/icons/more_unselected.svg',
-  ),
-];
+

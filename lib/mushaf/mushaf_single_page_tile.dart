@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/mushaf/single_page.dart';
 import 'package:mushaf_mistake_marker/page_data/page_data.dart';
+import 'package:mushaf_mistake_marker/page_data/surah_names.dart';
 
 class MushafSinglePageTile extends StatelessWidget {
   const MushafSinglePageTile({
@@ -35,6 +36,19 @@ class MushafSinglePageTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final pageNumber = pageData.pageNumber;
+    final juzNumber = pageData.juzNumber.join(', ');
+
+    final surahNumber = pageData.surahNumber.first.keys.first;
+    final surahName = surahs['$surahNumber']!['name'] as String;
+    final numberOfSurahVerses =
+        surahs['$surahNumber']!['numberofVerses'] as int;
+    final hizbNumber = pageData.hizbNumber.first;
+
+    final surahInfo = '$surahNumber $surahName ($numberOfSurahVerses)';
+    final juzuInfo = 'Juz $juzNumber';
+    final hizbInfo = '(Hizb $hizbNumber)';
+
     final (pageW, pageH) = (pageData.width, pageData.height);
 
     // final w = widget.constraints.maxWidth * 0.95;
@@ -68,21 +82,37 @@ class MushafSinglePageTile extends StatelessWidget {
           spacing: 20,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              height: constraints.maxHeight * 0.05,
+            SizedBox(
               width: w,
-              color: Colors.amber,
-              child: Column(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  Text(
+                    surahInfo,
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      decorationStyle: TextDecorationStyle.dashed,
+                    ),
+                  ),
+                  Text(
+                    '$pageNumber',
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      decorationStyle: TextDecorationStyle.dashed,
+                    ),
+                  ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Surah: [Surah Name]'),
-                      Text('Juzu: [Juzu Number]'),
+                      Text(
+                        juzuInfo,
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          decorationStyle: TextDecorationStyle.dashed,
+                        ),
+                      ),
+                      Text(' $hizbInfo'),
                     ],
                   ),
-                  Text('Page: [Page Number]'),
                 ],
               ),
             ),

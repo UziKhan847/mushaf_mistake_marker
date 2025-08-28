@@ -1,28 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mushaf_mistake_marker/providers/page_mode_provider.dart';
-import 'package:mushaf_mistake_marker/providers/mushaf_page_controller_provider.dart';
-import 'package:mushaf_mistake_marker/providers/theme_provider.dart';
 import 'package:mushaf_mistake_marker/widgets/custom_flex.dart';
-import 'package:mushaf_mistake_marker/widgets/custom_nav_bar/main_nav_bar_icon.dart';
+import 'package:mushaf_mistake_marker/widgets/custom_nav_bar/custom_icons/dark_mode_icon.dart';
+import 'package:mushaf_mistake_marker/widgets/custom_nav_bar/custom_icons/dual_page_icon.dart';
+import 'package:mushaf_mistake_marker/widgets/custom_nav_bar/custom_icons/main_nav_bar_icon.dart';
 
-class CustomNavBar extends ConsumerStatefulWidget {
+class CustomNavBar extends StatefulWidget {
   const CustomNavBar({super.key, required this.pageController});
 
   final PageController pageController;
 
   @override
-  ConsumerState<CustomNavBar> createState() => _CustomNavBarState();
+  State<CustomNavBar> createState() => _CustomNavBarState();
 }
 
-class _CustomNavBarState extends ConsumerState<CustomNavBar> {
+class _CustomNavBarState extends State<CustomNavBar> {
   int get page => widget.pageController.hasClients
       ? widget.pageController.page!.round()
       : 0;
   late int targetPage;
   late int mushafPage;
-  late final mushafPageCtrl = ref.read(mushafPgCtrlProvider);
-  late final mushafPageCrtlProv = ref.read(mushafPgCtrlProvider.notifier);
 
   BorderRadius getBoxRadius(Orientation orientation) {
     final radius = Radius.circular(20);
@@ -36,21 +32,12 @@ class _CustomNavBarState extends ConsumerState<CustomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    final (themeProv, isDarkMode) = (
-      ref.read(themeProvider.notifier),
-      ref.watch(themeProvider),
-    );
-
-    final (pageModeProv, isDualPage) = (
-      ref.read(pageModeProvider.notifier),
-      ref.watch(pageModeProvider),
-    );
-
     return OrientationBuilder(
       builder: (_, orientation) {
         final isPortrait = orientation == Orientation.portrait;
 
         return Container(
+          clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
             color: Theme.of(context).navigationBarTheme.backgroundColor,
             borderRadius: getBoxRadius(orientation),
@@ -85,57 +72,12 @@ class _CustomNavBarState extends ConsumerState<CustomNavBar> {
               }),
 
               if (!isPortrait) ...[
-                Divider(color: Colors.black, height: 1, thickness: 1),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      themeProv.switchTheme();
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        isDarkMode
-                            ? Icon(Icons.light_mode)
-                            : Icon(Icons.dark_mode),
-                        Text(
-                          'Dark Mode',
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: Color(0xFFaf955e),
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      pageModeProv.setPageMode();
-                      final newIsDualPage = !isDualPage;
-                      mushafPageCrtlProv.preservePage(
-                        newIsDualPage
-                            ? PageLayout.dualPage
-                            : PageLayout.singlePage,
-                      );
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        isDualPage ? Icon(Icons.pages) : Icon(Icons.lock_clock),
-                        Text(
-                          isDualPage ? 'DUAL ON' : 'DUAL OFF',
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: Color(0xFFaf955e),
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                      ],
-                    ),
+                Container(
+                  color: Theme.of(context).brightness == Brightness.light
+                      ? const Color(0x09000000)
+                      : const Color(0x10FFFFFF),
+                  child: SingleChildScrollView(
+                    child: Column(children: [DarkModeIcon(), DualPageIcon()]),
                   ),
                 ),
               ],
