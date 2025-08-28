@@ -88,7 +88,7 @@ class SpriteNotifier extends Notifier<List<SpriteSheet>> {
     state = newState;
   }
 
-    Future<void> preFetchPages(int initPage, bool isPortrait) async {
+  Future<void> preFetchPages(int initPage, bool isPortrait) async {
     final isDualPageMode = ref.read(pageModeProvider) && !isPortrait;
     final offsets = [0, 1, -1, 2, -2, 3, 4];
     final List<Future> futures = [];
@@ -98,8 +98,9 @@ class SpriteNotifier extends Notifier<List<SpriteSheet>> {
 
     for (final e in offsets) {
       if (actualPage + e >= 0 && actualPage + e <= 603) {
-        futures.add(fetchSpriteSheet(actualPage + e));
-        pageNumbers.add(actualPage + e);
+        final newPage = actualPage + e;
+        futures.add(fetchSpriteSheet(newPage));
+        pageNumbers.add(newPage);
       }
     }
 

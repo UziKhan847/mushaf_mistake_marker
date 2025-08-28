@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_page_view.dart';
-import 'package:mushaf_mistake_marker/page_data/pages.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf_page_controller_provider.dart';
 import 'package:mushaf_mistake_marker/providers/shared_prefs_provider.dart';
 import 'package:mushaf_mistake_marker/widgets/custom_flex.dart';
 import 'package:mushaf_mistake_marker/widgets/custom_nav_bar/custom_nav_bar.dart';
 
 class Homepage extends ConsumerStatefulWidget {
-  const Homepage({super.key, required this.pages});
+  const Homepage({super.key});
 
-  final Pages pages;
 
   @override
   ConsumerState<Homepage> createState() => _HomepageState();
@@ -65,7 +63,6 @@ class _HomepageState extends ConsumerState<Homepage> {
                 controller: pageController,
                 children: [
                   MushafPageView(
-                    pages: widget.pages,
                     constraints: constraints,
                     isPortrait: isPortrait,
                   ),

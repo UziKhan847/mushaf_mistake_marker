@@ -1,20 +1,21 @@
+import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mushaf_mistake_marker/enums.dart';
-import 'package:mushaf_mistake_marker/sprite/sprite_sheet.dart';
+import 'package:mushaf_mistake_marker/sprite/sprite.dart';
 import 'package:mushaf_mistake_marker/variables.dart';
 
 class MushafPagePainter extends CustomPainter {
   MushafPagePainter({
-    required this.spriteSheet,
-    //required this.paths,
+    required this.sprites,
+    required this.image,
     required this.vBoxSize,
     required this.markedPaths,
     required this.isDarkMode,
   });
 
-  //final List<DrawablePath> paths;
-  final SpriteSheet spriteSheet;
+  final List<Sprite> sprites;
+  final ui.Image image;
   final Size vBoxSize;
   final Map<String, MarkType> markedPaths;
   final bool isDarkMode;
@@ -24,15 +25,11 @@ class MushafPagePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final image = spriteSheet.image;
-
-    if (image != null) {
       final double scaleX = size.width / vBoxSize.width;
       final double scaleY = size.height / vBoxSize.height;
 
       canvas.scale(scaleX, scaleY);
-
-      final sprites = spriteSheet.sprites;
+      
       final floatListLength = sprites.length * 4;
       final rectList = Float32List(floatListLength);
       final transformList = Float32List(floatListLength);
@@ -81,7 +78,7 @@ class MushafPagePainter extends CustomPainter {
         null,
         paint,
       );
-    }
+    
   }
 
   @override

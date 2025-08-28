@@ -1,60 +1,19 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:mushaf_mistake_marker/page_data/pages.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/pages/homepage.dart';
+import 'package:mushaf_mistake_marker/providers/pages_provider.dart';
 
-class LoadingPage extends StatefulWidget {
+class LoadingPage extends ConsumerWidget {
   const LoadingPage({super.key});
 
   @override
-  State<LoadingPage> createState() => _LoadingPageState();
-}
-
-class _LoadingPageState extends State<LoadingPage> {
-  late final Future<Pages> data;
-
-  @override
-  void initState() {
-    super.initState();
-
-    data = fetchPages();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  Future<Pages> fetchPages() async {
-    final pageString = await rootBundle.loadString(
-      'assets/page_data_12_scale.txt',
-    );
-
-    final json = await jsonDecode(pageString);
-
-    final pages = Pages.fromJson(json);
-
-    return pages;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: data,
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        }
-
-        if (snapshot.hasData) {
-          final pages = snapshot.data!;
-
-          return Homepage(pages: pages);
-        }
-
-        return Center(child: CircularProgressIndicator());
-      },
-    );
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ref
+        .watch(pagesProvider)
+        .when(
+          data: (pages) => Homepage(),
+          error: (e, st) => Center(child: Text('Error: $e')),
+          loading: () => Center(child: CircularProgressIndicator()),
+        );
   }
 }

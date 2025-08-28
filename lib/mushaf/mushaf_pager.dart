@@ -2,11 +2,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_dual_page_tile.dart';
-import 'package:mushaf_mistake_marker/mushaf/mushaf_page_loading.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_single_page_tile.dart';
 import 'package:mushaf_mistake_marker/mushaf/page_changed_handler.dart';
-import 'package:mushaf_mistake_marker/page_data/pages.dart';
-import 'package:mushaf_mistake_marker/providers/sprite_provider.dart';
+import 'package:mushaf_mistake_marker/providers/pages_provider.dart';
 
 class MushafPager extends ConsumerStatefulWidget {
   const MushafPager({
@@ -14,7 +12,6 @@ class MushafPager extends ConsumerStatefulWidget {
     required this.isDualPageMode,
     required this.controller,
     required this.markedPgs,
-    required this.pages,
     required this.constraints,
     required this.ref,
     this.isPortrait = false,
@@ -25,7 +22,6 @@ class MushafPager extends ConsumerStatefulWidget {
   final bool isDualPageMode;
   final PageController controller;
   final List<Map<String, MarkType>> markedPgs;
-  final Pages pages;
   final BoxConstraints constraints;
   final WidgetRef ref;
   final bool isPortrait;
@@ -39,6 +35,7 @@ class MushafPager extends ConsumerStatefulWidget {
 class _MushafPagerState extends ConsumerState<MushafPager> {
   late int prevPage;
   late final onPageHandler = PageChangedHandler(ref: ref);
+  late final pages = ref.read(pagesProvider).value!;
 
   @override
   void initState() {
@@ -49,7 +46,10 @@ class _MushafPagerState extends ConsumerState<MushafPager> {
   @override
   Widget build(BuildContext context) {
     final int itemCount = widget.isDualPageMode ? 302 : 604;
-    final spriteSheets = ref.watch(spriteProvider);
+
+    print('----------------------------------------');
+    print('REBUILT PAGEVIEW');
+    print('----------------------------------------');
 
     return PageView.builder(
       reverse: widget.reverse,
@@ -68,39 +68,23 @@ class _MushafPagerState extends ConsumerState<MushafPager> {
           final int rightPage = index * 2;
           final int leftPage = rightPage + 1;
 
-          final bool pairMissing =
-              spriteSheets[rightPage].image == null ||
-              spriteSheets[leftPage].image == null;
-
-          return pairMissing
-              ? MushafPageLoading()
-              : MushafDualPageTile(
-                  constraints: widget.constraints,
-                  markedPaths: [
-                    widget.markedPgs[rightPage],
-                    widget.markedPgs[leftPage],
-                  ],
-                  spriteSheet: [
-                    spriteSheets[rightPage],
-                    spriteSheets[leftPage],
-                  ],
-                  pageData: [
-                    widget.pages.pageData[rightPage],
-                    widget.pages.pageData[leftPage],
-                  ],
-                );
+          return MushafDualPageTile(
+            constraints: widget.constraints,
+            markedPaths: [
+              widget.markedPgs[rightPage],
+              widget.markedPgs[leftPage],
+            ],
+            pageData: [pages.pageData[rightPage], pages.pageData[leftPage]],
+            dualPageIndex: [rightPage, leftPage],
+          );
         } else {
-          final bool missing = spriteSheets[index].image == null;
-
-          return missing
-              ? MushafPageLoading()
-              : MushafSinglePageTile(
-                  constraints: widget.constraints,
-                  markedPaths: widget.markedPgs[index],
-                  spriteSheet: spriteSheets[index],
-                  pageData: widget.pages.pageData[index],
-                  isPortrait: widget.isPortrait,
-                );
+          return MushafSinglePageTile(
+            constraints: widget.constraints,
+            markedPaths: widget.markedPgs[index],
+            pageData: pages.pageData[index],
+            isPortrait: widget.isPortrait,
+            index: index,
+          );
         }
       },
     );

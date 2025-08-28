@@ -2,39 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/mushaf/single_page.dart';
 import 'package:mushaf_mistake_marker/page_data/page_data.dart';
-import 'package:mushaf_mistake_marker/sprite/sprite_sheet.dart';
 
-class MushafSinglePageTile extends StatefulWidget {
+class MushafSinglePageTile extends StatelessWidget {
   const MushafSinglePageTile({
     super.key,
-    //required this.windowSize,
     required this.markedPaths,
-    required this.spriteSheet,
     required this.pageData,
     required this.constraints,
     required this.isPortrait,
+    required this.index,
   });
 
-  final SpriteSheet spriteSheet;
+  final int index;
   final PageData pageData;
   final Map<String, MarkType> markedPaths;
   final BoxConstraints constraints;
   final bool isPortrait;
-
-  @override
-  State<MushafSinglePageTile> createState() => _MushafPageViewTileState();
-}
-
-class _MushafPageViewTileState extends State<MushafSinglePageTile> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   bool elemBounds({
     required double top,
@@ -52,7 +35,7 @@ class _MushafPageViewTileState extends State<MushafSinglePageTile> {
 
   @override
   Widget build(BuildContext context) {
-    final (pageW, pageH) = (widget.pageData.width, widget.pageData.height);
+    final (pageW, pageH) = (pageData.width, pageData.height);
 
     // final w = widget.constraints.maxWidth * 0.95;
 
@@ -63,10 +46,8 @@ class _MushafPageViewTileState extends State<MushafSinglePageTile> {
     // final w = h * (pageW / pageH);
 
     (double, double) getWH() {
-      double w = widget.constraints.maxWidth * 0.9;
-      double h = widget.constraints.maxHeight * 0.875;
-
-      final isPortrait = widget.isPortrait;
+      double w = constraints.maxWidth * 0.9;
+      double h = constraints.maxHeight * 0.875;
 
       if (isPortrait && (h * (pageW / pageH) < w)) {
         w = h * (pageW / pageH);
@@ -82,13 +63,13 @@ class _MushafPageViewTileState extends State<MushafSinglePageTile> {
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: ConstrainedBox(
-        constraints: BoxConstraints(minHeight: widget.constraints.maxHeight),
+        constraints: BoxConstraints(minHeight: constraints.maxHeight),
         child: Column(
           spacing: 20,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              height: widget.constraints.maxHeight * 0.05,
+              height: constraints.maxHeight * 0.05,
               width: w,
               color: Colors.amber,
               child: Column(
@@ -110,8 +91,8 @@ class _MushafPageViewTileState extends State<MushafSinglePageTile> {
               h: h,
               pageW: pageW,
               pageH: pageH,
-              markedPaths: widget.markedPaths,
-              spriteSheet: widget.spriteSheet,
+              markedPaths: markedPaths,
+              index: index,
             ),
           ],
         ),
