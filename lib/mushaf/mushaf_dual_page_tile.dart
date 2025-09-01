@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/mushaf/single_page.dart';
 import 'package:mushaf_mistake_marker/page_data/page_data.dart';
+import 'package:mushaf_mistake_marker/surah/pages_with_multiple_surahs.dart';
 
 class MushafDualPageTile extends StatelessWidget {
   const MushafDualPageTile({
     super.key,
-    required this.markedPaths,
     required this.pageData,
     required this.constraints,
     required this.dualPageIndex,
@@ -14,26 +13,55 @@ class MushafDualPageTile extends StatelessWidget {
 
   final List<int> dualPageIndex;
   final List<PageData> pageData;
-  final List<Map<String, MarkType>> markedPaths;
   final BoxConstraints constraints;
+
+  (double, double) getWH(double pageW, double pageH) {
+    double w = constraints.maxWidth * 0.39;
+    double h = constraints.maxHeight * 0.95;
+
+    if (h * (pageW / pageH) > w) {
+      h = w * (pageH / pageW);
+    } else {
+      w = h * (pageW / pageH);
+    }
+
+    return (w, h);
+  }
 
   @override
   Widget build(BuildContext context) {
+    final (pageOneNum, pageTwoNum) = (dualPageIndex.first, dualPageIndex.last);
+
     final (pageOne, pageTwo) = (
       {'w': pageData.first.width, 'h': pageData.first.height},
       {'w': pageData.last.width, 'h': pageData.last.height},
     );
 
-    // final w = widget.constraints.maxWidth * 0.95;
-
-    // final h = w * (pageH / pageW);
-
-    final h = constraints.maxHeight;
-
-    final (p1w, p2w) = (
-      h * ((pageOne['w'] as double) / (pageOne['h'] as double)),
-      h * ((pageTwo['w'] as double) / (pageTwo['h'] as double)),
+    final (p1w, p1h) = (
+      getWH(pageOne['w'] as double, pageOne['h'] as double).$1,
+      getWH(pageOne['w'] as double, pageOne['h'] as double).$2,
     );
+    final (p2w, p2h) = (
+      getWH(pageTwo['w'] as double, pageTwo['h'] as double).$1,
+      getWH(pageTwo['w'] as double, pageTwo['h'] as double).$2,
+    );
+
+    final (pgOneSurahsNum, pgTwoSurahsNum) = (
+      pageData.first.surahNumber.map((e) {
+        return e.keys.first;
+      }).toSet(),
+      pageData.last.surahNumber.map((e) {
+        return e.keys.first;
+      }).toSet(),
+    );
+
+    if (pagesWithLastLineNextSurah.contains(pageOneNum)) {
+      pgOneSurahsNum.add(pgOneSurahsNum.last + 1);
+    }
+
+    if (pagesWithLastLineNextSurah.contains(pageTwoNum)) {
+      pgTwoSurahsNum.add(pgTwoSurahsNum.last + 1);
+    }
 
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
@@ -47,20 +75,20 @@ class MushafDualPageTile extends StatelessWidget {
           children: [
             SinglePage(
               w: p2w,
-              h: h,
+              h: p2h,
               pageW: pageTwo['w'] as double,
               pageH: pageTwo['h'] as double,
-              markedPaths: markedPaths.last,
               index: dualPageIndex.last,
+              surahsNum: pgTwoSurahsNum.toList(),
             ),
             SizedBox(width: 30),
             SinglePage(
               w: p1w,
-              h: h,
+              h: p1h,
               pageW: pageOne['w'] as double,
               pageH: pageOne['h'] as double,
-              markedPaths: markedPaths.first,
               index: dualPageIndex.first,
+              surahsNum: pgOneSurahsNum.toList(),
             ),
           ],
         ),

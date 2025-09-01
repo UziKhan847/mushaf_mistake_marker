@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_pager.dart';
 import 'package:mushaf_mistake_marker/providers/page_mode_provider.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf_page_controller_provider.dart';
@@ -28,12 +27,6 @@ class _MushafPageViewState extends ConsumerState<MushafPageView>
   late final spriteProv = ref.read(spriteProvider.notifier);
   late final prefs = ref.read(sharedPrefsProv);
   //late int prevPage;
-
-  late final List<Map<String, MarkType>> markedPgs = List.generate(
-    604,
-    (_) => {},
-    growable: false,
-  );
 
   late final Future<void> data;
 
@@ -69,7 +62,6 @@ class _MushafPageViewState extends ConsumerState<MushafPageView>
           return MushafPager(
             isDualPageMode: isDualPageMode,
             controller: mushfaPgCrtl,
-            markedPgs: markedPgs,
             constraints: widget.constraints,
             ref: ref,
             isPortrait: isDualPageMode ? false : widget.isPortrait,

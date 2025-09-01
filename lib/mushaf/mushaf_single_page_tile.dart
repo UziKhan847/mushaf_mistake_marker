@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/mushaf/single_page.dart';
 import 'package:mushaf_mistake_marker/page_data/page_data.dart';
-import 'package:mushaf_mistake_marker/page_data/surah_names.dart';
+import 'package:mushaf_mistake_marker/surah/pages_with_multiple_surahs.dart';
+import 'package:mushaf_mistake_marker/surah/surah.dart';
+import 'package:mushaf_mistake_marker/surah/surah_names_data.dart';
 
 class MushafSinglePageTile extends StatelessWidget {
   const MushafSinglePageTile({
     super.key,
-    required this.markedPaths,
     required this.pageData,
     required this.constraints,
     required this.isPortrait,
@@ -16,7 +16,6 @@ class MushafSinglePageTile extends StatelessWidget {
 
   final int index;
   final PageData pageData;
-  final Map<String, MarkType> markedPaths;
   final BoxConstraints constraints;
   final bool isPortrait;
 
@@ -34,45 +33,42 @@ class MushafSinglePageTile extends StatelessWidget {
         scaledY <= bottom;
   }
 
+  (double, double) getWH(double pageW, double pageH) {
+    double w = constraints.maxWidth * 0.9;
+    double h = constraints.maxHeight * 0.875;
+
+    if (isPortrait && (h * (pageW / pageH) < w)) {
+      w = h * (pageW / pageH);
+    } else {
+      h = w * (pageH / pageW);
+    }
+
+    return (w, h);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final pageNumber = pageData.pageNumber;
+    final pageNumber = index + 1;
     final juzNumber = pageData.juzNumber.join(', ');
 
-    final surahNumber = pageData.surahNumber.first.keys.first;
-    final surahName = surahs['$surahNumber']!['name'] as String;
-    final numberOfSurahVerses =
-        surahs['$surahNumber']!['numberofVerses'] as int;
+    final surahsNum = pageData.surahNumber.map((e) {
+      return e.keys.first;
+    }).toSet();
+
+    if (pagesWithLastLineNextSurah.contains(pageNumber)) {
+      surahsNum.add(surahsNum.last + 1);
+    }
+
+    final surah = Surah.fromJson(surahs[surahsNum.first - 1]);
     final hizbNumber = pageData.hizbNumber.first;
 
-    final surahInfo = '$surahNumber $surahName ($numberOfSurahVerses)';
+    final surahInfo = '${surah.number} ${surah.name} (${surah.numOfVs})';
     final juzuInfo = 'Juz $juzNumber';
     final hizbInfo = '(Hizb $hizbNumber)';
 
     final (pageW, pageH) = (pageData.width, pageData.height);
 
-    // final w = widget.constraints.maxWidth * 0.95;
-
-    // final h = w * (pageH / pageW);
-
-    // final h = widget.constraints.maxHeight * 0.875;
-
-    // final w = h * (pageW / pageH);
-
-    (double, double) getWH() {
-      double w = constraints.maxWidth * 0.9;
-      double h = constraints.maxHeight * 0.875;
-
-      if (isPortrait && (h * (pageW / pageH) < w)) {
-        w = h * (pageW / pageH);
-      } else {
-        h = w * (pageH / pageW);
-      }
-
-      return (w, h);
-    }
-
-    final (w, h) = (getWH().$1, getWH().$2);
+    final (w, h) = (getWH(pageW, pageH).$1, getWH(pageW, pageH).$2);
 
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
@@ -121,8 +117,8 @@ class MushafSinglePageTile extends StatelessWidget {
               h: h,
               pageW: pageW,
               pageH: pageH,
-              markedPaths: markedPaths,
               index: index,
+              surahsNum: surahsNum.toList(),
             ),
           ],
         ),

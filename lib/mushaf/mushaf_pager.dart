@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_dual_page_tile.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_single_page_tile.dart';
 import 'package:mushaf_mistake_marker/mushaf/page_changed_handler.dart';
@@ -11,7 +10,6 @@ class MushafPager extends ConsumerStatefulWidget {
     super.key,
     required this.isDualPageMode,
     required this.controller,
-    required this.markedPgs,
     required this.constraints,
     required this.ref,
     this.isPortrait = false,
@@ -21,7 +19,6 @@ class MushafPager extends ConsumerStatefulWidget {
 
   final bool isDualPageMode;
   final PageController controller;
-  final List<Map<String, MarkType>> markedPgs;
   final BoxConstraints constraints;
   final WidgetRef ref;
   final bool isPortrait;
@@ -47,9 +44,9 @@ class _MushafPagerState extends ConsumerState<MushafPager> {
   Widget build(BuildContext context) {
     final int itemCount = widget.isDualPageMode ? 302 : 604;
 
-    print('----------------------------------------');
-    print('REBUILT PAGEVIEW');
-    print('----------------------------------------');
+    // print('----------------------------------------');
+    // print('REBUILT PAGEVIEW');
+    // print('----------------------------------------');
 
     return PageView.builder(
       reverse: widget.reverse,
@@ -70,17 +67,12 @@ class _MushafPagerState extends ConsumerState<MushafPager> {
 
           return MushafDualPageTile(
             constraints: widget.constraints,
-            markedPaths: [
-              widget.markedPgs[rightPage],
-              widget.markedPgs[leftPage],
-            ],
             pageData: [pages.pageData[rightPage], pages.pageData[leftPage]],
             dualPageIndex: [rightPage, leftPage],
           );
         } else {
           return MushafSinglePageTile(
             constraints: widget.constraints,
-            markedPaths: widget.markedPgs[index],
             pageData: pages.pageData[index],
             isPortrait: widget.isPortrait,
             index: index,

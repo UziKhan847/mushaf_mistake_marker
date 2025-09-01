@@ -14,7 +14,14 @@ void main() async {
 
   final prefs = await SharedPreferencesWithCache.create(
     cacheOptions: SharedPreferencesWithCacheOptions(
-      allowList: {'savedTheme', 'savedPageMode', 'initPage', 'isDualPageMode'},
+      allowList: {
+        'savedTheme',
+        'savedPageMode',
+        'initPage',
+        'isDualPageMode',
+        'isLeftHand',
+        'isHighlightMode',
+      },
     ),
   );
 
@@ -38,7 +45,10 @@ class MyApp extends ConsumerWidget {
       themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
       theme: MyThemes.lightTheme,
       darkTheme: MyThemes.darkTheme,
-      home: Scaffold(body: LoadingPage()),
+      home: Scaffold(
+        body: LoadingPage(),
+        backgroundColor: isDarkMode ? null : Color(0xFFFFF2EB),
+      ),
       debugShowCheckedModeBanner: false,
     );
   }

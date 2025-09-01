@@ -65,6 +65,10 @@ class SpriteNotifier extends Notifier<List<SpriteSheet>> {
       return;
     }
 
+    print('------------------------------------------------');
+    print('FETCHING FROM INDEX: $index');
+    print('------------------------------------------------');
+
     final sprites = oldSheet.sprites.isEmpty
         ? await fetchSprite(index, index + 1)
         : oldSheet.sprites;

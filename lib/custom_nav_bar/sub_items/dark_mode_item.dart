@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mushaf_mistake_marker/custom_nav_bar/nav_bar_item.dart';
 import 'package:mushaf_mistake_marker/providers/theme_provider.dart';
-import 'package:mushaf_mistake_marker/widgets/custom_nav_bar/custom_icons/items_data.dart';
-import 'package:mushaf_mistake_marker/widgets/custom_nav_bar/custom_icons/sub_nav/sub_nav_bar_icon.dart';
 
-class DarkModeIcon extends ConsumerWidget {
-  const DarkModeIcon({super.key});
+class DarkModeItem extends ConsumerWidget {
+  const DarkModeItem({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -14,13 +13,12 @@ class DarkModeIcon extends ConsumerWidget {
       ref.watch(themeProvider),
     );
 
-    return SubNavBarIcon(
-      item: darkMode,
+    return NavBarItem(
+      iconName: 'darkmode',
       isSelected: isDarkMode,
       onTap: () {
         themeProv.switchTheme();
       },
-      showIndicator: true,
     );
   }
 }
