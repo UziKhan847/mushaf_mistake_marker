@@ -7,11 +7,11 @@ import 'package:mushaf_mistake_marker/providers/shared_prefs_provider.dart';
 class MushafContent extends ConsumerStatefulWidget {
   const MushafContent({
     super.key,
-    required this.isPortrait,
+    // required this.isPortrait,
     required this.pageController,
   });
 
-  final bool isPortrait;
+  //final bool isPortrait;
   final PageController pageController;
 
   @override
@@ -21,6 +21,9 @@ class MushafContent extends ConsumerStatefulWidget {
 class _MushafContentState extends ConsumerState<MushafContent> {
   late final mushafPgCrtlProv = ref.read(mushafPgCtrlProvider.notifier);
   late final prefs = ref.read(sharedPrefsProv);
+  late bool isDualPageMode;
+  late bool isPortrait;
+  late bool isDualPgTglOn;
   bool? oldIsPortrait;
 
   @override
@@ -37,20 +40,21 @@ class _MushafContentState extends ConsumerState<MushafContent> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    oldIsPortrait ??=
-        MediaQuery.of(context).orientation == Orientation.portrait;
-  }
+    isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
 
-  void preservePageOnOrientChange(bool isPortrait, bool isDualPage) {
-    if (oldIsPortrait == null) {
-      oldIsPortrait = isPortrait;
-      return;
-    }
+    oldIsPortrait ??= isPortrait;
 
-    if (oldIsPortrait != isPortrait && isDualPage) {
+    isDualPgTglOn = prefs.getBool('dualPageToggleOn') ?? false;
+
+    isDualPageMode = !isPortrait && isDualPgTglOn;
+
+    prefs.setBool('isDualPageMode', isDualPageMode);
+
+    if (oldIsPortrait != isPortrait) {
       mushafPgCrtlProv.preservePage(
-        isPortrait ? PageLayout.singlePage : PageLayout.dualPage,
+        isDualPageMode ? PageLayout.dualPage : PageLayout.singlePage,
       );
+
       oldIsPortrait = isPortrait;
     }
   }
@@ -59,18 +63,11 @@ class _MushafContentState extends ConsumerState<MushafContent> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (_, constraints) {
-        final isDualPage = prefs.getBool('savedPageMode') ?? false;
-
-        preservePageOnOrientChange(widget.isPortrait, isDualPage);
-
         return PageView(
           physics: NeverScrollableScrollPhysics(),
           controller: widget.pageController,
           children: [
-            MushafPageView(
-              constraints: constraints,
-              isPortrait: widget.isPortrait,
-            ),
+            MushafPageView(constraints: constraints, isPortrait: isPortrait),
             Placeholder(color: Colors.red),
             Placeholder(color: Colors.blueAccent),
             Placeholder(color: Colors.amberAccent),

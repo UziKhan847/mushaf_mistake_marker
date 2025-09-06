@@ -16,7 +16,7 @@ void main() async {
     cacheOptions: SharedPreferencesWithCacheOptions(
       allowList: {
         'savedTheme',
-        'savedPageMode',
+        'dualPageToggleOn',
         'initPage',
         'isDualPageMode',
         'isLeftHand',

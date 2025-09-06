@@ -81,7 +81,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    //final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final bgColor = Theme.of(context).colorScheme.surface;
 
     return LayoutBuilder(

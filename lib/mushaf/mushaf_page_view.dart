@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_pager.dart';
-import 'package:mushaf_mistake_marker/providers/page_mode_provider.dart';
+import 'package:mushaf_mistake_marker/providers/dual_page_toggle_provider.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf_page_controller_provider.dart';
 import 'package:mushaf_mistake_marker/providers/shared_prefs_provider.dart';
 import 'package:mushaf_mistake_marker/providers/sprite_provider.dart';
@@ -26,7 +26,6 @@ class _MushafPageViewState extends ConsumerState<MushafPageView>
   late final initPage = mushfaPgCrtl.initialPage;
   late final spriteProv = ref.read(spriteProvider.notifier);
   late final prefs = ref.read(sharedPrefsProv);
-  //late int prevPage;
 
   late final Future<void> data;
 
@@ -36,7 +35,12 @@ class _MushafPageViewState extends ConsumerState<MushafPageView>
   @override
   void initState() {
     super.initState();
-    data = spriteProv.preFetchPages(initPage, widget.isPortrait);
+    //data = spriteProv.preFetchPages(initPage, widget.isPortrait);
+
+    data = Future.delayed(
+      Duration.zero,
+      () => spriteProv.preFetchPages(initPage, widget.isPortrait),
+    );
   }
 
   @override
@@ -47,9 +51,8 @@ class _MushafPageViewState extends ConsumerState<MushafPageView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final isDualPage = ref.watch(pageModeProvider);
+    final isDualPage = ref.watch(dualPageToggleProvider);
     final isDualPageMode = isDualPage && !widget.isPortrait;
-    prefs.setBool('isDualPageMode', isDualPageMode);
 
     return FutureBuilder(
       future: data,

@@ -30,22 +30,16 @@ class _HomepageState extends ConsumerState<Homepage> {
     return OrientationBuilder(
       builder: (_, orientation) {
         final isPortrait = orientation == Orientation.portrait;
-        // final isLeftHand = ref.watch(leftHandProvider);
-
-        // print('---------------------------------------');
-        // print('HOMEPAGE IS REBUILT: ${rebuildNumber++}');
 
         return Flex(
           direction: isPortrait ? Axis.vertical : Axis.horizontal,
           children: [
-            //if (isLeftHand) CustomNavBar(pageController: pageController),
             Expanded(
               child: MushafContent(
-                isPortrait: isPortrait,
+                //isPortrait: isPortrait,
                 pageController: pageController,
               ),
             ),
-            // if (!isLeftHand)
             CustomNavBar(pageController: pageController),
           ],
         );

@@ -3,7 +3,8 @@ import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mushaf_mistake_marker/providers/page_mode_provider.dart';
+import 'package:mushaf_mistake_marker/providers/dual_page_toggle_provider.dart';
+import 'package:mushaf_mistake_marker/providers/shared_prefs_provider.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite_sheet.dart';
 
@@ -61,13 +62,12 @@ class SpriteNotifier extends Notifier<List<SpriteSheet>> {
     final oldSheet = state[index];
 
     if (oldSheet.sprites.isNotEmpty && oldSheet.image != null) {
-      state = [...state];
       return;
     }
 
-    print('------------------------------------------------');
-    print('FETCHING FROM INDEX: $index');
-    print('------------------------------------------------');
+    // print('------------------------------------------------');
+    // print('FETCHING FROM INDEX: $index');
+    // print('------------------------------------------------');
 
     final sprites = oldSheet.sprites.isEmpty
         ? await fetchSprite(index, index + 1)
@@ -93,7 +93,9 @@ class SpriteNotifier extends Notifier<List<SpriteSheet>> {
   }
 
   Future<void> preFetchPages(int initPage, bool isPortrait) async {
-    final isDualPageMode = ref.read(pageModeProvider) && !isPortrait;
+    //final isDualPageMode = ref.read(dualPageToggleProvider) && !isPortrait;
+    final prefs = ref.read(sharedPrefsProv);
+    final isDualPageMode = prefs.getBool('isDualPageMode') ?? false;
     final offsets = [0, 1, -1, 2, -2, 3, 4];
     final List<Future> futures = [];
     final List<int> pageNumbers = [];

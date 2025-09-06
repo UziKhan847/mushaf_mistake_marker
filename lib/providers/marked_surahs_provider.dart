@@ -40,6 +40,8 @@ class MarkedSurahsProvider extends Notifier<List<Map<String, MarkType>>> {
         MarkType.tajwid => null,
         _ => MarkType.doubt,
       };
+
+  
 }
 
 enum MarkType { mistake, oldMistake, doubt, tajwid }

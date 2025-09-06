@@ -15,23 +15,7 @@ class MushafPageControllerProvider extends Notifier<PageController> {
     final isDualPageMode = prefs.getBool('isDualPageMode') ?? false;
     final initPage = prefs.getInt('initPage') ?? 0;
 
-    print('----------------------------');
-    print('INITIAL PAGE: $initPage');
-    print('----------------------------');
-
-    int actualPage = isDualPageMode ? (initPage / 2).ceil() : initPage;
-
-    print('----------------------------');
-    print('ACTUAL PAGE: $actualPage');
-    print('----------------------------');
-
-    actualPage = isDualPageMode && actualPage > 301
-        ? (actualPage / 2).ceil()
-        : actualPage;
-
-    print('----------------------------');
-    print('ACTUAL PAGE PROTECTION: $actualPage');
-    print('----------------------------');
+    final actualPage = isDualPageMode ? (initPage / 2).ceil() : initPage;
 
     final pageController = PageController(initialPage: actualPage);
 
