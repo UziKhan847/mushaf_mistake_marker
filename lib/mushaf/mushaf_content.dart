@@ -5,13 +5,8 @@ import 'package:mushaf_mistake_marker/providers/mushaf_page_controller_provider.
 import 'package:mushaf_mistake_marker/providers/shared_prefs_provider.dart';
 
 class MushafContent extends ConsumerStatefulWidget {
-  const MushafContent({
-    super.key,
-    // required this.isPortrait,
-    required this.pageController,
-  });
+  const MushafContent({super.key, required this.pageController});
 
-  //final bool isPortrait;
   final PageController pageController;
 
   @override
@@ -51,9 +46,11 @@ class _MushafContentState extends ConsumerState<MushafContent> {
     prefs.setBool('isDualPageMode', isDualPageMode);
 
     if (oldIsPortrait != isPortrait) {
-      mushafPgCrtlProv.preservePage(
-        isDualPageMode ? PageLayout.dualPage : PageLayout.singlePage,
-      );
+      if (isDualPgTglOn) {
+        mushafPgCrtlProv.preservePage(
+          isDualPageMode ? PageLayout.dualPage : PageLayout.singlePage,
+        );
+      }
 
       oldIsPortrait = isPortrait;
     }

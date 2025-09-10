@@ -44,10 +44,6 @@ class _MushafPagerState extends ConsumerState<MushafPager> {
   Widget build(BuildContext context) {
     final int itemCount = widget.isDualPageMode ? 302 : 604;
 
-    // print('----------------------------------------');
-    // print('REBUILT PAGEVIEW');
-    // print('----------------------------------------');
-
     return PageView.builder(
       reverse: widget.reverse,
       controller: widget.controller,

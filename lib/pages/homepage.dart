@@ -27,23 +27,14 @@ class _HomepageState extends ConsumerState<Homepage> {
 
   @override
   Widget build(BuildContext context) {
-    return OrientationBuilder(
-      builder: (_, orientation) {
-        final isPortrait = orientation == Orientation.portrait;
-
-        return Flex(
-          direction: isPortrait ? Axis.vertical : Axis.horizontal,
-          children: [
-            Expanded(
-              child: MushafContent(
-                //isPortrait: isPortrait,
-                pageController: pageController,
-              ),
-            ),
-            CustomNavBar(pageController: pageController),
-          ],
-        );
-      },
+    return Flex(
+      direction: MediaQuery.of(context).orientation == Orientation.portrait
+          ? Axis.vertical
+          : Axis.horizontal,
+      children: [
+        Expanded(child: MushafContent(pageController: pageController)),
+        CustomNavBar(pageController: pageController),
+      ],
     );
   }
 }
