@@ -5,30 +5,32 @@ part 'page_data.g.dart';
 @JsonSerializable()
 class PageData {
   PageData({
-    required this.hizbNumber,
-    required this.juzNumber,
-    required this.manzilNumber,
-    required this.rubElHizbNumber,
-    required this.rukuNumber,
-    required this.sajdahNumber,
-    required this.surahNumber,
-    required this.pageNumber,
-    required this.width,
-    required this.height,
+    required this.pNum,
+    this.pSize,
+    required this.hzNum,
+    required this.rHzbNum,
+    required this.rkNum,
+    required this.mnzlNum,
+    this.sjdNum,
+    required this.jzNum,
+    required this.srNum,
+    required this.srVrsSets,
   });
 
-  int pageNumber;
-  Set<int> hizbNumber;
-  Set<int> rubElHizbNumber;
-  Set<int> rukuNumber;
-  Set<int> manzilNumber;
-  int? sajdahNumber;
-  Set<int> juzNumber;
-  Set<Map<int, int>> surahNumber;
-  double width;
-  double height;
+  final int pNum;
+  final List<double>? pSize;
+  final Set<int> srNum;
+  final Set<int> hzNum;
+  final Set<int> rHzbNum;
+  final Set<int> rkNum;
+  final Set<int> mnzlNum;
+  final int? sjdNum;
+  final Set<int> jzNum;
+  final Map<int, Set<int>> srVrsSets;
 
   factory PageData.fromJson(Map<String, dynamic> json) =>
       _$PageDataFromJson(json);
+
   Map<String, dynamic> toJson() => _$PageDataToJson(this);
 }
+

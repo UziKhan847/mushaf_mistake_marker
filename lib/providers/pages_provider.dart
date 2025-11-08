@@ -11,7 +11,7 @@ class PagesNotifier extends AsyncNotifier<Pages> {
   @override
   Future<Pages> build() async {
     final pageString = await rootBundle.loadString(
-      'assets/page_data_12_scale.txt',
+      'assets/old_madani_pages_data.json',
     );
 
     final json = await jsonDecode(pageString);

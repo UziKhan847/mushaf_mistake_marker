@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf_page_controller_provider.dart';
+import 'package:mushaf_mistake_marker/providers/shared_prefs_provider.dart';
 import 'package:mushaf_mistake_marker/providers/sprite_provider.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite_sheet.dart';
 
@@ -19,6 +20,8 @@ class PageChangedHandler {
 
     mushafPgCtrlProv.setPage(targetPage);
   }
+
+  List<int> get getJumpToOffsets => [0, -1, -2, -3, 1, 2, 3];
 
   List<int> getFetchOffsets(bool swipedLeft) =>
       swipedLeft ? [0, 1, 2, 3, -1, -2] : [0, -1, -2, -3, 1, 2];
@@ -74,5 +77,15 @@ class PageChangedHandler {
     clearUnusedImages(actualPage, clearOffsets);
 
     return index;
+  }
+
+  void onJumpToPage(int index) async {
+    final prefs = ref.read(sharedPrefsProv);
+
+    final isDualPageMode = prefs.getBool('isDualPageMode') ?? false;
+    final actualPage = isDualPageMode ? index * 2 : index;
+
+    spriteProv.clearAll();
+    await fetchMissingImages(actualPage, getJumpToOffsets);
   }
 }

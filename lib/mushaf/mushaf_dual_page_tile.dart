@@ -33,8 +33,8 @@ class MushafDualPageTile extends StatelessWidget {
     final (pageOneNum, pageTwoNum) = (dualPageIndex.first, dualPageIndex.last);
 
     final (pageOne, pageTwo) = (
-      {'w': pageData.first.width, 'h': pageData.first.height},
-      {'w': pageData.last.width, 'h': pageData.last.height},
+      {'w': pageData.first.pSize!.first, 'h': pageData.first.pSize!.last},
+      {'w': pageData.last.pSize!.first, 'h': pageData.last.pSize!.last},
     );
 
     final (p1w, p1h) = (
@@ -47,12 +47,8 @@ class MushafDualPageTile extends StatelessWidget {
     );
 
     final (pgOneSurahsNum, pgTwoSurahsNum) = (
-      pageData.first.surahNumber.map((e) {
-        return e.keys.first;
-      }).toSet(),
-      pageData.last.surahNumber.map((e) {
-        return e.keys.first;
-      }).toSet(),
+      pageData.first.srNum,
+      pageData.last.srNum,
     );
 
     if (pagesWithLastLineNextSurah.contains(pageOneNum)) {

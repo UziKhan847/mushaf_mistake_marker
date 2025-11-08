@@ -1,16 +1,19 @@
-import 'package:json_annotation/json_annotation.dart';
+//import 'package:json_annotation/json_annotation.dart';
 
-part 'rect_offset.g.dart';
+//part 'rect_offset.g.dart';
 
-@JsonSerializable()
+//@JsonSerializable()
 class RectOffset {
   RectOffset({required this.x, required this.y});
 
-  int x;
-  int y;
+  // int x;
+  // int y;
 
-  factory RectOffset.fromJson(Map<String, dynamic> json) =>
-      _$RectOffsetFromJson(json);
+  double x;
+  double y;
 
-  Map<String, dynamic> toJson() => _$RectOffsetToJson(this);
+  // factory RectOffset.fromJson(Map<String, dynamic> json) =>
+  //     _$RectOffsetFromJson(json);
+
+  // Map<String, dynamic> toJson() => _$RectOffsetToJson(this);
 }

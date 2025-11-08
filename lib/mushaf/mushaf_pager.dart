@@ -53,7 +53,6 @@ class _MushafPagerState extends ConsumerState<MushafPager> {
           index,
           widget.isDualPageMode,
         );
-        // setState(() {});
       },
       itemCount: itemCount,
       itemBuilder: (_, index) {
@@ -63,13 +62,13 @@ class _MushafPagerState extends ConsumerState<MushafPager> {
 
           return MushafDualPageTile(
             constraints: widget.constraints,
-            pageData: [pages.pageData[rightPage], pages.pageData[leftPage]],
+            pageData: [pages.pagesData[rightPage], pages.pagesData[leftPage]],
             dualPageIndex: [rightPage, leftPage],
           );
         } else {
           return MushafSinglePageTile(
             constraints: widget.constraints,
-            pageData: pages.pageData[index],
+            pageData: pages.pagesData[index],
             isPortrait: widget.isPortrait,
             index: index,
           );

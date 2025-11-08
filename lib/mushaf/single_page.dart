@@ -92,10 +92,10 @@ class _SinglePageState extends ConsumerState<SinglePage> {
                 for (final e in sprites) {
                   final (id, left, top, right, bottom, scaledX, scaledY) = (
                     e.id,
-                    e.rstOffset.x,
-                    e.rstOffset.y,
-                    e.origSize.w + e.rstOffset.x,
-                    e.origSize.h + e.rstOffset.y,
+                    e.eLTWH.first,
+                    e.eLTWH[1],
+                    e.eLTWH[2] + e.eLTWH.first,
+                    e.eLTWH.last + e.eLTWH[1],
                     scaledPoint.dx,
                     scaledPoint.dy,
                   );

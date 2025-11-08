@@ -27,7 +27,7 @@ class SpriteNotifier extends Notifier<List<SpriteSheet>> {
       final json =
           await compute(jsonDecode, spriteManifest) as Map<String, dynamic>;
 
-      for (final e in json['sprites'] as List<dynamic>) {
+      for (final e in json['spritesData'] as List<dynamic>) {
         final sprite = Sprite.fromJson(e);
 
         sprites.add(sprite);
@@ -91,8 +91,16 @@ class SpriteNotifier extends Notifier<List<SpriteSheet>> {
     state = newState;
   }
 
+  void clearAll() {
+    // final List<SpriteSheet> newSheets = [...state];
+
+    // newSheets.clear();
+
+    // final clearedSheets = newSheets;
+    state = List.generate(604, (_) => SpriteSheet(sprites: []));
+  }
+
   Future<void> preFetchPages(int initPage, bool isPortrait) async {
-    //final isDualPageMode = ref.read(dualPageToggleProvider) && !isPortrait;
     final prefs = ref.read(sharedPrefsProv);
     final isDualPageMode = prefs.getBool('isDualPageMode') ?? false;
     final offsets = [0, 1, -1, 2, -2, 3, 4];

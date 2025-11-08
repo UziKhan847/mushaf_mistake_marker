@@ -50,24 +50,22 @@ class MushafSinglePageTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pageNumber = index + 1;
-    final juzNumber = pageData.juzNumber.join(', ');
+    final juzNumber = pageData.jzNum.join(', ');
 
-    final surahsNum = pageData.surahNumber.map((e) {
-      return e.keys.first;
-    }).toSet();
+    final surahsNum = pageData.srNum;
 
     if (pagesWithLastLineNextSurah.contains(pageNumber)) {
       surahsNum.add(surahsNum.last + 1);
     }
 
     final surah = Surah.fromJson(surahs[surahsNum.first - 1]);
-    final hizbNumber = pageData.hizbNumber.first;
+    final hizbNumber = pageData.hzNum.first;
 
     final surahInfo = '${surah.number} ${surah.name} (${surah.numOfVs})';
     final juzuInfo = 'Juz $juzNumber';
     final hizbInfo = '(Hizb $hizbNumber)';
 
-    final (pageW, pageH) = (pageData.width, pageData.height);
+    final (pageW, pageH) = (pageData.pSize!.first, pageData.pSize!.last);
 
     final (w, h) = (getWH(pageW, pageH).$1, getWH(pageW, pageH).$2);
 

@@ -3,27 +3,31 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/app_scroll_behaviour.dart';
 import 'package:mushaf_mistake_marker/my_themes.dart';
+import 'package:mushaf_mistake_marker/objectbox/object_box.dart';
 import 'package:mushaf_mistake_marker/pages/loading_page.dart';
 import 'package:mushaf_mistake_marker/providers/shared_prefs_provider.dart';
 import 'package:mushaf_mistake_marker/providers/theme_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
   final prefs = await SharedPreferencesWithCache.create(
     cacheOptions: SharedPreferencesWithCacheOptions(
       allowList: {
-        'savedTheme',
+        'isDarkMode',
         'dualPageToggleOn',
         'initPage',
+        'userId',
         'isDualPageMode',
         'isLeftHand',
         'isHighlightMode',
       },
     ),
   );
+
+  objectbox = await ObjectBox.create();
 
   runApp(
     ProviderScope(
@@ -53,3 +57,5 @@ class MyApp extends ConsumerWidget {
     );
   }
 }
+
+late final ObjectBox objectbox;

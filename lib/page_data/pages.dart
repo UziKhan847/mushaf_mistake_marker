@@ -5,9 +5,9 @@ part 'pages.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Pages {
-  Pages({required this.pageData});
+  Pages({required this.pagesData});
 
-  List<PageData> pageData;
+  List<PageData> pagesData;
 
   factory Pages.fromJson(Map<String, dynamic> json) => _$PagesFromJson(json);
   Map<String, dynamic> toJson() => _$PagesToJson(this);

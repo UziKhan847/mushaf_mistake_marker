@@ -2,6 +2,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mushaf_mistake_marker/providers/marked_surahs_provider.dart';
+import 'package:mushaf_mistake_marker/sprite/rst_offset.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite.dart';
 import 'package:mushaf_mistake_marker/variables.dart';
 
@@ -25,60 +26,61 @@ class MushafPagePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-      final double scaleX = size.width / vBoxSize.width;
-      final double scaleY = size.height / vBoxSize.height;
+    final double scaleX = size.width / vBoxSize.width;
+    final double scaleY = size.height / vBoxSize.height;
 
-      canvas.scale(scaleX, scaleY);
-      
-      final floatListLength = sprites.length * 4;
-      final rectList = Float32List(floatListLength);
-      final transformList = Float32List(floatListLength);
-      final colorList = Int32List(sprites.length);
+    canvas.scale(scaleX, scaleY);
 
-      for (int i = 0; i < sprites.length; i++) {
-        final sprite = sprites[i];
-        final id = sprite.id;
-        final byteIndex = i * 4;
-        final rectOffset = sprite.rectOffset;
-        final rstOffset = sprite.rstOffset;
-        final origSize = sprite.origSize;
-        final rectW = origSize.w.ceil();
-        final rectH = origSize.h.ceil();
+    final floatListLength = sprites.length * 4;
+    final rectList = Float32List(floatListLength);
+    final transformList = Float32List(floatListLength);
+    final colorList = Int32List(sprites.length);
 
-        final rectLTRB = [
-          rectOffset.x.toDouble(),
-          rectOffset.y.toDouble(),
-          (rectOffset.x + rectW).toDouble(),
-          (rectOffset.y + rectH).toDouble(),
-        ];
+    for (int i = 0; i < sprites.length; i++) {
+      final sprite = sprites[i];
+      final id = sprite.id;
+      final byteIndex = i * 4;
+      final rectLTWH = (
+        sprite.sprXY.first,
+        sprite.sprXY.last,
+        sprite.eLTWH[2].ceil(),
+        sprite.eLTWH.last.ceil(),
+      );
+      final rstOffset = RstOffset(x: sprite.eLTWH.first, y: sprite.eLTWH[1]);
 
-        final rstValues = [1.0, 0.0, rstOffset.x, rstOffset.y];
+      final rectLTRB = [
+        rectLTWH.$1,
+        rectLTWH.$2,
+        (rectLTWH.$1 + rectLTWH.$3),
+        (rectLTWH.$2 + rectLTWH.$4),
+      ];
 
-        for (int x = 0; x < 4; x++) {
-          rectList[byteIndex + x] = rectLTRB[x];
-          transformList[byteIndex + x] = rstValues[x];
-        }
+      final rstValues = [1.0, 0.0, rstOffset.x, rstOffset.y];
 
-        colorList[i] = switch (markedPaths[id]) {
-          MarkType.doubt => purpleInt,
-          MarkType.mistake => redInt,
-          MarkType.oldMistake => blueInt,
-          MarkType.tajwid => greenInt,
-          _ => isDarkMode ? whiteInt : blackInt,
-        };
+      for (int x = 0; x < 4; x++) {
+        rectList[byteIndex + x] = rectLTRB[x];
+        transformList[byteIndex + x] = rstValues[x];
       }
 
-      final paint = Paint()..filterQuality = FilterQuality.high;
-      canvas.drawRawAtlas(
-        image,
-        transformList,
-        rectList,
-        colorList,
-        BlendMode.dstATop,
-        null,
-        paint,
-      );
-    
+      colorList[i] = switch (markedPaths[id]) {
+        MarkType.doubt => purpleInt,
+        MarkType.mistake => redInt,
+        MarkType.oldMistake => blueInt,
+        MarkType.tajwid => greenInt,
+        _ => isDarkMode ? whiteInt : blackInt,
+      };
+    }
+
+    final paint = Paint()..filterQuality = FilterQuality.high;
+    canvas.drawRawAtlas(
+      image,
+      transformList,
+      rectList,
+      colorList,
+      BlendMode.dstATop,
+      null,
+      paint,
+    );
   }
 
   @override
