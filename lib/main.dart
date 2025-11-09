@@ -23,6 +23,7 @@ Future<void> main() async {
         'isDualPageMode',
         'isLeftHand',
         'isHighlightMode',
+        'isAccountNavBtnSelected',
       },
     ),
   );

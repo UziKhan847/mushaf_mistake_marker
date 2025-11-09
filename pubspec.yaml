@@ -40,7 +40,6 @@ flutter:
 
   assets:
     - images/
-    - assets/page_data_12_scale.txt
     - assets/old_madani_pages_data.json
     - assets/sprite_manifests/
     - assets/sprite_sheets_webp/
@@ -56,6 +55,9 @@ flutter:
           weight: 600
         - asset: fonts/ScheherazadeNew-Bold.ttf
           weight: 700
+    - family: MyFlutterApp
+      fonts:
+        - asset: fonts/MyFlutterApp.ttf
 
 objectbox:
   output_dir: objectbox

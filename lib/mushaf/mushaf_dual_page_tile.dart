@@ -37,14 +37,8 @@ class MushafDualPageTile extends StatelessWidget {
       {'w': pageData.last.pSize!.first, 'h': pageData.last.pSize!.last},
     );
 
-    final (p1w, p1h) = (
-      getWH(pageOne['w'] as double, pageOne['h'] as double).$1,
-      getWH(pageOne['w'] as double, pageOne['h'] as double).$2,
-    );
-    final (p2w, p2h) = (
-      getWH(pageTwo['w'] as double, pageTwo['h'] as double).$1,
-      getWH(pageTwo['w'] as double, pageTwo['h'] as double).$2,
-    );
+    final (p1w, p1h) = getWH(pageOne['w'] as double, pageOne['h'] as double);
+    final (p2w, p2h) = getWH(pageTwo['w'] as double, pageTwo['h'] as double);
 
     final (pgOneSurahsNum, pgTwoSurahsNum) = (
       pageData.first.srNum,

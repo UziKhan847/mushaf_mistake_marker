@@ -81,9 +81,11 @@ class PageChangedHandler {
 
   void onJumpToPage(int index) async {
     final prefs = ref.read(sharedPrefsProv);
+    final mshfPgCtrlProv = ref.read(mushafPgCtrlProvider.notifier);
 
     final isDualPageMode = prefs.getBool('isDualPageMode') ?? false;
     final actualPage = isDualPageMode ? index * 2 : index;
+    mshfPgCtrlProv.setPage(index);
 
     spriteProv.clearAll();
     await fetchMissingImages(actualPage, getJumpToOffsets);

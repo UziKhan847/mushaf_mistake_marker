@@ -67,7 +67,7 @@ class MushafSinglePageTile extends StatelessWidget {
 
     final (pageW, pageH) = (pageData.pSize!.first, pageData.pSize!.last);
 
-    final (w, h) = (getWH(pageW, pageH).$1, getWH(pageW, pageH).$2);
+    final (w, h) = getWH(pageW, pageH);
 
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,

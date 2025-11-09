@@ -1,70 +1,63 @@
+import 'dart:math';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:mushaf_mistake_marker/overlay_position_type/dynamic_overlay.dart';
+import 'package:mushaf_mistake_marker/overlay_position_type/static_overlay.dart';
 
 extension ContextOverlayExtension on BuildContext {
   OverlayEntry insertOverlay({
     required VoidCallback onTapOutside,
     required int itemCount,
     required IndexedWidgetBuilder itemBuilder,
-    required LayerLink layerLink,
-    required GlobalKey widgetKey,
+    LayerLink? layerLink,
+    GlobalKey? widgetKey,
+    bool isStatic = false,
     double verticalOffset = 8.0,
     double elevation = 4.0,
     BorderRadius? borderRadius,
   }) {
-    final renderObject = widgetKey.currentContext?.findRenderObject();
-    if (renderObject == null || renderObject is! RenderBox) {
-      throw Exception(
-        'widgetKey is not mounted or does not point to a RenderBox.',
-      );
+    if (isStatic == false) {
+      if (layerLink == null && widgetKey == null) {
+        throw Exception(
+          'Error: If isStatic == false, then layerLink and widgetKey cannot be null!',
+        );
+      }
     }
-
-    final renderBox = renderObject;
-    final (height, width) = (renderBox.size.height, renderBox.size.width);
-    final screenHeight = MediaQuery.of(this).size.height;
-    final bottomInset = MediaQuery.of(this).viewInsets.bottom;
-    final bottomPadding = MediaQuery.of(this).padding.bottom;
-    final buttonBottom = renderBox.localToGlobal(Offset.zero).dy + height;
-
-    final availableHeight =
-        screenHeight -
-        buttonBottom -
-        verticalOffset -
-        bottomInset -
-        bottomPadding -
-        8.0;
 
     final OverlayEntry entry = OverlayEntry(
       builder: (context) {
         return Stack(
           children: [
+            BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
+              child: Container(color: Colors.black.withAlpha(40)),
+            ),
+
             ModalBarrier(
               dismissible: true,
               color: Colors.transparent,
               onDismiss: onTapOutside,
             ),
 
-            CompositedTransformFollower(
-              link: layerLink,
-              showWhenUnlinked: false,
-              offset: Offset(0, height + verticalOffset),
-              child: Material(
+            if (isStatic)
+              StaticOverlay(
                 elevation: elevation,
-                borderRadius: borderRadius ?? BorderRadius.circular(4),
-                color: Theme.of(context).colorScheme.surface,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxWidth: width,
-                    maxHeight: availableHeight > 40 ? availableHeight : 200,
-                  ),
-                  child: ListView.builder(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    itemCount: itemCount,
-                    itemBuilder: itemBuilder,
-                  ),
-                ),
+                borderRadius: borderRadius,
+                itemCount: itemCount,
+                itemBuilder: itemBuilder,
               ),
-            ),
+
+            if (!isStatic)
+              DynamicOverlay(
+                link: layerLink!,
+                widgetKey: widgetKey!,
+                verticalOffset: verticalOffset,
+                elevation: elevation,
+                borderRadius: borderRadius,
+                itemCount: itemCount,
+                itemBuilder: itemBuilder,
+              ),
           ],
         );
       },

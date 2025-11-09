@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/custom_nav_bar/nav_bar_item.dart';
+import 'package:mushaf_mistake_marker/icons/my_flutter_app_icons.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf_page_controller_provider.dart';
 import 'package:mushaf_mistake_marker/providers/dual_page_toggle_provider.dart';
 
@@ -17,7 +18,7 @@ class DualPageItem extends ConsumerWidget {
     final mushafPageCrtlProv = ref.read(mushafPgCtrlProvider.notifier);
 
     return NavBarItem(
-      iconName: 'dualpage',
+      iconLabel: 'Dual Page',
       isSelected: isDualPgTglOn,
       onTap: () {
         dualPgTglProv.switchToggle();
@@ -25,7 +26,7 @@ class DualPageItem extends ConsumerWidget {
         mushafPageCrtlProv.preservePage(
           newIsDualPage ? PageLayout.dualPage : PageLayout.singlePage,
         );
-      },
+      }, selectedAsset: MyFlutterApp.dual_page, unselectedAsset: MyFlutterApp.dual_page_outlined,
     );
   }
 }
