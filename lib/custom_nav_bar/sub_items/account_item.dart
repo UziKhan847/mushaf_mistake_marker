@@ -8,6 +8,7 @@ import 'package:mushaf_mistake_marker/icons/my_flutter_app_icons.dart';
 import 'package:mushaf_mistake_marker/main.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/user.dart';
 import 'package:mushaf_mistake_marker/providers/buttons/account_nav_btn_provider.dart';
+import 'package:mushaf_mistake_marker/providers/user_id_provider.dart';
 
 class AccountItem extends ConsumerStatefulWidget {
   const AccountItem({super.key});
@@ -25,6 +26,8 @@ class _AccountItemState extends ConsumerState<AccountItem> {
       ref.read(accountNavBtnProvider.notifier),
       ref.watch(accountNavBtnProvider),
     );
+
+    final userId = ref.watch(userIdProvider);
 
     final users = objectbox.store.box<User>().getAll();
 
@@ -47,6 +50,7 @@ class _AccountItemState extends ConsumerState<AccountItem> {
               final userSettings = user.settings.target!;
 
               return AccountUserTile(
+                isSelected: user.id == userId,
                 colorScheme: colorScheme,
                 textTheme: textTheme,
                 user: user,

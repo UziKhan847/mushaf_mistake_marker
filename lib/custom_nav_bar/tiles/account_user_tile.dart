@@ -9,8 +9,10 @@ class AccountUserTile extends StatelessWidget {
     required this.textTheme,
     required this.user,
     required this.userSettings,
+    required this.isSelected,
   });
 
+  final bool isSelected;
   final ColorScheme colorScheme;
   final TextTheme textTheme;
   final User user;
