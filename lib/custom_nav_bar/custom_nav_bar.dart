@@ -24,12 +24,14 @@ class _CustomNavBarState extends State<CustomNavBar> {
   @override
   Widget build(BuildContext context) {
     final bgColor = Theme.of(context).colorScheme.surface;
+    final widgetKey = GlobalKey();
 
     return LayoutBuilder(
       builder: (_, constraints) {
         final isPortrait = constraints.maxHeight > constraints.maxWidth;
 
         return Material(
+          key: widgetKey,
           elevation: 20,
           color: bgColor,
           borderRadius: BorderRadius.only(
@@ -53,7 +55,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
                     return NavBarItem(
                       iconLabel: switch (index) {
                         1 => 'Index',
-                        2 => 'Index',
+                        2 => 'Settings',
                         _ => 'Mushaf',
                       },
                       isSelected: isSelected,

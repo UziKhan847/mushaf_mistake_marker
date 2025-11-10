@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DynamicOverlay extends StatelessWidget {
+class DynamicOverlay extends ConsumerWidget {
   const DynamicOverlay({
     super.key,
     required this.link,
@@ -21,8 +22,9 @@ class DynamicOverlay extends StatelessWidget {
   final IndexedWidgetBuilder itemBuilder;
 
   @override
-  Widget build(BuildContext context) {
-    final renderObject = widgetKey!.currentContext?.findRenderObject();
+  Widget build(BuildContext context, WidgetRef ref) {
+
+    final renderObject = widgetKey.currentContext?.findRenderObject();
     if (renderObject == null || renderObject is! RenderBox) {
       throw Exception(
         'WidgetKey is not mounted or does not point to a RenderBox.',

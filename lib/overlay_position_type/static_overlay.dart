@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class StaticOverlay extends StatelessWidget {
+class StaticOverlay extends ConsumerWidget {
   const StaticOverlay({
     super.key,
     required this.elevation,
-    required this.borderRadius,
+    this.borderRadius,
     required this.itemCount,
     required this.itemBuilder,
   });
@@ -14,61 +15,35 @@ class StaticOverlay extends StatelessWidget {
   final int itemCount;
   final IndexedWidgetBuilder itemBuilder;
 
-  (double, double) getOffset(Size scrSize, Size navBarSize, bool isPortrait) {
-    if (isPortrait) {
-      final contW = scrSize.width - 15;
+  double getTop(Size scrSize) => (scrSize.height - (scrSize.height - 50)) / 2;
 
-      final left = (scrSize.width - contW) / 2;
-      final bottom = navBarSize.height;
-
-      return (left, bottom);
-    }
-
-    final contH = scrSize.height - 15;
-
-    final top = (scrSize.height - contH) / 2;
-    final right = navBarSize.width;
-
-    return (right, top);
-  }
-
-  BorderRadiusGeometry getBorderRadius(bool isPortrait) => isPortrait
-      ? BorderRadius.only(
-          topLeft: Radius.circular(4),
-          topRight: Radius.circular(4),
-        )
-      : BorderRadius.only(
-          topLeft: Radius.circular(4),
-          bottomLeft: Radius.circular(4),
-        );
+  BorderRadiusGeometry getBorderRadius(bool isPortrait, Radius radius) =>
+      isPortrait
+      ? BorderRadius.only(topLeft: radius, topRight: radius)
+      : BorderRadius.only(topLeft: radius, bottomLeft: radius);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final radius = Radius.circular(20);
     final mediaQ = MediaQuery.of(context);
 
     final scrSize = mediaQ.size;
     final isPortrait = mediaQ.orientation == Orientation.portrait;
-    const navBarSize = Size(72, 56);
-
-    final centerOffset = getOffset(scrSize, navBarSize, isPortrait);
-
-    final (x, y) = centerOffset;
 
     return Positioned(
-      left: isPortrait ? x : null,
-      right: isPortrait ? null : x,
-      bottom: isPortrait ? y : null,
-      top: isPortrait ? null : y,
+      right: isPortrait ? null : 0,
+      bottom: isPortrait ? 0 : null,
+      top: isPortrait ? null : getTop(scrSize),
       child: Material(
+        clipBehavior: Clip.hardEdge,
         elevation: elevation,
-        borderRadius: borderRadius ?? getBorderRadius(isPortrait),
+        borderRadius: borderRadius ?? getBorderRadius(isPortrait, radius),
         color: Theme.of(context).colorScheme.surface,
         child: SizedBox(
-          width: isPortrait ? scrSize.width - 15 : scrSize.width / 2,
-          height: isPortrait ? scrSize.height / 2 : scrSize.height - 15,
+          width: isPortrait ? scrSize.width : scrSize.height,
+          height: isPortrait ? (scrSize.height - 50) / 2 : scrSize.height - 50,
           child: ListView.builder(
             padding: EdgeInsets.zero,
-            //shrinkWrap: true,
             itemCount: itemCount,
             itemBuilder: itemBuilder,
           ),

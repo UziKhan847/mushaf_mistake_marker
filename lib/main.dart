@@ -6,7 +6,7 @@ import 'package:mushaf_mistake_marker/my_themes.dart';
 import 'package:mushaf_mistake_marker/objectbox/object_box.dart';
 import 'package:mushaf_mistake_marker/pages/loading_page.dart';
 import 'package:mushaf_mistake_marker/providers/shared_prefs_provider.dart';
-import 'package:mushaf_mistake_marker/providers/theme_provider.dart';
+import 'package:mushaf_mistake_marker/providers/buttons/theme_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
@@ -23,7 +23,6 @@ Future<void> main() async {
         'isDualPageMode',
         'isLeftHand',
         'isHighlightMode',
-        'isAccountNavBtnSelected',
       },
     ),
   );

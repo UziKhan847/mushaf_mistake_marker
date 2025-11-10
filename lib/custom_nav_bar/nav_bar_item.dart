@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mushaf_mistake_marker/custom_nav_bar/icon/icon_label.dart';
+import 'package:mushaf_mistake_marker/custom_nav_bar/icon_label.dart';
 
 class NavBarItem extends StatelessWidget {
   const NavBarItem({
@@ -51,7 +51,7 @@ class NavBarItem extends StatelessWidget {
               Icon(
                 isSelected ? selectedAsset : unselectedAsset,
                 color: color,
-                size: 20,
+                // size: 20,
               ),
               const SizedBox(height: 4),
               IconLabel(labelText: iconLabel, textColor: color),

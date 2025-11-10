@@ -60,9 +60,9 @@ class _SinglePageState extends ConsumerState<SinglePage> {
       ),
     );
 
-    print('----------------------------------------');
-    print('Rebuilt page: ${widget.index + 1}');
-    print('----------------------------------------');
+    // print('----------------------------------------');
+    // print('Rebuilt page: ${widget.index + 1}');
+    // print('----------------------------------------');
 
     return SizedBox(
       width: widget.w,

@@ -118,8 +118,8 @@ class SpriteNotifier extends Notifier<List<SpriteSheet>> {
     }
 
     await Future.wait(futures);
-    print(
-      'Prefetched the following pages and their images: ${pageNumbers.join(',')}',
-    );
+    // print(
+    //   'Prefetched the following pages and their images: ${pageNumbers.join(',')}',
+    // );
   }
 }

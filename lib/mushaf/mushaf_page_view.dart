@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_pager.dart';
-import 'package:mushaf_mistake_marker/providers/dual_page_toggle_provider.dart';
+import 'package:mushaf_mistake_marker/providers/buttons/dual_page_toggle_provider.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf_page_controller_provider.dart';
 import 'package:mushaf_mistake_marker/providers/shared_prefs_provider.dart';
 import 'package:mushaf_mistake_marker/providers/sprite_provider.dart';
