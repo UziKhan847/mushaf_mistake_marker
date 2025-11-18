@@ -3,14 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/main.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/user.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/user_settings.dart';
-import 'package:mushaf_mistake_marker/providers/user_id_provider.dart';
+import 'package:mushaf_mistake_marker/providers/user/user_id_provider.dart';
 
 final userProvider = NotifierProvider<UserNotifier, User>(UserNotifier.new);
 
 class UserNotifier extends Notifier<User> {
   @override
   User build() {
-    final int userId = ref.watch(userIdProvider);
+    final userId = ref.watch(userIdProvider);
 
     if (userId == 0) {
       throw Exception('Invalid User Id');
@@ -37,8 +37,10 @@ class UserNotifier extends Notifier<User> {
 
     user.settings.target = settings;
 
-    userBox.put(user);
+    final id = userBox.put(user);
 
-    state = user;
+    final userIdProv = ref.read(userIdProvider.notifier);
+
+    userIdProv.setUserId(id);
   }
 }

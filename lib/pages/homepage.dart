@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/mushaf/mushaf_content.dart';
-import 'package:mushaf_mistake_marker/custom_nav_bar/custom_nav_bar.dart';
+import 'package:mushaf_mistake_marker/custom_nav_bar/nav_bar.dart';
 
 class Homepage extends ConsumerStatefulWidget {
   const Homepage({super.key});

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mushaf_mistake_marker/custom_nav_bar/nav_bar_item.dart';
-import 'package:mushaf_mistake_marker/custom_nav_bar/sub_items/account_item.dart';
-import 'package:mushaf_mistake_marker/custom_nav_bar/sub_items/dark_mode_item.dart';
-import 'package:mushaf_mistake_marker/custom_nav_bar/sub_items/dual_page_item.dart';
-import 'package:mushaf_mistake_marker/custom_nav_bar/sub_items/highlighter_item.dart';
+import 'package:mushaf_mistake_marker/custom_nav_bar/custom_items/highlighter.dart';
+import 'package:mushaf_mistake_marker/custom_nav_bar/item.dart';
+import 'package:mushaf_mistake_marker/custom_nav_bar/custom_items/account.dart';
+import 'package:mushaf_mistake_marker/custom_nav_bar/custom_items/dark_mode.dart';
+import 'package:mushaf_mistake_marker/custom_nav_bar/custom_items/dual_page.dart';
 import 'package:mushaf_mistake_marker/icons/my_flutter_app_icons.dart';
 
 class CustomNavBar extends StatefulWidget {

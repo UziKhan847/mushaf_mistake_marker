@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class StaticOverlay extends ConsumerWidget {
-  const StaticOverlay({
+class BottomSideSheetOverlay extends ConsumerWidget {
+  const BottomSideSheetOverlay({
     super.key,
-    required this.elevation,
+    this.elevation = 4.0,
     this.borderRadius,
     required this.itemCount,
     required this.itemBuilder,

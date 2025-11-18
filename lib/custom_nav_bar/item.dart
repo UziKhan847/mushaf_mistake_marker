@@ -42,7 +42,7 @@ class NavBarItem extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(8),
       child: ConstrainedBox(
-        constraints: const BoxConstraints(minWidth: 72, minHeight: 56),
+        constraints: const BoxConstraints(minWidth: 60, minHeight: 56),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -51,7 +51,7 @@ class NavBarItem extends StatelessWidget {
               Icon(
                 isSelected ? selectedAsset : unselectedAsset,
                 color: color,
-                // size: 20,
+                size: 20,
               ),
               const SizedBox(height: 4),
               IconLabel(labelText: iconLabel, textColor: color),
