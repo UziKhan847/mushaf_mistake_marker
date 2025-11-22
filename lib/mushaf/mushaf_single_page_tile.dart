@@ -70,30 +70,30 @@ class MushafSinglePageTile extends StatelessWidget {
     final (w, h) = getWH(pageW, pageH);
 
     return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
+      scrollDirection: .vertical,
       child: ConstrainedBox(
         constraints: BoxConstraints(minHeight: constraints.maxHeight),
         child: Column(
           spacing: 20,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: .center,
           children: [
             SizedBox(
               width: w,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: .spaceBetween,
                 children: [
                   Text(
                     surahInfo,
                     style: TextStyle(
-                      decoration: TextDecoration.underline,
-                      decorationStyle: TextDecorationStyle.dashed,
+                      decoration: .underline,
+                      decorationStyle: .dashed,
                     ),
                   ),
                   // Text(
                   //   '$pageNumber',
                   //   style: TextStyle(
-                  //     decoration: TextDecoration.underline,
-                  //     decorationStyle: TextDecorationStyle.dashed,
+                  //     decoration: .underline,
+                  //     decorationStyle: .dashed,
                   //   ),
                   // ),
                   PageNumber(pageNumber: pageNumber),
@@ -102,8 +102,8 @@ class MushafSinglePageTile extends StatelessWidget {
                       Text(
                         juzuInfo,
                         style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          decorationStyle: TextDecorationStyle.dashed,
+                          decoration: .underline,
+                          decorationStyle: .dashed,
                         ),
                       ),
                       Text(' $hizbInfo'),

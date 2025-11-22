@@ -41,7 +41,7 @@ extension PathExtension on Path {
           final cW = e['cW'] as bool;
           arcToPoint(
             Offset(vals[0], vals[1]),
-            radius: Radius.elliptical(rE[0], rE[1]),
+            radius: .elliptical(rE[0], rE[1]),
             rotation: rot,
             largeArc: lA,
             clockwise: cW,
@@ -53,7 +53,7 @@ extension PathExtension on Path {
           final cW = e['cW'] as bool;
           relativeArcToPoint(
             Offset(vals[0], vals[1]),
-            radius: Radius.elliptical(rE[0], rE[1]),
+            radius: .elliptical(rE[0], rE[1]),
             rotation: rot,
             largeArc: lA,
             clockwise: cW,

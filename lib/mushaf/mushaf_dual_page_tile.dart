@@ -54,14 +54,14 @@ class MushafDualPageTile extends StatelessWidget {
     }
 
     return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
+      scrollDirection: .vertical,
       child: ConstrainedBox(
         constraints: BoxConstraints(
           minHeight: constraints.maxHeight,
           minWidth: constraints.maxWidth,
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: .center,
           children: [
             SinglePage(
               w: p2w,

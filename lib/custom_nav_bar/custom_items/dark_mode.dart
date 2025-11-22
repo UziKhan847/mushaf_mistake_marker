@@ -15,7 +15,7 @@ class DarkModeItem extends ConsumerWidget {
     );
 
     return NavBarItem(
-      iconLabel: 'Darkmode',
+      iconLabel: 'Dark Mode',
       isSelected: isDarkMode,
       onTap: () {
         themeProv.switchTheme();

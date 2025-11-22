@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mushaf_mistake_marker/add_user/card.dart';
 import 'package:mushaf_mistake_marker/extensions/context_extensions.dart';
-import 'package:mushaf_mistake_marker/add_user/popup_card.dart';
 
 class AddUserBtmSheetTile extends StatefulWidget {
   const AddUserBtmSheetTile({
@@ -19,6 +19,10 @@ class AddUserBtmSheetTile extends StatefulWidget {
 class _AddUserBtmSheetTileState extends State<AddUserBtmSheetTile> {
   OverlayEntry? overlay;
 
+  void onCancel() {
+    context.removeOverlayEntry(overlay);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -33,19 +37,16 @@ class _AddUserBtmSheetTileState extends State<AddUserBtmSheetTile> {
                   context.removeOverlayEntry(overlay);
                 },
                 children: [
-                  AddUserPopupCard(
-                    onCancel: () {
-                      context.removeOverlayEntry(overlay);
-                    }, child: null, colorScheme: widget.colorScheme, textTheme: widget.textTheme,
+                  AddUserCard(
+                    colorScheme: widget.colorScheme,
+                    textTheme: widget.textTheme,
+                    onCancel: onCancel,
                   ),
                 ],
               );
             },
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24.0,
-                vertical: 12.0,
-              ),
+              padding: const .symmetric(horizontal: 24.0, vertical: 12.0),
               child: Row(
                 children: [
                   CircleAvatar(
@@ -62,13 +63,13 @@ class _AddUserBtmSheetTileState extends State<AddUserBtmSheetTile> {
 
                   Expanded(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: .start,
+                      mainAxisSize: .min,
                       children: [
                         Text(
                           'Add account',
                           style: widget.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
+                            fontWeight: .w600,
                           ),
                         ),
                         const SizedBox(height: 2),

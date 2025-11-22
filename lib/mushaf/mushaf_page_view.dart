@@ -35,10 +35,9 @@ class _MushafPageViewState extends ConsumerState<MushafPageView>
   @override
   void initState() {
     super.initState();
-    //data = spriteProv.preFetchPages(initPage, widget.isPortrait);
 
     data = Future.delayed(
-      Duration.zero,
+      .zero,
       () => spriteProv.preFetchPages(initPage, widget.isPortrait),
     );
   }
@@ -61,7 +60,7 @@ class _MushafPageViewState extends ConsumerState<MushafPageView>
           return Center(child: Text('Error: ${snapshot.error}'));
         }
 
-        if (snapshot.connectionState == ConnectionState.done) {
+        if (snapshot.connectionState == .done) {
           return MushafPager(
             isDualPageMode: isDualPageMode,
             controller: mushfaPgCrtl,

@@ -36,24 +36,21 @@ class UserAccountTile extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       elevation: elevation,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      shape: RoundedRectangleBorder(borderRadius: .circular(8)),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
         curve: Curves.easeInOut,
         decoration: BoxDecoration(
           color: backgroundColor,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: .circular(8),
         ),
         child: InkWell(
           onTap: () {},
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: .circular(8),
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 12.0,
-              vertical: 8.0,
-            ),
+            padding: const .symmetric(horizontal: 12.0, vertical: 8.0),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: .center,
               children: [
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 180),
@@ -61,9 +58,9 @@ class UserAccountTile extends StatelessWidget {
                   height: 56,
                   decoration: BoxDecoration(
                     color: isSelected ? accentColor : Colors.transparent,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(6),
-                      bottomLeft: Radius.circular(6),
+                    borderRadius: const .only(
+                      topLeft: .circular(6),
+                      bottomLeft: .circular(6),
                     ),
                   ),
                 ),
@@ -71,7 +68,7 @@ class UserAccountTile extends StatelessWidget {
                 const SizedBox(width: 10),
 
                 Stack(
-                  clipBehavior: Clip.none,
+                  clipBehavior: .none,
                   children: [
                     CircleAvatar(
                       radius: 28,
@@ -92,11 +89,11 @@ class UserAccountTile extends StatelessWidget {
                         child: Material(
                           elevation: 2,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: .circular(12),
                           ),
                           color: accentColor,
                           child: Padding(
-                            padding: const EdgeInsets.all(4.0),
+                            padding: const .all(4.0),
                             child: Icon(Icons.check, size: 14, color: onAccent),
                           ),
                         ),
@@ -108,8 +105,8 @@ class UserAccountTile extends StatelessWidget {
 
                 Expanded(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: .start,
+                    mainAxisSize: .min,
                     children: [
                       Row(
                         children: [
@@ -117,10 +114,10 @@ class UserAccountTile extends StatelessWidget {
                             child: Text(
                               user.username,
                               style: textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.w700,
+                                fontWeight: .w700,
                                 color: usernameColor,
                               ),
-                              overflow: TextOverflow.ellipsis,
+                              overflow: .ellipsis,
                             ),
                           ),
 
@@ -138,10 +135,10 @@ class UserAccountTile extends StatelessWidget {
                       const SizedBox(height: 8),
 
                       Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        crossAxisAlignment: .center,
                         children: [
                           Container(
-                            padding: const EdgeInsets.symmetric(
+                            padding: const .symmetric(
                               horizontal: 10,
                               vertical: 6,
                             ),
@@ -149,10 +146,10 @@ class UserAccountTile extends StatelessWidget {
                               color: colorScheme.secondaryContainer.withAlpha(
                                 50,
                               ),
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: .circular(20),
                             ),
                             child: Row(
-                              mainAxisSize: MainAxisSize.min,
+                              mainAxisSize: .min,
                               children: [
                                 Icon(
                                   Icons.history,

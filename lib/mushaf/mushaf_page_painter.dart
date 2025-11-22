@@ -21,8 +21,7 @@ class MushafPagePainter extends CustomPainter {
   final Map<String, MarkType> markedPaths;
   final bool isDarkMode;
 
-  ColorFilter changeColor(Color color) =>
-      ColorFilter.mode(color, BlendMode.srcIn);
+  ColorFilter changeColor(Color color) => .mode(color, .srcIn);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -63,10 +62,10 @@ class MushafPagePainter extends CustomPainter {
       }
 
       colorList[i] = switch (markedPaths[id]) {
-        MarkType.doubt => purpleInt,
-        MarkType.mistake => redInt,
-        MarkType.oldMistake => blueInt,
-        MarkType.tajwid => greenInt,
+        .doubt => purpleInt,
+        .mistake => redInt,
+        .oldMistake => blueInt,
+        .tajwid => greenInt,
         _ => isDarkMode ? whiteInt : blackInt,
       };
     }
@@ -77,7 +76,7 @@ class MushafPagePainter extends CustomPainter {
       transformList,
       rectList,
       colorList,
-      BlendMode.dstATop,
+      .dstATop,
       null,
       paint,
     );

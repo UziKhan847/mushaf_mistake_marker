@@ -21,14 +21,14 @@ class AddUserHeader extends StatelessWidget {
           height: 10,
           decoration: BoxDecoration(
             color: colorScheme.primary,
-            borderRadius: BorderRadius.circular(6),
+            borderRadius: .circular(6),
           ),
         ),
         const SizedBox(width: 12),
         Expanded(
           child: Text(
             'Add account',
-            style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+            style: textTheme.titleLarge?.copyWith(fontWeight: .w700),
           ),
         ),
 

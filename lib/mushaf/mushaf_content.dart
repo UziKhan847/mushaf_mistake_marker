@@ -35,7 +35,7 @@ class _MushafContentState extends ConsumerState<MushafContent> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+    isPortrait = MediaQuery.of(context).orientation == .portrait;
 
     oldIsPortrait ??= isPortrait;
 

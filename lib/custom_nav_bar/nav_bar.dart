@@ -34,20 +34,20 @@ class _CustomNavBarState extends State<CustomNavBar> {
           key: widgetKey,
           elevation: 20,
           color: bgColor,
-          borderRadius: BorderRadius.only(
+          borderRadius: .only(
             topLeft: radius,
-            topRight: isPortrait ? radius : Radius.zero,
-            bottomLeft: isPortrait ? Radius.zero : radius,
+            topRight: isPortrait ? radius : .zero,
+            bottomLeft: isPortrait ? .zero : radius,
           ),
-          clipBehavior: Clip.hardEdge,
+          clipBehavior: .hardEdge,
           child: SizedBox(
             height: isPortrait ? null : constraints.maxHeight,
             width: isPortrait ? constraints.maxWidth : null,
             child: SingleChildScrollView(
-              scrollDirection: isPortrait ? Axis.horizontal : Axis.vertical,
+              scrollDirection: isPortrait ? .horizontal : .vertical,
               child: Flex(
-                direction: isPortrait ? Axis.horizontal : Axis.vertical,
-                mainAxisSize: MainAxisSize.min,
+                direction: isPortrait ? .horizontal : .vertical,
+                mainAxisSize: .min,
                 children: [
                   ...List.generate(3, (index) {
                     final isSelected = page == index;

@@ -28,9 +28,9 @@ class _HomepageState extends ConsumerState<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Flex(
-      direction: MediaQuery.of(context).orientation == Orientation.portrait
-          ? Axis.vertical
-          : Axis.horizontal,
+      direction: MediaQuery.of(context).orientation == .portrait
+          ? .vertical
+          : .horizontal,
       children: [
         Expanded(child: MushafContent(pageController: pageController)),
         CustomNavBar(pageController: pageController),

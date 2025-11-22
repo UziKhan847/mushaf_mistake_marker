@@ -53,7 +53,7 @@ class MushafPageControllerProvider extends Notifier<PageController> {
     }
 
     final pageIndex = state.page!.round();
-    final isSinglePage = targetLayout == PageLayout.singlePage;
+    final isSinglePage = targetLayout == .singlePage;
 
     final int targetPage = isSinglePage ? pageIndex * 2 : pageIndex ~/ 2;
 

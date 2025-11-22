@@ -20,7 +20,7 @@ class BottomSideSheetOverlay extends ConsumerWidget {
   BorderRadiusGeometry getBorderRadius(bool isPortrait, Radius radius) =>
       isPortrait
       ? BorderRadius.only(topLeft: radius, topRight: radius)
-      : BorderRadius.only(topLeft: radius, bottomLeft: radius);
+      : .only(topLeft: radius, bottomLeft: radius);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,14 +28,14 @@ class BottomSideSheetOverlay extends ConsumerWidget {
     final mediaQ = MediaQuery.of(context);
 
     final scrSize = mediaQ.size;
-    final isPortrait = mediaQ.orientation == Orientation.portrait;
+    final isPortrait = mediaQ.orientation == .portrait;
 
     return Positioned(
       right: isPortrait ? null : 0,
       bottom: isPortrait ? 0 : null,
       top: isPortrait ? null : getTop(scrSize),
       child: Material(
-        clipBehavior: Clip.hardEdge,
+        clipBehavior: .hardEdge,
         elevation: elevation,
         borderRadius: borderRadius ?? getBorderRadius(isPortrait, radius),
         color: Theme.of(context).colorScheme.surface,
@@ -43,7 +43,7 @@ class BottomSideSheetOverlay extends ConsumerWidget {
           width: isPortrait ? scrSize.width : scrSize.height,
           height: isPortrait ? (scrSize.height - 50) / 2 : scrSize.height - 50,
           child: ListView.builder(
-            padding: EdgeInsets.zero,
+            padding: .zero,
             itemCount: itemCount,
             itemBuilder: itemBuilder,
           ),

@@ -42,14 +42,14 @@ class _PageNumberState extends ConsumerState<PageNumber> {
                 itemCount: 604,
                 itemBuilder: (context, index) {
                   return GestureDetector(
-                    behavior: HitTestBehavior.opaque,
+                    behavior: .opaque,
                     onTap: () {
                       context.removeOverlayEntry(overlay);
                       mushafPgCtrlProv.jumpToPage(index);
                       onPgChgHandler.onJumpToPage(index);
                     },
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 20, bottom: 20),
+                      padding: const .only(top: 20, bottom: 20),
                       child: Center(child: Text('${index + 1}')),
                     ),
                   );
@@ -60,10 +60,7 @@ class _PageNumberState extends ConsumerState<PageNumber> {
         },
         child: Text(
           '${widget.pageNumber}',
-          style: TextStyle(
-            decoration: TextDecoration.underline,
-            decorationStyle: TextDecorationStyle.dashed,
-          ),
+          style: TextStyle(decoration: .underline, decorationStyle: .dashed),
         ),
       ),
     );

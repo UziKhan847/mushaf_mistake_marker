@@ -11,7 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  SystemChrome.setEnabledSystemUIMode(.immersiveSticky);
 
   final prefs = await SharedPreferencesWithCache.create(
     cacheOptions: SharedPreferencesWithCacheOptions(
@@ -46,7 +46,7 @@ class MyApp extends ConsumerWidget {
 
     return MaterialApp(
       scrollBehavior: AppScrollBehaviour(),
-      themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
+      themeMode: isDarkMode ? .dark : .light,
       theme: MyThemes.lightTheme,
       darkTheme: MyThemes.darkTheme,
       home: Scaffold(

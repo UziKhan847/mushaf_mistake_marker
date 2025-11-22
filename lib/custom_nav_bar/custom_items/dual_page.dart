@@ -24,7 +24,7 @@ class DualPageItem extends ConsumerWidget {
         dualPgTglProv.switchToggle();
         final newIsDualPage = !isDualPgTglOn;
         mushafPageCrtlProv.preservePage(
-          newIsDualPage ? PageLayout.dualPage : PageLayout.singlePage,
+          newIsDualPage ? .dualPage : .singlePage,
         );
       }, selectedAsset: MyFlutterApp.dual_page, unselectedAsset: MyFlutterApp.dual_page_outlined,
     );

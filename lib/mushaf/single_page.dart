@@ -138,7 +138,7 @@ class _SinglePageState extends ConsumerState<SinglePage> {
                   markedPaths: Map.from(markedSurahs.toCombinedMap()),
                   sprites: sprites,
                   image: image,
-                  isDarkMode: Theme.of(context).brightness == Brightness.dark,
+                  isDarkMode: Theme.of(context).brightness == .dark,
                 ),
               ),
             ),

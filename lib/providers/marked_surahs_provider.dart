@@ -34,11 +34,11 @@ class MarkedSurahsProvider extends Notifier<List<Map<String, MarkType>>> {
 
   MarkType? getMarkType(int markedSurah, String id) =>
       switch (state[markedSurah][id]) {
-        MarkType.doubt => MarkType.mistake,
-        MarkType.mistake => MarkType.oldMistake,
-        MarkType.oldMistake => MarkType.tajwid,
-        MarkType.tajwid => null,
-        _ => MarkType.doubt,
+        .doubt => .mistake,
+        .mistake => .oldMistake,
+        .oldMistake => .tajwid,
+        .tajwid => null,
+        _ => .doubt,
       };
 
   

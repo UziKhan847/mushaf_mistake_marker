@@ -7,7 +7,7 @@ class MushafPageLoading extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Center(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: .center,
         spacing: 16,
         children: [CircularProgressIndicator(), Text('Loading Page')],
       ),

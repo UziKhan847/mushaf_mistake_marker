@@ -56,7 +56,7 @@ class PageHeaderOverlay extends ConsumerWidget {
       offset: Offset(0, btnH + verticalOffset),
       child: Material(
         elevation: elevation,
-        borderRadius: borderRadius ?? BorderRadius.circular(4),
+        borderRadius: borderRadius ?? .circular(4),
         color: Theme.of(context).colorScheme.surface,
         child: ConstrainedBox(
           constraints: BoxConstraints(
@@ -65,7 +65,7 @@ class PageHeaderOverlay extends ConsumerWidget {
             minHeight: 200,
           ),
           child: ListView.builder(
-            padding: EdgeInsets.zero,
+            padding: .zero,
             shrinkWrap: true,
             itemCount: itemCount,
             itemBuilder: itemBuilder,

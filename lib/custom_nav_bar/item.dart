@@ -17,13 +17,13 @@ class NavBarItem extends StatelessWidget {
   final String iconLabel;
   final VoidCallback onTap;
 
-  Color saturateColor(bool isDarkMode, Color color, [double amount = -0.05]) {
+  Color saturateColor(bool isDarkMode, Color color, [double amount = 0.05]) {
     if (isDarkMode) {
       return color;
     }
 
     final hsl = HSLColor.fromColor(color);
-    final newSaturation = (hsl.saturation - amount).clamp(0, 1.0) as double;
+    final newSaturation = (hsl.saturation + amount).clamp(0, 1.0) as double;
     final newColor = hsl.withSaturation(newSaturation).toColor();
     return newColor;
   }
@@ -31,31 +31,35 @@ class NavBarItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final isDarkMode = Theme.of(context).brightness == .dark;
 
     final selectedColor = saturateColor(isDarkMode, colorScheme.primary);
     final unselectedColor = colorScheme.onSurfaceVariant;
 
     final color = isSelected ? selectedColor : unselectedColor;
 
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(minWidth: 60, minHeight: 56),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                isSelected ? selectedAsset : unselectedAsset,
-                color: color,
-                size: 20,
-              ),
-              const SizedBox(height: 4),
-              IconLabel(labelText: iconLabel, textColor: color),
-            ],
+    return Semantics(
+      button: true,
+      selected: isSelected,
+      label: iconLabel,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: .circular(8),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minWidth: 64, minHeight: 56),
+          child: Padding(
+            padding: const .all(8.0),
+            child: Column(
+              spacing: 2,
+              mainAxisAlignment: .center,
+              children: [
+                Icon(
+                  isSelected ? selectedAsset : unselectedAsset,
+                  color: color,
+                ),
+                IconLabel(labelText: iconLabel, textColor: color),
+              ],
+            ),
           ),
         ),
       ),

@@ -22,8 +22,8 @@ class SubmitButton extends StatelessWidget {
         backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.onPrimary,
         elevation: 0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        padding: const EdgeInsets.symmetric(vertical: 14),
+        shape: RoundedRectangleBorder(borderRadius: .circular(10)),
+        padding: const .symmetric(vertical: 14),
       ),
       child: AnimatedSwitcher(
         duration: Duration(milliseconds: 220),
@@ -37,7 +37,7 @@ class SubmitButton extends StatelessWidget {
                 child: CircularProgressIndicator(strokeWidth: 2.2),
               )
             : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: .center,
                 children: [
                   Icon(Icons.add, size: 18, color: colorScheme.onPrimary),
                   const SizedBox(width: 8),

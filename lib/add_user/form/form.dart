@@ -20,7 +20,7 @@ class AddUserForm extends StatelessWidget {
       key: formKey,
       child: TextFormField(
         controller: txtCtrl,
-        textInputAction: TextInputAction.done,
+        textInputAction: .done,
         decoration: InputDecoration(
           labelText: 'Username',
           hintText: 'e.g. umaza_2040',
@@ -30,9 +30,9 @@ class AddUserForm extends StatelessWidget {
             Icons.person_outline,
             color: colorScheme.onSurfaceVariant,
           ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          border: OutlineInputBorder(borderRadius: .circular(12)),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: .circular(12),
             borderSide: BorderSide(color: colorScheme.primary, width: 2),
           ),
         ),

@@ -6,7 +6,7 @@ publish_to: 'none'
 version: 2.0.1+7
 
 environment:
-  sdk: ^3.8.1
+  sdk: '>=3.10.0 <4.0.0'
 
 dependencies:
   flutter:
@@ -25,6 +25,7 @@ dependencies:
   objectbox: ^5.0.1
   objectbox_flutter_libs: ^5.0.1
   objectbox_generator: ^5.0.1
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   flutter_test:
