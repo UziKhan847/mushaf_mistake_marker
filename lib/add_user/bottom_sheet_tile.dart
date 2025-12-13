@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/add_user/card.dart';
 import 'package:mushaf_mistake_marker/extensions/context_extensions.dart';
+import 'package:mushaf_mistake_marker/providers/add_user/phase.dart';
 
-class AddUserBtmSheetTile extends StatefulWidget {
+class AddUserBtmSheetTile extends ConsumerStatefulWidget {
   const AddUserBtmSheetTile({
     super.key,
     required this.colorScheme,
@@ -13,14 +15,16 @@ class AddUserBtmSheetTile extends StatefulWidget {
   final TextTheme textTheme;
 
   @override
-  State<AddUserBtmSheetTile> createState() => _AddUserBtmSheetTileState();
+  ConsumerState<AddUserBtmSheetTile> createState() =>
+      _AddUserBtmSheetTileState();
 }
 
-class _AddUserBtmSheetTileState extends State<AddUserBtmSheetTile> {
+class _AddUserBtmSheetTileState extends ConsumerState<AddUserBtmSheetTile> {
   OverlayEntry? overlay;
 
   void onCancel() {
     context.removeOverlayEntry(overlay);
+    ref.read(addUserPhaseProvider.notifier).setPhase(.initial);
   }
 
   @override
@@ -35,6 +39,7 @@ class _AddUserBtmSheetTileState extends State<AddUserBtmSheetTile> {
               overlay = context.insertOverlay(
                 onTapOutside: () {
                   context.removeOverlayEntry(overlay);
+                  ref.read(addUserPhaseProvider.notifier).setPhase(.initial);
                 },
                 children: [
                   AddUserCard(

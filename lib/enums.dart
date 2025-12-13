@@ -1,0 +1,1 @@
+enum MarkType { mistake, oldMistake, doubt, tajwid }

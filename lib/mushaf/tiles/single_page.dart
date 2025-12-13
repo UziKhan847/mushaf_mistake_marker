@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mushaf_mistake_marker/mushaf/page_header/page_number.dart';
-import 'package:mushaf_mistake_marker/mushaf/single_page.dart';
+import 'package:mushaf_mistake_marker/mushaf/page/header/page_number.dart';
+import 'package:mushaf_mistake_marker/mushaf/page/screen.dart';
 import 'package:mushaf_mistake_marker/page_data/page_data.dart';
 import 'package:mushaf_mistake_marker/surah/pages_with_multiple_surahs.dart';
-import 'package:mushaf_mistake_marker/surah/surah.dart';
-import 'package:mushaf_mistake_marker/surah/surah_names_data.dart';
 
 class MushafSinglePageTile extends StatelessWidget {
   const MushafSinglePageTile({
@@ -50,7 +48,7 @@ class MushafSinglePageTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pageNumber = index + 1;
-    final juzNumber = pageData.jzNum.join(', ');
+  //  final juzNumber = pageData.jzNum.join(', ');
 
     final surahsNum = pageData.srNum;
 
@@ -58,12 +56,10 @@ class MushafSinglePageTile extends StatelessWidget {
       surahsNum.add(surahsNum.last + 1);
     }
 
-    final surah = Surah.fromJson(surahs[surahsNum.first - 1]);
-    final hizbNumber = pageData.hzNum.first;
-
-    final surahInfo = '${surah.number} ${surah.name} (${surah.numOfVs})';
-    final juzuInfo = 'Juz $juzNumber';
-    final hizbInfo = '(Hizb $hizbNumber)';
+   // final surah = Surah.fromJson(surahs[surahsNum.first - 1]);
+   // final hizbNumber = pageData.hzNum.first;
+  //  final juzuInfo = 'Juz $juzNumber';
+   // final hizbInfo = '(Hizb $hizbNumber)';
 
     final (pageW, pageH) = (pageData.pSize!.first, pageData.pSize!.last);
 
@@ -82,37 +78,13 @@ class MushafSinglePageTile extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: .spaceBetween,
                 children: [
-                  Text(
-                    surahInfo,
-                    style: TextStyle(
-                      decoration: .underline,
-                      decorationStyle: .dashed,
-                    ),
-                  ),
-                  // Text(
-                  //   '$pageNumber',
-                  //   style: TextStyle(
-                  //     decoration: .underline,
-                  //     decorationStyle: .dashed,
-                  //   ),
-                  // ),
-                  PageNumber(pageNumber: pageNumber),
-                  Row(
-                    children: [
-                      Text(
-                        juzuInfo,
-                        style: TextStyle(
-                          decoration: .underline,
-                          decorationStyle: .dashed,
-                        ),
-                      ),
-                      Text(' $hizbInfo'),
-                    ],
-                  ),
+                //  SurahNumberHeader(surah: surah),
+                  PageNumberHeader(pageNumber: pageNumber),
+                  //    JuzNumberHeader(surah: 'surah'),
                 ],
               ),
             ),
-            SinglePage(
+            MushafPageScreen(
               w: w,
               h: h,
               pageW: pageW,

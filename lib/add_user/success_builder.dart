@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class AddUserSuccesBuilder extends StatelessWidget {
-  const AddUserSuccesBuilder({
+class AddUserSuccessBuilder extends StatelessWidget {
+  const AddUserSuccessBuilder({
     super.key,
     required this.colorScheme,
     required this.textTheme,

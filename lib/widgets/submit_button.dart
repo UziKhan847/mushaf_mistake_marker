@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mushaf_mistake_marker/providers/add_user/phase.dart';
 
-class SubmitButton extends StatelessWidget {
+class SubmitButton extends ConsumerWidget {
   const SubmitButton({
     super.key,
-    required this.submitting,
     required this.onSubmit,
     required this.colorScheme,
     required this.textTheme,
   });
 
-  final bool submitting;
   final VoidCallback? onSubmit;
   final ColorScheme colorScheme;
   final TextTheme textTheme;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final phase = ref.read(addUserPhaseProvider);
+
     return ElevatedButton(
-      onPressed: submitting ? null : onSubmit,
+      onPressed: onSubmit,
       style: ElevatedButton.styleFrom(
         backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.onPrimary,
@@ -30,7 +32,7 @@ class SubmitButton extends StatelessWidget {
         transitionBuilder: (child, animation) {
           return ScaleTransition(scale: animation, child: child);
         },
-        child: submitting
+        child: phase == .submitting
             ? SizedBox(
                 height: 20,
                 width: 20,
@@ -38,9 +40,9 @@ class SubmitButton extends StatelessWidget {
               )
             : Row(
                 mainAxisAlignment: .center,
+                spacing: 8,
                 children: [
                   Icon(Icons.add, size: 18, color: colorScheme.onPrimary),
-                  const SizedBox(width: 8),
                   Text(
                     'Add account',
                     style: textTheme.labelLarge?.copyWith(

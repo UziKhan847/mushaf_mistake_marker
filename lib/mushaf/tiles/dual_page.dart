@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mushaf_mistake_marker/mushaf/single_page.dart';
+import 'package:mushaf_mistake_marker/mushaf/page/screen.dart';
 import 'package:mushaf_mistake_marker/page_data/page_data.dart';
 import 'package:mushaf_mistake_marker/surah/pages_with_multiple_surahs.dart';
 
@@ -63,7 +63,7 @@ class MushafDualPageTile extends StatelessWidget {
         child: Row(
           mainAxisAlignment: .center,
           children: [
-            SinglePage(
+            MushafPageScreen(
               w: p2w,
               h: p2h,
               pageW: pageTwo['w'] as double,
@@ -72,7 +72,7 @@ class MushafDualPageTile extends StatelessWidget {
               surahsNum: pgTwoSurahsNum.toList(),
             ),
             SizedBox(width: 30),
-            SinglePage(
+            MushafPageScreen(
               w: p1w,
               h: p1h,
               pageW: pageOne['w'] as double,

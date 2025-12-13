@@ -8,15 +8,13 @@ class AddUserButtons extends StatelessWidget {
     required this.colorScheme,
     required this.textTheme,
     required this.onCancel,
-    required this.submitting,
     this.onSubmit,
   });
 
   final ColorScheme colorScheme;
   final TextTheme textTheme;
-  final bool submitting;
-  final void Function()? onCancel;
-  final void Function()? onSubmit;
+  final VoidCallback? onCancel;
+  final VoidCallback? onSubmit;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +26,6 @@ class AddUserButtons extends StatelessWidget {
         ),
         Expanded(
           child: SubmitButton(
-            submitting: submitting,
             onSubmit: onSubmit,
             colorScheme: colorScheme,
             textTheme: textTheme,

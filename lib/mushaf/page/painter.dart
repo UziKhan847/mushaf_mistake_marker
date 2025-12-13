@@ -1,7 +1,7 @@
 import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mushaf_mistake_marker/providers/marked_surahs_provider.dart';
+import 'package:mushaf_mistake_marker/providers/marked_surahs.dart';
 import 'package:mushaf_mistake_marker/sprite/rst_offset.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite.dart';
 import 'package:mushaf_mistake_marker/variables.dart';

@@ -3,7 +3,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mushaf_mistake_marker/providers/shared_prefs_provider.dart';
+import 'package:mushaf_mistake_marker/providers/shared_prefs.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite_sheet.dart';
 
@@ -16,7 +16,7 @@ class SpriteNotifier extends Notifier<List<SpriteSheet>> {
   List<SpriteSheet> build() =>
       List.generate(604, (_) => SpriteSheet(sprites: []));
 
-  Future<List<Sprite>> fetchSprite(int index, int pageNumber) async {
+  Future<List<Sprite>> fetchSprite(int pageNumber) async {
     try {
       final List<Sprite> sprites = [];
 
@@ -64,12 +64,8 @@ class SpriteNotifier extends Notifier<List<SpriteSheet>> {
       return;
     }
 
-    // print('------------------------------------------------');
-    // print('FETCHING FROM INDEX: $index');
-    // print('------------------------------------------------');
-
     final sprites = oldSheet.sprites.isEmpty
-        ? await fetchSprite(index, index + 1)
+        ? await fetchSprite(index + 1)
         : oldSheet.sprites;
 
     final image = oldSheet.image == null
@@ -91,12 +87,14 @@ class SpriteNotifier extends Notifier<List<SpriteSheet>> {
     state = newState;
   }
 
+    void clearSprite(int index) {
+
+    final newState = [...state];
+    newState[index] = SpriteSheet(sprites: []);
+    state = newState;
+  }
+
   void clearAll() {
-    // final List<SpriteSheet> newSheets = [...state];
-
-    // newSheets.clear();
-
-    // final clearedSheets = newSheets;
     state = List.generate(604, (_) => SpriteSheet(sprites: []));
   }
 
@@ -118,8 +116,5 @@ class SpriteNotifier extends Notifier<List<SpriteSheet>> {
     }
 
     await Future.wait(futures);
-    // print(
-    //   'Prefetched the following pages and their images: ${pageNumbers.join(',')}',
-    // );
   }
 }

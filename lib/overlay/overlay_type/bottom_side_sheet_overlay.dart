@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mushaf_mistake_marker/add_user/bottom_sheet_tile.dart';
+import 'package:mushaf_mistake_marker/main.dart';
+import 'package:mushaf_mistake_marker/objectbox/entities/user.dart';
+import 'package:mushaf_mistake_marker/providers/user/id.dart';
+import 'package:mushaf_mistake_marker/user_account/user_account_tile.dart';
 
 class BottomSideSheetOverlay extends ConsumerWidget {
   const BottomSideSheetOverlay({
     super.key,
     this.elevation = 4.0,
     this.borderRadius,
-    required this.itemCount,
-    required this.itemBuilder,
   });
 
   final double elevation;
   final BorderRadiusGeometry? borderRadius;
-  final int itemCount;
-  final IndexedWidgetBuilder itemBuilder;
 
   double getTop(Size scrSize) => (scrSize.height - (scrSize.height - 50)) / 2;
 
@@ -24,6 +25,9 @@ class BottomSideSheetOverlay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final userId = ref.watch(userIdProvider);
+    final users = objectbox.store.box<User>().getAll();
+
     final radius = Radius.circular(20);
     final mediaQ = MediaQuery.of(context);
 
@@ -44,8 +48,35 @@ class BottomSideSheetOverlay extends ConsumerWidget {
           height: isPortrait ? (scrSize.height - 50) / 2 : scrSize.height - 50,
           child: ListView.builder(
             padding: .zero,
-            itemCount: itemCount,
-            itemBuilder: itemBuilder,
+            itemCount: users.length + 1,
+            itemBuilder: (context, index) {
+              final colorScheme = Theme.of(context).colorScheme;
+              final textTheme = Theme.of(context).textTheme;
+
+              if (index < users.length) {
+                final user = users[index];
+                final id = user.id;
+                final settings = user.settings.target!;
+
+                return Column(
+                  children: [
+                    Divider(height: 4),
+                    UserAccountTile(
+                      isSelected: id == userId,
+                      colorScheme: colorScheme,
+                      textTheme: textTheme,
+                      user: user,
+                      userSettings: settings,
+                    ),
+                  ],
+                );
+              }
+
+              return AddUserBtmSheetTile(
+                colorScheme: colorScheme,
+                textTheme: textTheme,
+              );
+            },
           ),
         ),
       ),

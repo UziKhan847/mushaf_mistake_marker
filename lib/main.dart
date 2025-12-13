@@ -5,8 +5,8 @@ import 'package:mushaf_mistake_marker/app_scroll_behaviour.dart';
 import 'package:mushaf_mistake_marker/my_themes.dart';
 import 'package:mushaf_mistake_marker/objectbox/object_box.dart';
 import 'package:mushaf_mistake_marker/pages/loading_page.dart';
-import 'package:mushaf_mistake_marker/providers/shared_prefs_provider.dart';
-import 'package:mushaf_mistake_marker/providers/buttons/theme_provider.dart';
+import 'package:mushaf_mistake_marker/providers/shared_prefs.dart';
+import 'package:mushaf_mistake_marker/providers/buttons/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {

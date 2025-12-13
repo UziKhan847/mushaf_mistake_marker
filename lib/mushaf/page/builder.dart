@@ -1,12 +1,12 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mushaf_mistake_marker/mushaf/mushaf_dual_page_tile.dart';
-import 'package:mushaf_mistake_marker/mushaf/mushaf_single_page_tile.dart';
-import 'package:mushaf_mistake_marker/mushaf/page_changed_handler.dart';
+import 'package:mushaf_mistake_marker/mushaf/tiles/dual_page.dart';
+import 'package:mushaf_mistake_marker/mushaf/tiles/single_page.dart';
+import 'package:mushaf_mistake_marker/mushaf/page/page_changed_handler.dart';
 import 'package:mushaf_mistake_marker/providers/pages_provider.dart';
 
-class MushafPager extends ConsumerStatefulWidget {
-  const MushafPager({
+class MushafPageBuilder extends ConsumerStatefulWidget {
+  const MushafPageBuilder({
     super.key,
     required this.isDualPageMode,
     required this.controller,
@@ -26,10 +26,10 @@ class MushafPager extends ConsumerStatefulWidget {
   final int initPage;
 
   @override
-  ConsumerState<MushafPager> createState() => _MushafPagerState();
+  ConsumerState<MushafPageBuilder> createState() => _MushafPagerState();
 }
 
-class _MushafPagerState extends ConsumerState<MushafPager> {
+class _MushafPagerState extends ConsumerState<MushafPageBuilder> {
   late int prevPage;
   late final onPageHandler = PageChangedHandler(ref: ref);
   late final pages = ref.read(pagesProvider).value!;

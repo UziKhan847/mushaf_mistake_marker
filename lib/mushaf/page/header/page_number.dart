@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/extensions/context_extensions.dart';
-import 'package:mushaf_mistake_marker/mushaf/page_changed_handler.dart';
+import 'package:mushaf_mistake_marker/mushaf/page/page_changed_handler.dart';
 import 'package:mushaf_mistake_marker/overlay/overlay_type/page_header_overlay.dart';
-import 'package:mushaf_mistake_marker/providers/mushaf_page_controller_provider.dart';
+import 'package:mushaf_mistake_marker/providers/mushaf_page_controller.dart';
 
-class PageNumber extends ConsumerStatefulWidget {
-  const PageNumber({super.key, required this.pageNumber});
+class PageNumberHeader extends ConsumerStatefulWidget {
+  const PageNumberHeader({super.key, required this.pageNumber});
 
   final int pageNumber;
 
   @override
-  ConsumerState<PageNumber> createState() => _PageNumberState();
+  ConsumerState<PageNumberHeader> createState() => _PageNumberHeaderState();
 }
 
-class _PageNumberState extends ConsumerState<PageNumber> {
+class _PageNumberHeaderState extends ConsumerState<PageNumberHeader> {
   final link = LayerLink();
 
   final widgetKey = GlobalKey();

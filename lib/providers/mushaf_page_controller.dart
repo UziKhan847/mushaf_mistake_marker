@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/main.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/user_settings.dart';
-import 'package:mushaf_mistake_marker/providers/shared_prefs_provider.dart';
-import 'package:mushaf_mistake_marker/providers/user/user_provider.dart';
+import 'package:mushaf_mistake_marker/providers/shared_prefs.dart';
+import 'package:mushaf_mistake_marker/providers/user/user.dart';
 
 final mushafPgCtrlProvider =
     NotifierProvider<MushafPageControllerProvider, PageController>(
@@ -18,8 +18,6 @@ class MushafPageControllerProvider extends Notifier<PageController> {
 
     final isDualPageMode = prefs.getBool('isDualPageMode') ?? false;
 
-    // final initPage = prefs.getInt('initPage') ?? 0;
-
     final initPage = user.settings.target!.initPage;
 
     final actualPage = isDualPageMode ? (initPage / 2).ceil() : initPage;
@@ -32,10 +30,6 @@ class MushafPageControllerProvider extends Notifier<PageController> {
   }
 
   void setPage(int index) {
-    //final prefs = ref.read(sharedPrefsProv);
-
-    //prefs.setInt('initPage', index);
-
     final user = ref.read(userProvider);
 
     final settings = user.settings.target!;

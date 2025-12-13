@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mushaf_mistake_marker/mushaf/page/page_changed_handler.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/user.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/user_settings.dart';
+import 'package:mushaf_mistake_marker/providers/mushaf_page_controller.dart';
+import 'package:mushaf_mistake_marker/providers/user/id.dart';
 
-class UserAccountTile extends StatelessWidget {
+class UserAccountTile extends ConsumerWidget {
   const UserAccountTile({
     super.key,
     required this.colorScheme,
@@ -24,9 +28,15 @@ class UserAccountTile extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userIdProv = ref.read(userIdProvider.notifier);
+    final mushafPgCtrlProv = ref.read(mushafPgCtrlProvider);
+    final onPgChgHandler = PageChangedHandler(ref: ref);
+
+    final userLastPage = userSettings.initPage;
+
     final backgroundColor = isSelected
-        ? colorScheme.primary.withAlpha(25)
+        ? colorScheme.secondaryContainer.withAlpha(100)
         : colorScheme.surface;
     final elevation = isSelected ? 2.0 : 0.0;
     final usernameColor = isSelected ? colorScheme.primary : null;
@@ -45,7 +55,11 @@ class UserAccountTile extends StatelessWidget {
           borderRadius: .circular(8),
         ),
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            userIdProv.setUserId(user.id);
+            mushafPgCtrlProv.jumpToPage(userLastPage);
+            onPgChgHandler.onJumpToPage(userLastPage);
+          },
           borderRadius: .circular(8),
           child: Padding(
             padding: const .symmetric(horizontal: 12.0, vertical: 8.0),
