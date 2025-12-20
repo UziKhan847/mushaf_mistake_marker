@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/add_user/bottom_sheet_tile.dart';
-import 'package:mushaf_mistake_marker/main.dart';
-import 'package:mushaf_mistake_marker/objectbox/entities/user.dart';
-import 'package:mushaf_mistake_marker/providers/user/id.dart';
+import 'package:mushaf_mistake_marker/providers/objectbox/box/user.dart';
+import 'package:mushaf_mistake_marker/providers/objectbox/entities/user.dart';
 import 'package:mushaf_mistake_marker/user_account/user_account_tile.dart';
 
 class BottomSideSheetOverlay extends ConsumerWidget {
@@ -25,8 +24,8 @@ class BottomSideSheetOverlay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userId = ref.watch(userIdProvider);
-    final users = objectbox.store.box<User>().getAll();
+    final userId = ref.watch(userProvider).value!.id;
+    final users = ref.read(userBoxProvider).getAll();
 
     final radius = Radius.circular(20);
     final mediaQ = MediaQuery.of(context);

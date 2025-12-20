@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:5695174526205380813",
-      "lastPropertyId": "3:3143501386793757011",
+      "lastPropertyId": "4:8596584169510785488",
       "name": "User",
       "properties": [
         {
@@ -26,6 +26,14 @@
           "type": 11,
           "flags": 520,
           "relationTarget": "UserSettings"
+        },
+        {
+          "id": "4:8596584169510785488",
+          "name": "mushafDataId",
+          "indexId": "2:7746610485079453983",
+          "type": 11,
+          "flags": 520,
+          "relationTarget": "UserMushafData"
         }
       ],
       "relations": []
@@ -53,11 +61,72 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "4:5158204488349438991",
+      "lastPropertyId": "2:486392625489474937",
+      "name": "UserMushafData",
+      "properties": [
+        {
+          "id": "1:8077524744268339072",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:486392625489474937",
+          "name": "updatedAt",
+          "type": 6
+        }
+      ],
+      "relations": [
+        {
+          "id": "1:1867234926092955552",
+          "name": "elementData",
+          "targetId": "5:7498263474056846663"
+        }
+      ]
+    },
+    {
+      "id": "5:7498263474056846663",
+      "lastPropertyId": "5:1143108290443860278",
+      "name": "ElementData",
+      "properties": [
+        {
+          "id": "1:5364272024075805505",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:4310841449428069570",
+          "name": "key",
+          "indexId": "3:3535139043750553455",
+          "type": 9,
+          "flags": 2048
+        },
+        {
+          "id": "3:102739221113859876",
+          "name": "annotation",
+          "type": 9
+        },
+        {
+          "id": "4:3820782552421138780",
+          "name": "markId",
+          "type": 2
+        },
+        {
+          "id": "5:1143108290443860278",
+          "name": "highlightId",
+          "type": 2
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "3:4114569898738216993",
-  "lastIndexId": "1:8369541278899629778",
-  "lastRelationId": "0:0",
+  "lastEntityId": "5:7498263474056846663",
+  "lastIndexId": "3:3535139043750553455",
+  "lastRelationId": "1:1867234926092955552",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,

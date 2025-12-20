@@ -1,16 +1,16 @@
 import 'dart:ui' as ui;
 
-import 'package:mushaf_mistake_marker/sprite/sprite.dart';
+import 'package:mushaf_mistake_marker/sprite/sprite_ele_data.dart';
 
 class SpriteSheet {
-  SpriteSheet({required this.sprites, this.image});
+  SpriteSheet({required this.sprMnfst, this.image});
 
-  List<Sprite> sprites;
+  List<SpriteEleData> sprMnfst;
   ui.Image? image;
 
-  SpriteSheet copyWith({List<Sprite>? sprites, ui.Image? image}) {
+  SpriteSheet copyWith({List<SpriteEleData>? sprMnfst, ui.Image? image}) {
     return SpriteSheet(
-      sprites: sprites ?? List.from(this.sprites),
+      sprMnfst: sprMnfst ?? List.from(this.sprMnfst),
       image: image ?? this.image,
     );
   }

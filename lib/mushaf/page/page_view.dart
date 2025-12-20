@@ -22,8 +22,8 @@ class MushafPageView extends ConsumerStatefulWidget {
 
 class _MushafPageViewState extends ConsumerState<MushafPageView>
     with AutomaticKeepAliveClientMixin {
-  late final mushfaPgCrtl = ref.read(mushafPgCtrlProvider);
-  late final initPage = mushfaPgCrtl.initialPage;
+  late final mushafPgCrtl = ref.read(mushafPgCtrlProvider);
+  late final initPage = mushafPgCrtl.initialPage;
   late final spriteProv = ref.read(spriteProvider.notifier);
   late final prefs = ref.read(sharedPrefsProv);
 
@@ -63,7 +63,7 @@ class _MushafPageViewState extends ConsumerState<MushafPageView>
         if (snapshot.connectionState == .done) {
           return MushafPageBuilder(
             isDualPageMode: isDualPageMode,
-            controller: mushfaPgCrtl,
+            controller: mushafPgCrtl,
             constraints: widget.constraints,
             ref: ref,
             isPortrait: isDualPageMode ? false : widget.isPortrait,

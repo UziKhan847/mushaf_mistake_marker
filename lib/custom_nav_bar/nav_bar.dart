@@ -1,37 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:mushaf_mistake_marker/custom_nav_bar/custom_items/highlighter.dart';
-import 'package:mushaf_mistake_marker/custom_nav_bar/item.dart';
+import 'package:mushaf_mistake_marker/custom_nav_bar/custom_items/index.dart';
+import 'package:mushaf_mistake_marker/custom_nav_bar/custom_items/mushaf.dart';
+import 'package:mushaf_mistake_marker/custom_nav_bar/custom_items/settings.dart';
 import 'package:mushaf_mistake_marker/custom_nav_bar/custom_items/account.dart';
 import 'package:mushaf_mistake_marker/custom_nav_bar/custom_items/dark_mode.dart';
 import 'package:mushaf_mistake_marker/custom_nav_bar/custom_items/dual_page.dart';
-import 'package:mushaf_mistake_marker/icons/my_flutter_app_icons.dart';
 
 class CustomNavBar extends StatefulWidget {
-  const CustomNavBar({super.key, required this.pageController});
-
-  final PageController pageController;
+  const CustomNavBar({super.key});
 
   @override
   State<CustomNavBar> createState() => _CustomNavBarState();
 }
 
 class _CustomNavBarState extends State<CustomNavBar> {
-  int get page => widget.pageController.hasClients
-      ? widget.pageController.page!.round()
-      : 0;
   final radius = Radius.circular(20);
 
   @override
   Widget build(BuildContext context) {
     final bgColor = Theme.of(context).colorScheme.surface;
-    final widgetKey = GlobalKey();
 
     return LayoutBuilder(
       builder: (_, constraints) {
         final isPortrait = constraints.maxHeight > constraints.maxWidth;
 
         return Material(
-          key: widgetKey,
           elevation: 20,
           color: bgColor,
           borderRadius: .only(
@@ -49,35 +43,9 @@ class _CustomNavBarState extends State<CustomNavBar> {
                 direction: isPortrait ? .horizontal : .vertical,
                 mainAxisSize: .min,
                 children: [
-                  ...List.generate(3, (index) {
-                    final isSelected = page == index;
-
-                    return NavBarItem(
-                      iconLabel: switch (index) {
-                        1 => 'Index',
-                        2 => 'Settings',
-                        _ => 'Mushaf',
-                      },
-                      isSelected: isSelected,
-                      onTap: () {
-                        if (widget.pageController.hasClients) {
-                          widget.pageController.jumpToPage(index);
-                          setState(() {});
-                        }
-                      },
-                      selectedAsset: switch (index) {
-                        1 => MyFlutterApp.index,
-                        2 => MyFlutterApp.settings,
-                        _ => MyFlutterApp.mushaf,
-                      },
-                      unselectedAsset: switch (index) {
-                        1 => MyFlutterApp.index_outlined,
-                        2 => MyFlutterApp.settings_outlined,
-                        _ => MyFlutterApp.mushaf_outlined,
-                      },
-                    );
-                  }),
-
+                  MushafItem(),
+                  IndexItem(),
+                  SettingsItem(),
                   AccountItem(),
                   DarkModeItem(),
                   if (!isPortrait) DualPageItem(),

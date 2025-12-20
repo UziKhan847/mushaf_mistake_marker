@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/extensions/list_extension.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/painter.dart';
 import 'package:mushaf_mistake_marker/providers/marked_surahs.dart';
@@ -48,7 +49,7 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
   Widget build(BuildContext context) {
     final surahsNum = widget.surahsNum;
     final pageNumber = widget.index + 1;
-    final sprites = ref.read(spriteProvider)[widget.index].sprites;
+    final sprites = ref.read(spriteProvider)[widget.index].sprMnfst;
     final markedSurahsProv = ref.read(markedSurahsProvider.notifier);
     final image = ref.watch(
       spriteProvider.select((state) => state[widget.index].image),

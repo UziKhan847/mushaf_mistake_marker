@@ -6,7 +6,8 @@ import 'package:mushaf_mistake_marker/objectbox/entities/user.dart';
 import 'package:mushaf_mistake_marker/overlay/overlay_type/popup_card.dart';
 import 'package:mushaf_mistake_marker/providers/add_user/error_message.dart';
 import 'package:mushaf_mistake_marker/providers/add_user/phase.dart';
-import 'package:mushaf_mistake_marker/providers/user/user.dart';
+import 'package:mushaf_mistake_marker/providers/objectbox/box/user.dart';
+import 'package:mushaf_mistake_marker/providers/objectbox/entities/user.dart';
 
 class AddUserCard extends ConsumerStatefulWidget {
   const AddUserCard({
@@ -25,7 +26,6 @@ class AddUserCard extends ConsumerStatefulWidget {
 }
 
 class _AddUserCardState extends ConsumerState<AddUserCard> {
-  //final _formKey = GlobalKey<FormState>();
   final textCtrl = TextEditingController();
 
   @override
@@ -43,8 +43,12 @@ class _AddUserCardState extends ConsumerState<AddUserCard> {
 
     final errMsgProv = ref.read(addUserErrorMsgProvider.notifier);
 
-    final userProv = ref.read(userProvider.notifier);
-    final usernames = userProv.getUsernames(isLowerCase: true);
+    final (userProv, userBoxProv) = (
+      ref.read(userProvider.notifier),
+      ref.read(userBoxProvider.notifier),
+    );
+
+    final usernames = userBoxProv.lowerCaseUsernames;
 
     return PopupCard(
       child: AnimatedSize(
@@ -58,7 +62,6 @@ class _AddUserCardState extends ConsumerState<AddUserCard> {
             : AddUserFormBuilder(
                 colorScheme: widget.colorScheme,
                 textTheme: widget.textTheme,
-                //formKey: _formKey,
                 textCtrl: textCtrl,
                 phase: phase,
                 onCancel: widget.onCancel,
@@ -96,7 +99,6 @@ class _AddUserCardState extends ConsumerState<AddUserCard> {
                           phaseProv.setPhase(.success);
                         } catch (e) {
                           errMsgProv.setErrorMsg('$e');
-                          //phaseProv.errorMsg('$e');
                           phaseProv.setPhase(.error);
                         }
                       },

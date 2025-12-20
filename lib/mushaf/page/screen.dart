@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/annotator.dart';
+// ignore: unused_import
+import 'package:mushaf_mistake_marker/providers/sprite/family/img.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/sprite.dart';
 
 class MushafPageScreen extends ConsumerStatefulWidget {
@@ -42,17 +44,11 @@ class _MushafPageScreenState extends ConsumerState<MushafPageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //final surahsNum = widget.surahsNum!;
     final image = ref.watch(
       spriteProvider.select((state) => state[widget.index].image),
     );
 
-    // List<Map<String, MarkType>> markedSurahs = List.generate(
-    //   surahsNum.length,
-    //   (index) => ref.watch(
-    //     markedSurahsProvider.select((state) => state[surahsNum[index] - 1]),
-    //   ),
-    // );
+    //final image = ref.watch(sprImgProvider(widget.index)).value;
 
     return SizedBox(
       width: widget.w,

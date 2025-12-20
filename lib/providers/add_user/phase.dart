@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mushaf_mistake_marker/add_user/form/enum.dart';
+import 'package:mushaf_mistake_marker/enums.dart';
+
 
 final addUserPhaseProvider = NotifierProvider<AddUserPhaseNotifier, Phase>(
   AddUserPhaseNotifier.new,

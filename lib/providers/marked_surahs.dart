@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mushaf_mistake_marker/enums.dart';
 
 final markedSurahsProvider =
     NotifierProvider<MarkedSurahsProvider, List<Map<String, MarkType>>>(
@@ -44,4 +45,3 @@ class MarkedSurahsProvider extends Notifier<List<Map<String, MarkType>>> {
   
 }
 
-enum MarkType { mistake, oldMistake, doubt, tajwid }

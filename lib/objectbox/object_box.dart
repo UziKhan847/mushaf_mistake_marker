@@ -1,6 +1,7 @@
 import 'dart:io';
+import 'package:mushaf_mistake_marker/objectbox/entities/mushaf_data.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/user.dart';
-import 'package:mushaf_mistake_marker/objectbox/entities/user_settings.dart';
+import 'package:mushaf_mistake_marker/objectbox/entities/settings.dart';
 import 'package:mushaf_mistake_marker/objectbox/objectbox.g.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -14,14 +15,20 @@ class ObjectBox {
   void initializeDefaultUser() {
     final userBox = store.box<User>();
     final settingsBox = store.box<UserSettings>();
+    final mushafDataBox = store.box<UserMushafData>();
 
     if (userBox.isEmpty()) {
-      final userSettings = UserSettings(updatedAt: DateTime.now().millisecondsSinceEpoch);
+      final (settings, mushafData) = (
+        UserSettings(updatedAt: DateTime.now().millisecondsSinceEpoch),
+        UserMushafData(),
+      );
 
-      settingsBox.put(userSettings);
+      settingsBox.put(settings);
+      mushafDataBox.put(mushafData);
 
-      final user = User(username: 'default_user');
-      user.settings.target = userSettings;
+      final user = User(username: 'default');
+      user.settings.target = settings;
+      user.mushafData.target = mushafData;
       userBox.put(user);
     }
   }

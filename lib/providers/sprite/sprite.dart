@@ -1,10 +1,7 @@
-import 'dart:convert';
-import 'dart:ui' as ui;
-import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/providers/shared_prefs.dart';
-import 'package:mushaf_mistake_marker/sprite/sprite.dart';
+import 'package:mushaf_mistake_marker/providers/sprite/family/img.dart';
+import 'package:mushaf_mistake_marker/providers/sprite/family/page_data.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite_sheet.dart';
 
 final spriteProvider = NotifierProvider<SpriteNotifier, List<SpriteSheet>>(
@@ -14,65 +11,24 @@ final spriteProvider = NotifierProvider<SpriteNotifier, List<SpriteSheet>>(
 class SpriteNotifier extends Notifier<List<SpriteSheet>> {
   @override
   List<SpriteSheet> build() =>
-      List.generate(604, (_) => SpriteSheet(sprites: []));
-
-  Future<List<Sprite>> fetchSprite(int pageNumber) async {
-    try {
-      final List<Sprite> sprites = [];
-
-      final spriteManifest = await rootBundle.loadString(
-        'assets/sprite_manifests/$pageNumber.json',
-      );
-
-      final json =
-          await compute(jsonDecode, spriteManifest) as Map<String, dynamic>;
-
-      for (final e in json['spritesData'] as List<dynamic>) {
-        final sprite = Sprite.fromJson(e);
-
-        sprites.add(sprite);
-      }
-
-      return sprites;
-    } catch (e) {
-      throw Exception('Exception. Error message: $e');
-    }
-  }
-
-  Future<ui.Image> fetchImg(int index, int pageNumber) async {
-    try {
-      final imgFile = await rootBundle.load(
-        'assets/sprite_sheets_webp/$pageNumber.webp',
-      );
-
-      final codec = await ui.instantiateImageCodec(
-        imgFile.buffer.asUint8List(),
-      );
-
-      final frame = await codec.getNextFrame();
-
-      return frame.image;
-    } catch (e) {
-      throw Exception('Exception. Error message: $e');
-    }
-  }
+      List.generate(604, (_) => SpriteSheet(sprMnfst: []));
 
   Future<void> fetchSpriteSheet(int index) async {
     final oldSheet = state[index];
 
-    if (oldSheet.sprites.isNotEmpty && oldSheet.image != null) {
+    if (oldSheet.sprMnfst.isNotEmpty && oldSheet.image != null) {
       return;
     }
 
-    final sprites = oldSheet.sprites.isEmpty
-        ? await fetchSprite(index + 1)
-        : oldSheet.sprites;
+    final sprMnfst = oldSheet.sprMnfst.isEmpty
+        ? await ref.read(sprPgDataProvider(index).future)
+        : oldSheet.sprMnfst;
 
     final image = oldSheet.image == null
-        ? await fetchImg(index, index + 1)
+        ? await ref.read(sprImgProvider(index).future)
         : oldSheet.image!;
 
-    final updated = oldSheet.copyWith(sprites: sprites, image: image);
+    final updated = oldSheet.copyWith(sprMnfst: sprMnfst, image: image);
     final newState = [...state];
     newState[index] = updated;
     state = newState;
@@ -87,15 +43,14 @@ class SpriteNotifier extends Notifier<List<SpriteSheet>> {
     state = newState;
   }
 
-    void clearSprite(int index) {
-
+  void clearSprite(int index) {
     final newState = [...state];
-    newState[index] = SpriteSheet(sprites: []);
+    newState[index] = SpriteSheet(sprMnfst: []);
     state = newState;
   }
 
   void clearAll() {
-    state = List.generate(604, (_) => SpriteSheet(sprites: []));
+    state = List.generate(604, (_) => SpriteSheet(sprMnfst: []));
   }
 
   Future<void> preFetchPages(int initPage, bool isPortrait) async {

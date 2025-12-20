@@ -14,8 +14,10 @@ import 'package:objectbox/internal.dart'
 import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
+import '../objectbox/entities/element_data.dart';
+import '../objectbox/entities/mushaf_data.dart';
+import '../objectbox/entities/settings.dart';
 import '../objectbox/entities/user.dart';
-import '../objectbox/entities/user_settings.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 
@@ -23,7 +25,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(1, 5695174526205380813),
     name: 'User',
-    lastPropertyId: const obx_int.IdUid(3, 3143501386793757011),
+    lastPropertyId: const obx_int.IdUid(4, 8596584169510785488),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -46,6 +48,15 @@ final _entities = <obx_int.ModelEntity>[
         indexId: const obx_int.IdUid(1, 8369541278899629778),
         relationField: 'settings',
         relationTarget: 'UserSettings',
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 8596584169510785488),
+        name: 'mushafDataId',
+        type: 11,
+        flags: 520,
+        indexId: const obx_int.IdUid(2, 7746610485079453983),
+        relationField: 'mushafData',
+        relationTarget: 'UserMushafData',
       ),
     ],
     relations: <obx_int.ModelRelation>[],
@@ -73,6 +84,75 @@ final _entities = <obx_int.ModelEntity>[
         id: const obx_int.IdUid(7, 5368749521206539205),
         name: 'updatedAt',
         type: 6,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(4, 5158204488349438991),
+    name: 'UserMushafData',
+    lastPropertyId: const obx_int.IdUid(2, 486392625489474937),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 8077524744268339072),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 486392625489474937),
+        name: 'updatedAt',
+        type: 6,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[
+      obx_int.ModelRelation(
+        id: const obx_int.IdUid(1, 1867234926092955552),
+        name: 'elementData',
+        targetId: const obx_int.IdUid(5, 7498263474056846663),
+      ),
+    ],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(5, 7498263474056846663),
+    name: 'ElementData',
+    lastPropertyId: const obx_int.IdUid(5, 1143108290443860278),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 5364272024075805505),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 4310841449428069570),
+        name: 'key',
+        type: 9,
+        flags: 2048,
+        indexId: const obx_int.IdUid(3, 3535139043750553455),
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 102739221113859876),
+        name: 'annotation',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 3820782552421138780),
+        name: 'markId',
+        type: 2,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 1143108290443860278),
+        name: 'highlightId',
+        type: 2,
         flags: 0,
       ),
     ],
@@ -119,9 +199,9 @@ Future<obx.Store> openStore({
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
     entities: _entities,
-    lastEntityId: const obx_int.IdUid(3, 4114569898738216993),
-    lastIndexId: const obx_int.IdUid(1, 8369541278899629778),
-    lastRelationId: const obx_int.IdUid(0, 0),
+    lastEntityId: const obx_int.IdUid(5, 7498263474056846663),
+    lastIndexId: const obx_int.IdUid(3, 3535139043750553455),
+    lastRelationId: const obx_int.IdUid(1, 1867234926092955552),
     lastSequenceId: const obx_int.IdUid(0, 0),
     retiredEntityUids: const [4114569898738216993],
     retiredIndexUids: const [],
@@ -142,7 +222,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
   final bindings = <Type, obx_int.EntityDefinition>{
     User: obx_int.EntityDefinition<User>(
       model: _entities[0],
-      toOneRelations: (User object) => [object.settings],
+      toOneRelations: (User object) => [object.settings, object.mushafData],
       toManyRelations: (User object) => {},
       getId: (User object) => object.id,
       setId: (User object, int id) {
@@ -150,10 +230,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
       },
       objectToFB: (User object, fb.Builder fbb) {
         final usernameOffset = fbb.writeString(object.username);
-        fbb.startTable(4);
+        fbb.startTable(5);
         fbb.addInt64(0, object.id);
         fbb.addOffset(1, usernameOffset);
         fbb.addInt64(2, object.settings.targetId);
+        fbb.addInt64(3, object.mushafData.targetId);
         fbb.finish(fbb.endTable());
         return object.id;
       },
@@ -172,6 +253,13 @@ obx_int.ModelDefinition getObjectBoxModel() {
           0,
         );
         object.settings.attach(store);
+        object.mushafData.targetId = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          10,
+          0,
+        );
+        object.mushafData.attach(store);
         return object;
       },
     ),
@@ -194,19 +282,101 @@ obx_int.ModelDefinition getObjectBoxModel() {
       objectFromFB: (obx.Store store, ByteData fbData) {
         final buffer = fb.BufferContext(fbData);
         final rootOffset = buffer.derefObject(0);
+        final initPageParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          6,
+          0,
+        );
+        final updatedAtParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          16,
+          0,
+        );
+        final object = UserSettings(
+          initPage: initPageParam,
+          updatedAt: updatedAtParam,
+        )..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
 
-        final object = UserSettings()
+        return object;
+      },
+    ),
+    UserMushafData: obx_int.EntityDefinition<UserMushafData>(
+      model: _entities[2],
+      toOneRelations: (UserMushafData object) => [],
+      toManyRelations: (UserMushafData object) => {
+        obx_int.RelInfo<UserMushafData>.toMany(1, object.id):
+            object.elementData,
+      },
+      getId: (UserMushafData object) => object.id,
+      setId: (UserMushafData object, int id) {
+        object.id = id;
+      },
+      objectToFB: (UserMushafData object, fb.Builder fbb) {
+        fbb.startTable(3);
+        fbb.addInt64(0, object.id);
+        fbb.addInt64(1, object.updatedAt);
+        fbb.finish(fbb.endTable());
+        return object.id;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final updatedAtParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          6,
+          0,
+        );
+        final object = UserMushafData(updatedAt: updatedAtParam)
+          ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+        obx_int.InternalToManyAccess.setRelInfo<UserMushafData>(
+          object.elementData,
+          store,
+          obx_int.RelInfo<UserMushafData>.toMany(1, object.id),
+        );
+        return object;
+      },
+    ),
+    ElementData: obx_int.EntityDefinition<ElementData>(
+      model: _entities[3],
+      toOneRelations: (ElementData object) => [],
+      toManyRelations: (ElementData object) => {},
+      getId: (ElementData object) => object.id,
+      setId: (ElementData object, int id) {
+        object.id = id;
+      },
+      objectToFB: (ElementData object, fb.Builder fbb) {
+        final keyOffset = fbb.writeString(object.key);
+        final annotationOffset = object.annotation == null
+            ? null
+            : fbb.writeString(object.annotation!);
+        fbb.startTable(6);
+        fbb.addInt64(0, object.id);
+        fbb.addOffset(1, keyOffset);
+        fbb.addOffset(2, annotationOffset);
+        fbb.addInt8(3, object.markId);
+        fbb.addInt8(4, object.highlightId);
+        fbb.finish(fbb.endTable());
+        return object.id;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final keyParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 6, '');
+        final annotationParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 8);
+        final object = ElementData(key: keyParam, annotation: annotationParam)
           ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
-          ..initPage = const fb.Int64Reader().vTableGet(
+          ..markId = const fb.Int8Reader().vTableGet(buffer, rootOffset, 10, 0)
+          ..highlightId = const fb.Int8Reader().vTableGet(
             buffer,
             rootOffset,
-            6,
-            0,
-          )
-          ..updatedAt = const fb.Int64Reader().vTableGet(
-            buffer,
-            rootOffset,
-            16,
+            12,
             0,
           );
 
@@ -232,6 +402,11 @@ class User_ {
   static final settings = obx.QueryRelationToOne<User, UserSettings>(
     _entities[0].properties[2],
   );
+
+  /// See [User.mushafData].
+  static final mushafData = obx.QueryRelationToOne<User, UserMushafData>(
+    _entities[0].properties[3],
+  );
 }
 
 /// [UserSettings] entity fields to define ObjectBox queries.
@@ -249,5 +424,52 @@ class UserSettings_ {
   /// See [UserSettings.updatedAt].
   static final updatedAt = obx.QueryIntegerProperty<UserSettings>(
     _entities[1].properties[2],
+  );
+}
+
+/// [UserMushafData] entity fields to define ObjectBox queries.
+class UserMushafData_ {
+  /// See [UserMushafData.id].
+  static final id = obx.QueryIntegerProperty<UserMushafData>(
+    _entities[2].properties[0],
+  );
+
+  /// See [UserMushafData.updatedAt].
+  static final updatedAt = obx.QueryIntegerProperty<UserMushafData>(
+    _entities[2].properties[1],
+  );
+
+  /// see [UserMushafData.elementData]
+  static final elementData =
+      obx.QueryRelationToMany<UserMushafData, ElementData>(
+        _entities[2].relations[0],
+      );
+}
+
+/// [ElementData] entity fields to define ObjectBox queries.
+class ElementData_ {
+  /// See [ElementData.id].
+  static final id = obx.QueryIntegerProperty<ElementData>(
+    _entities[3].properties[0],
+  );
+
+  /// See [ElementData.key].
+  static final key = obx.QueryStringProperty<ElementData>(
+    _entities[3].properties[1],
+  );
+
+  /// See [ElementData.annotation].
+  static final annotation = obx.QueryStringProperty<ElementData>(
+    _entities[3].properties[2],
+  );
+
+  /// See [ElementData.markId].
+  static final markId = obx.QueryIntegerProperty<ElementData>(
+    _entities[3].properties[3],
+  );
+
+  /// See [ElementData.highlightId].
+  static final highlightId = obx.QueryIntegerProperty<ElementData>(
+    _entities[3].properties[4],
   );
 }

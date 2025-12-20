@@ -20,6 +20,8 @@ Future<void> main() async {
         'dualPageToggleOn',
         'initPage',
         'userId',
+        'userMshfDataId',
+        'userSettingsId',
         'isDualPageMode',
         'isLeftHand',
         'isHighlightMode',

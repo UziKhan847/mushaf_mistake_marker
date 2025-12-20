@@ -1,9 +1,11 @@
 import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mushaf_mistake_marker/enums.dart';
+// ignore: unused_import
 import 'package:mushaf_mistake_marker/providers/marked_surahs.dart';
 import 'package:mushaf_mistake_marker/sprite/rst_offset.dart';
-import 'package:mushaf_mistake_marker/sprite/sprite.dart';
+import 'package:mushaf_mistake_marker/sprite/sprite_ele_data.dart';
 import 'package:mushaf_mistake_marker/variables.dart';
 
 class MushafPagePainter extends CustomPainter {
@@ -15,7 +17,7 @@ class MushafPagePainter extends CustomPainter {
     required this.isDarkMode,
   });
 
-  final List<Sprite> sprites;
+  final List<SpriteEleData> sprites;
   final ui.Image image;
   final Size vBoxSize;
   final Map<String, MarkType> markedPaths;

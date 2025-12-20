@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mushaf_mistake_marker/add_user/form/buttons.dart';
-import 'package:mushaf_mistake_marker/add_user/form/enum.dart';
 import 'package:mushaf_mistake_marker/add_user/form/error.dart';
 import 'package:mushaf_mistake_marker/add_user/form/text_field.dart';
 import 'package:mushaf_mistake_marker/add_user/form/header.dart';
+import 'package:mushaf_mistake_marker/enums.dart';
 
 class AddUserFormBuilder extends StatelessWidget {
   const AddUserFormBuilder({

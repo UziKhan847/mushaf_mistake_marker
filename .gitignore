@@ -52,5 +52,5 @@ app.*.map.json
 /lib/sprite/orig_size.g.dart
 /lib/sprite/rect_offset.g.dart
 /lib/sprite/rst_offset.g.dart
-/lib/sprite/sprite.g.dart
+/lib/sprite/sprite_ele_data.g.dart
 /assets

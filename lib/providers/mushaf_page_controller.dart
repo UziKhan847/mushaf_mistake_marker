@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/main.dart';
-import 'package:mushaf_mistake_marker/objectbox/entities/user_settings.dart';
+import 'package:mushaf_mistake_marker/objectbox/entities/settings.dart';
 import 'package:mushaf_mistake_marker/providers/shared_prefs.dart';
-import 'package:mushaf_mistake_marker/providers/user/user.dart';
+import 'package:mushaf_mistake_marker/providers/objectbox/entities/user.dart';
 
 final mushafPgCtrlProvider =
     NotifierProvider<MushafPageControllerProvider, PageController>(
@@ -14,7 +15,15 @@ class MushafPageControllerProvider extends Notifier<PageController> {
   @override
   PageController build() {
     final prefs = ref.read(sharedPrefsProv);
-    final user = ref.read(userProvider);
+    print('-------------------------------------------------------');
+    print('TESTING, DOES IT REACH? MSHF PAGE CRTL 1');
+    print('-------------------------------------------------------');
+
+    final user = ref.read(userProvider).value!;
+
+    print('-------------------------------------------------------');
+    print('TESTING, DOES IT REACH? MSHF PAGE CRTL 2');
+    print('-------------------------------------------------------');
 
     final isDualPageMode = prefs.getBool('isDualPageMode') ?? false;
 
@@ -30,7 +39,7 @@ class MushafPageControllerProvider extends Notifier<PageController> {
   }
 
   void setPage(int index) {
-    final user = ref.read(userProvider);
+    final user = ref.read(userProvider).value!;
 
     final settings = user.settings.target!;
 
@@ -58,5 +67,3 @@ class MushafPageControllerProvider extends Notifier<PageController> {
     setPage(setInitPage);
   }
 }
-
-enum PageLayout { singlePage, dualPage }

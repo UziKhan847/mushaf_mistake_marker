@@ -54,6 +54,16 @@ class PageChangedHandler {
     }
   }
 
+  void clearUnusedSprite(int baseIndex, List<int> offsets) {
+    for (final offset in offsets) {
+      final index = baseIndex + offset;
+
+      if (isValidIndex(index) && spriteSheets[index].image != null) {
+        spriteProv.clearSprite(index);
+      }
+    }
+  }
+
   Future<int> onPageChanged(
     int prevPage,
     int index,

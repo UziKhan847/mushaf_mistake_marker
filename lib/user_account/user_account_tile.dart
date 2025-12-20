@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/page_changed_handler.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/user.dart';
-import 'package:mushaf_mistake_marker/objectbox/entities/user_settings.dart';
+import 'package:mushaf_mistake_marker/objectbox/entities/settings.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf_page_controller.dart';
-import 'package:mushaf_mistake_marker/providers/user/id.dart';
+import 'package:mushaf_mistake_marker/providers/objectbox/entities/user.dart';
 
 class UserAccountTile extends ConsumerWidget {
   const UserAccountTile({
@@ -29,7 +29,7 @@ class UserAccountTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userIdProv = ref.read(userIdProvider.notifier);
+    final userProv = ref.read(userProvider.notifier);
     final mushafPgCtrlProv = ref.read(mushafPgCtrlProvider);
     final onPgChgHandler = PageChangedHandler(ref: ref);
 
@@ -56,7 +56,7 @@ class UserAccountTile extends ConsumerWidget {
         ),
         child: InkWell(
           onTap: () {
-            userIdProv.setUserId(user.id);
+            userProv.setUser(user);
             mushafPgCtrlProv.jumpToPage(userLastPage);
             onPgChgHandler.onJumpToPage(userLastPage);
           },
