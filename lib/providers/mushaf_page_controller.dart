@@ -15,15 +15,8 @@ class MushafPageControllerProvider extends Notifier<PageController> {
   @override
   PageController build() {
     final prefs = ref.read(sharedPrefsProv);
-    print('-------------------------------------------------------');
-    print('TESTING, DOES IT REACH? MSHF PAGE CRTL 1');
-    print('-------------------------------------------------------');
 
     final user = ref.read(userProvider).value!;
-
-    print('-------------------------------------------------------');
-    print('TESTING, DOES IT REACH? MSHF PAGE CRTL 2');
-    print('-------------------------------------------------------');
 
     final isDualPageMode = prefs.getBool('isDualPageMode') ?? false;
 

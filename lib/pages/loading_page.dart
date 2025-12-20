@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mushaf_mistake_marker/pages/homepage.dart';
 import 'package:mushaf_mistake_marker/pages/loading_user.dart';
 import 'package:mushaf_mistake_marker/providers/pages_provider.dart';
 
