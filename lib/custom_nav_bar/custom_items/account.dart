@@ -26,15 +26,12 @@ class _AccountItemState extends ConsumerState<AccountItem> {
     return NavBarItem(
       isSelected: isAccBtnSelected,
       onTap: () {
-        accNavBarProv.switchBtnState();
         overlay = context.insertOverlay(
           onTapOutside: () {
             accNavBarProv.switchBtnState();
             context.removeOverlayEntry(overlay);
           },
-          children: [
-            BottomSideSheetOverlay(),
-          ],
+          children: [BottomSideSheetOverlay()],
         );
       },
       selectedAsset: MyFlutterApp.account,

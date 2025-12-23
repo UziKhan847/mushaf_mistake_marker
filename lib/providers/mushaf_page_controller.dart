@@ -12,11 +12,12 @@ final mushafPgCtrlProvider =
     );
 
 class MushafPageControllerProvider extends Notifier<PageController> {
+  //Maybe make it AutoDispose in the Future
   @override
   PageController build() {
     final prefs = ref.read(sharedPrefsProv);
 
-    final user = ref.read(userProvider).value!;
+    final user = ref.read(userProvider)!;
 
     final isDualPageMode = prefs.getBool('isDualPageMode') ?? false;
 
@@ -32,7 +33,7 @@ class MushafPageControllerProvider extends Notifier<PageController> {
   }
 
   void setPage(int index) {
-    final user = ref.read(userProvider).value!;
+    final user = ref.read(userProvider)!;
 
     final settings = user.settings.target!;
 

@@ -11,7 +11,15 @@ class IndexItem extends ConsumerWidget {
     return NavBarItem(
       iconLabel: 'Index',
       isSelected: false,
-      onTap: () {},
+      onTap: () {
+        // final userBox = ref.read(userBoxProvider);
+        // final mshfDataBox = ref.read(mushafDataBoxProvider);
+        // final settingsBox = ref.read(settingsBoxProvider);
+
+        // mshfDataBox.removeAll();
+        // settingsBox.removeAll();
+        // userBox.removeAll();
+      },
       selectedAsset: MyFlutterApp.index,
       unselectedAsset: MyFlutterApp.index_outlined,
     );

@@ -1,4 +1,5 @@
 import 'package:mushaf_mistake_marker/enums.dart';
+import 'package:mushaf_mistake_marker/objectbox/entities/mushaf_data.dart';
 import 'package:objectbox/objectbox.dart';
 
 @Entity()
@@ -26,6 +27,8 @@ class ElementData {
   int highlightId = 0;
 
   String? annotation;
+
+  final mushafData = ToOne<UserMushafData>();
 
   @Transient()
   MarkType get mark => .fromId(markId);

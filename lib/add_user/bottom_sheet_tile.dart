@@ -24,7 +24,7 @@ class _AddUserBtmSheetTileState extends ConsumerState<AddUserBtmSheetTile> {
 
   void onCancel() {
     context.removeOverlayEntry(overlay);
-    ref.read(addUserPhaseProvider.notifier).setPhase(.initial);
+    // ref.read(addUserPhaseProvider.notifier).setPhase(.initial);
   }
 
   @override
@@ -36,10 +36,10 @@ class _AddUserBtmSheetTileState extends ConsumerState<AddUserBtmSheetTile> {
           color: widget.colorScheme.surface,
           child: InkWell(
             onTap: () {
+              ref.read(addUserPhaseProvider.notifier).setPhase(.initial);
               overlay = context.insertOverlay(
                 onTapOutside: () {
                   context.removeOverlayEntry(overlay);
-                  ref.read(addUserPhaseProvider.notifier).setPhase(.initial);
                 },
                 children: [
                   AddUserCard(

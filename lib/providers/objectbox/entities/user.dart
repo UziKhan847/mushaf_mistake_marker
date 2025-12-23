@@ -7,13 +7,13 @@ import 'package:mushaf_mistake_marker/providers/objectbox/box/settings.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/box/user.dart';
 import 'package:mushaf_mistake_marker/providers/shared_prefs.dart';
 
-final userProvider = AsyncNotifierProvider<UserNotifier, User>(
+final userProvider = NotifierProvider<UserNotifier, User?>(
   UserNotifier.new,
 );
 
-class UserNotifier extends AsyncNotifier<User> {
+class UserNotifier extends Notifier<User?> {
   @override
-  Future<User> build() async {
+  User? build() {
     final prefs = ref.read(sharedPrefsProv);
     final userBox = objectbox.store.box<User>();
 
@@ -37,7 +37,7 @@ class UserNotifier extends AsyncNotifier<User> {
   }
 
   void setUser(User user) {
-    state = AsyncData(user);
+    state = user;
   }
 
   Future<void> saveUser(User user) async {
@@ -56,6 +56,6 @@ class UserNotifier extends AsyncNotifier<User> {
 
     userBox.put(user);
 
-    state = AsyncData(user);
+    state = user;
   }
 }

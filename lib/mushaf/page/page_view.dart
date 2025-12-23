@@ -65,7 +65,6 @@ class _MushafPageViewState extends ConsumerState<MushafPageView>
             isDualPageMode: isDualPageMode,
             controller: mushafPgCrtl,
             constraints: widget.constraints,
-            ref: ref,
             isPortrait: isDualPageMode ? false : widget.isPortrait,
             initPage: initPage,
           );

@@ -121,7 +121,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(5, 7498263474056846663),
     name: 'ElementData',
-    lastPropertyId: const obx_int.IdUid(5, 1143108290443860278),
+    lastPropertyId: const obx_int.IdUid(6, 5794467697471834517),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -154,6 +154,15 @@ final _entities = <obx_int.ModelEntity>[
         name: 'highlightId',
         type: 2,
         flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(6, 5794467697471834517),
+        name: 'mushafDataId',
+        type: 11,
+        flags: 520,
+        indexId: const obx_int.IdUid(4, 4480574627615894053),
+        relationField: 'mushafData',
+        relationTarget: 'UserMushafData',
       ),
     ],
     relations: <obx_int.ModelRelation>[],
@@ -200,7 +209,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
     entities: _entities,
     lastEntityId: const obx_int.IdUid(5, 7498263474056846663),
-    lastIndexId: const obx_int.IdUid(3, 3535139043750553455),
+    lastIndexId: const obx_int.IdUid(4, 4480574627615894053),
     lastRelationId: const obx_int.IdUid(1, 1867234926092955552),
     lastSequenceId: const obx_int.IdUid(0, 0),
     retiredEntityUids: const [4114569898738216993],
@@ -341,7 +350,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
     ),
     ElementData: obx_int.EntityDefinition<ElementData>(
       model: _entities[3],
-      toOneRelations: (ElementData object) => [],
+      toOneRelations: (ElementData object) => [object.mushafData],
       toManyRelations: (ElementData object) => {},
       getId: (ElementData object) => object.id,
       setId: (ElementData object, int id) {
@@ -352,12 +361,13 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final annotationOffset = object.annotation == null
             ? null
             : fbb.writeString(object.annotation!);
-        fbb.startTable(6);
+        fbb.startTable(7);
         fbb.addInt64(0, object.id);
         fbb.addOffset(1, keyOffset);
         fbb.addOffset(2, annotationOffset);
         fbb.addInt8(3, object.markId);
         fbb.addInt8(4, object.highlightId);
+        fbb.addInt64(5, object.mushafData.targetId);
         fbb.finish(fbb.endTable());
         return object.id;
       },
@@ -379,7 +389,13 @@ obx_int.ModelDefinition getObjectBoxModel() {
             12,
             0,
           );
-
+        object.mushafData.targetId = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          14,
+          0,
+        );
+        object.mushafData.attach(store);
         return object;
       },
     ),
@@ -471,5 +487,10 @@ class ElementData_ {
   /// See [ElementData.highlightId].
   static final highlightId = obx.QueryIntegerProperty<ElementData>(
     _entities[3].properties[4],
+  );
+
+  /// See [ElementData.mushafData].
+  static final mushafData = obx.QueryRelationToOne<ElementData, UserMushafData>(
+    _entities[3].properties[5],
   );
 }

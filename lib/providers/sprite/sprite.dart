@@ -3,35 +3,51 @@ import 'package:mushaf_mistake_marker/providers/shared_prefs.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/img.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/page_data.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite_sheet.dart';
+import 'package:flutter/material.dart';
 
 final spriteProvider = NotifierProvider<SpriteNotifier, List<SpriteSheet>>(
   SpriteNotifier.new,
 );
 
 class SpriteNotifier extends Notifier<List<SpriteSheet>> {
+  final Set<int> fetching = {};
+
   @override
   List<SpriteSheet> build() =>
       List.generate(604, (_) => SpriteSheet(sprMnfst: []));
 
   Future<void> fetchSpriteSheet(int index) async {
-    final oldSheet = state[index];
-
-    if (oldSheet.sprMnfst.isNotEmpty && oldSheet.image != null) {
+    if (fetching.contains(index)) {
       return;
     }
 
-    final sprMnfst = oldSheet.sprMnfst.isEmpty
-        ? await ref.read(sprPgDataProvider(index).future)
-        : oldSheet.sprMnfst;
+    fetching.add(index);
 
-    final image = oldSheet.image == null
-        ? await ref.read(sprImgProvider(index).future)
-        : oldSheet.image!;
+    try {
+      final oldSheet = state[index];
 
-    final updated = oldSheet.copyWith(sprMnfst: sprMnfst, image: image);
-    final newState = [...state];
-    newState[index] = updated;
-    state = newState;
+      if (oldSheet.sprMnfst.isNotEmpty && oldSheet.image != null) {
+        return;
+      }
+
+      final sprMnfst = oldSheet.sprMnfst.isEmpty
+          ? await ref.read(sprPgDataProvider(index).future)
+          : oldSheet.sprMnfst;
+
+      final image = oldSheet.image == null
+          ? await ref.read(sprImgProvider(index).future)
+          : oldSheet.image!;
+
+      final updated = oldSheet.copyWith(sprMnfst: sprMnfst, image: image);
+      final newState = [...state];
+      newState[index] = updated;
+      state = newState;
+    } catch (e, st) {
+      debugPrint('fetchSpriteSheet ERROR for index $index: $e');
+      debugPrintStack(stackTrace: st);
+    } finally {
+      fetching.remove(index);
+    }
   }
 
   void clearImg(int index) {

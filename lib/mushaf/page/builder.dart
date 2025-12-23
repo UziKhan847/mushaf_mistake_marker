@@ -11,7 +11,6 @@ class MushafPageBuilder extends ConsumerStatefulWidget {
     required this.isDualPageMode,
     required this.controller,
     required this.constraints,
-    required this.ref,
     this.isPortrait = false,
     this.reverse = true,
     this.initPage = 0,
@@ -20,7 +19,6 @@ class MushafPageBuilder extends ConsumerStatefulWidget {
   final bool isDualPageMode;
   final PageController controller;
   final BoxConstraints constraints;
-  final WidgetRef ref;
   final bool isPortrait;
   final bool reverse;
   final int initPage;

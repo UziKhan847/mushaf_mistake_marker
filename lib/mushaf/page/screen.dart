@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/annotator.dart';
-// ignore: unused_import
-import 'package:mushaf_mistake_marker/providers/sprite/family/img.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/sprite.dart';
 
 class MushafPageScreen extends ConsumerStatefulWidget {
@@ -28,6 +26,18 @@ class MushafPageScreen extends ConsumerStatefulWidget {
 }
 
 class _MushafPageScreenState extends ConsumerState<MushafPageScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+      ref.read(spriteProvider.notifier).fetchSpriteSheet(widget.index);
+    });
+  }
+
   bool elemBounds({
     required double top,
     required double bottom,
@@ -47,8 +57,6 @@ class _MushafPageScreenState extends ConsumerState<MushafPageScreen> {
     final image = ref.watch(
       spriteProvider.select((state) => state[widget.index].image),
     );
-
-    //final image = ref.watch(sprImgProvider(widget.index)).value;
 
     return SizedBox(
       width: widget.w,
