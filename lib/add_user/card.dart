@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/add_user/form/builder.dart';
 import 'package:mushaf_mistake_marker/add_user/success_builder.dart';
+import 'package:mushaf_mistake_marker/mushaf/page/page_changed_handler.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/user.dart';
 import 'package:mushaf_mistake_marker/overlay/overlay_type/popup_card.dart';
 import 'package:mushaf_mistake_marker/providers/add_user/error_message.dart';
 import 'package:mushaf_mistake_marker/providers/add_user/phase.dart';
+import 'package:mushaf_mistake_marker/providers/mushaf_page_controller.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/box/user.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/entities/user.dart';
 
@@ -41,12 +43,14 @@ class _AddUserCardState extends ConsumerState<AddUserCard> {
       ref.read(addUserPhaseProvider.notifier),
     );
 
-    final errMsgProv = ref.read(addUserErrorMsgProvider.notifier);
-
-    final (userProv, userBoxProv) = (
+    final (errMsgProv, userProv, userBoxProv, mushafPgCtrlProv) = (
+      ref.read(addUserErrorMsgProvider.notifier),
       ref.read(userProvider.notifier),
       ref.read(userBoxProvider.notifier),
+      ref.read(mushafPgCtrlProvider),
     );
+
+    final onPgChgHandler = PageChangedHandler(ref: ref);
 
     final usernames = userBoxProv.lowerCaseUsernames;
 
@@ -94,8 +98,16 @@ class _AddUserCardState extends ConsumerState<AddUserCard> {
 
                         final user = User(username: textCtrl.text);
 
+                        final onPageOne = mushafPgCtrlProv.page == 0;
+
                         try {
                           await userProv.saveUser(user);
+
+                          if (!onPageOne) {
+                            mushafPgCtrlProv.jumpToPage(0);
+                            onPgChgHandler.onJumpToPage(0);
+                          }
+
                           phaseProv.setPhase(.success);
                         } catch (e) {
                           errMsgProv.setErrorMsg('$e');

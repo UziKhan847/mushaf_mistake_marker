@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mushaf_mistake_marker/mushaf/page/header/page_number.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/screen.dart';
 import 'package:mushaf_mistake_marker/page_data/page_data.dart';
-import 'package:mushaf_mistake_marker/surah/pages_with_multiple_surahs.dart';
 
 class MushafDualPageTile extends StatelessWidget {
   const MushafDualPageTile({
@@ -40,19 +40,6 @@ class MushafDualPageTile extends StatelessWidget {
     final (p1w, p1h) = getWH(pageOne['w'] as double, pageOne['h'] as double);
     final (p2w, p2h) = getWH(pageTwo['w'] as double, pageTwo['h'] as double);
 
-    final (pgOneSurahsNum, pgTwoSurahsNum) = (
-      pageData.first.srNum,
-      pageData.last.srNum,
-    );
-
-    if (pagesWithLastLineNextSurah.contains(pageOneNum)) {
-      pgOneSurahsNum.add(pgOneSurahsNum.last + 1);
-    }
-
-    if (pagesWithLastLineNextSurah.contains(pageTwoNum)) {
-      pgTwoSurahsNum.add(pgTwoSurahsNum.last + 1);
-    }
-
     return SingleChildScrollView(
       scrollDirection: .vertical,
       child: ConstrainedBox(
@@ -61,25 +48,24 @@ class MushafDualPageTile extends StatelessWidget {
           minWidth: constraints.maxWidth,
         ),
         child: Row(
-          mainAxisAlignment: .center,
+          mainAxisAlignment: .spaceEvenly,
           children: [
+            PageNumberHeader(pageNumber: pageTwoNum + 1),
             MushafPageScreen(
               w: p2w,
               h: p2h,
               pageW: pageTwo['w'] as double,
               pageH: pageTwo['h'] as double,
               index: dualPageIndex.last,
-              surahsNum: pgTwoSurahsNum.toList(),
             ),
-            SizedBox(width: 30),
             MushafPageScreen(
               w: p1w,
               h: p1h,
               pageW: pageOne['w'] as double,
               pageH: pageOne['h'] as double,
               index: dualPageIndex.first,
-              surahsNum: pgOneSurahsNum.toList(),
             ),
+            PageNumberHeader(pageNumber: pageOneNum + 1),
           ],
         ),
       ),

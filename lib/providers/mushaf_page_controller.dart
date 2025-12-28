@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/enums.dart';
-import 'package:mushaf_mistake_marker/main.dart';
-import 'package:mushaf_mistake_marker/objectbox/entities/settings.dart';
+import 'package:mushaf_mistake_marker/providers/objectbox/box/settings.dart';
+import 'package:mushaf_mistake_marker/providers/objectbox/entities/settings.dart';
 import 'package:mushaf_mistake_marker/providers/shared_prefs.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/entities/user.dart';
 
@@ -12,12 +12,12 @@ final mushafPgCtrlProvider =
     );
 
 class MushafPageControllerProvider extends Notifier<PageController> {
-  //Maybe make it AutoDispose in the Future
+  
   @override
   PageController build() {
     final prefs = ref.read(sharedPrefsProv);
 
-    final user = ref.read(userProvider)!;
+    final user = ref.read(userProvider);
 
     final isDualPageMode = prefs.getBool('isDualPageMode') ?? false;
 
@@ -32,16 +32,15 @@ class MushafPageControllerProvider extends Notifier<PageController> {
     return pageController;
   }
 
-  void setPage(int index) {
-    final user = ref.read(userProvider)!;
+  void setUserPage(int index) {
+    final (settings, settingsBox) = (
+      ref.read(userSettingsProvider),
+      ref.read(settingsBoxProvider),
+    );
 
-    final settings = user.settings.target!;
+    settings!.initPage = index;
 
-    final settingBox = objectbox.store.box<UserSettings>();
-
-    settings.initPage = index;
-
-    settingBox.put(settings);
+    settingsBox.put(settings);
   }
 
   void preservePage(PageLayout targetLayout) {
@@ -58,6 +57,6 @@ class MushafPageControllerProvider extends Notifier<PageController> {
 
     final setInitPage = isSinglePage ? targetPage : targetPage * 2;
 
-    setPage(setInitPage);
+    setUserPage(setInitPage);
   }
 }

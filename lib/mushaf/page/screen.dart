@@ -7,7 +7,6 @@ class MushafPageScreen extends ConsumerStatefulWidget {
   const MushafPageScreen({
     super.key,
     required this.index,
-    this.surahsNum,
     required this.w,
     required this.h,
     required this.pageW,
@@ -19,7 +18,6 @@ class MushafPageScreen extends ConsumerStatefulWidget {
   final double pageW;
   final double pageH;
   final int index;
-  final List<int>? surahsNum;
 
   @override
   ConsumerState<MushafPageScreen> createState() => _MushafPageScreenState();
@@ -29,27 +27,10 @@ class _MushafPageScreenState extends ConsumerState<MushafPageScreen> {
   @override
   void initState() {
     super.initState();
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) {
-        return;
-      }
+      if (!mounted) return;
       ref.read(spriteProvider.notifier).fetchSpriteSheet(widget.index);
     });
-  }
-
-  bool elemBounds({
-    required double top,
-    required double bottom,
-    required double left,
-    required double right,
-    required double scaledX,
-    required double scaledY,
-  }) {
-    return scaledX >= left &&
-        scaledY >= top &&
-        scaledX <= right &&
-        scaledY <= bottom;
   }
 
   @override
@@ -57,6 +38,10 @@ class _MushafPageScreenState extends ConsumerState<MushafPageScreen> {
     final image = ref.watch(
       spriteProvider.select((state) => state[widget.index].image),
     );
+
+    print('----------------------------');
+    print('Rebuilt Mushaf Page Screen');
+    print('----------------------------');
 
     return SizedBox(
       width: widget.w,
@@ -71,11 +56,11 @@ class _MushafPageScreenState extends ConsumerState<MushafPageScreen> {
             )
           : MushafPageAnnotator(
               index: widget.index,
-              surahsNum: widget.surahsNum,
               h: widget.h,
               w: widget.w,
               pageH: widget.pageH,
               pageW: widget.pageW,
+              image: image,
             ),
     );
   }

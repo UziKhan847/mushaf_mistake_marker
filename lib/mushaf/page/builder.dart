@@ -58,6 +58,12 @@ class _MushafPagerState extends ConsumerState<MushafPageBuilder> {
           final int rightPage = index * 2;
           final int leftPage = rightPage + 1;
 
+          print('-----------------------------------');
+          print('Index: $index');
+          print('Right Page: $rightPage');
+          print('Left Page: $leftPage');
+          print('-----------------------------------');
+
           return MushafDualPageTile(
             constraints: widget.constraints,
             pageData: [pages.pagesData[rightPage], pages.pagesData[leftPage]],

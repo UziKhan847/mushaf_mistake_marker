@@ -1,9 +1,7 @@
 import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mushaf_mistake_marker/enums.dart';
-// ignore: unused_import
-import 'package:mushaf_mistake_marker/providers/marked_surahs.dart';
+import 'package:mushaf_mistake_marker/objectbox/entities/element_mark_data.dart';
 import 'package:mushaf_mistake_marker/sprite/rst_offset.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite_ele_data.dart';
 import 'package:mushaf_mistake_marker/variables.dart';
@@ -13,14 +11,14 @@ class MushafPagePainter extends CustomPainter {
     required this.sprites,
     required this.image,
     required this.vBoxSize,
-    required this.markedPaths,
+    required this.eleMarkDataList,
     required this.isDarkMode,
   });
 
   final List<SpriteEleData> sprites;
+  final List<ElementMarkData> eleMarkDataList;
   final ui.Image image;
   final Size vBoxSize;
-  final Map<String, MarkType> markedPaths;
   final bool isDarkMode;
 
   ColorFilter changeColor(Color color) => .mode(color, .srcIn);
@@ -63,13 +61,30 @@ class MushafPagePainter extends CustomPainter {
         transformList[byteIndex + x] = rstValues[x];
       }
 
-      colorList[i] = switch (markedPaths[id]) {
+      final eleMarkDataIndex = eleMarkDataList.indexWhere((e) => e.key == id);
+
+      if (eleMarkDataIndex == -1) {
+        colorList[i] = isDarkMode ? whiteInt : blackInt;
+        continue;
+      }
+
+      final eleMarkData = eleMarkDataList[eleMarkDataIndex];
+
+      colorList[i] = switch (eleMarkData.mark) {
         .doubt => purpleInt,
         .mistake => redInt,
         .oldMistake => blueInt,
         .tajwid => greenInt,
         _ => isDarkMode ? whiteInt : blackInt,
       };
+
+      //       colorList[i] = switch (markedPaths[id]) {
+      //   .doubt => purpleInt,
+      //   .mistake => redInt,
+      //   .oldMistake => blueInt,
+      //   .tajwid => greenInt,
+      //   _ => isDarkMode ? whiteInt : blackInt,
+      // };
     }
 
     final paint = Paint()..filterQuality = FilterQuality.high;
@@ -86,5 +101,5 @@ class MushafPagePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant MushafPagePainter oldDelegate) =>
-      !mapEquals(oldDelegate.markedPaths, markedPaths);
+      !listEquals(oldDelegate.eleMarkDataList, eleMarkDataList);
 }

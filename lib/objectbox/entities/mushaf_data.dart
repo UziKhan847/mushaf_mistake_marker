@@ -1,4 +1,4 @@
-import 'package:mushaf_mistake_marker/objectbox/entities/element_data.dart';
+import 'package:mushaf_mistake_marker/objectbox/entities/element_mark_data.dart';
 import 'package:objectbox/objectbox.dart';
 
 @Entity()
@@ -8,6 +8,6 @@ class UserMushafData {
   @Id()
   int id = 0;
 
-  final elementData = ToMany<ElementData>();
+  final elementMarkData = ToMany<ElementMarkData>();
   int updatedAt;
 }

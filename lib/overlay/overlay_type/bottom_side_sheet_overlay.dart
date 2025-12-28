@@ -24,7 +24,7 @@ class BottomSideSheetOverlay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userId = ref.watch(userProvider)!.id;
+    final userId = ref.watch(userProvider).id;
     final users = ref.read(userBoxProvider).getAll();
 
     final radius = Radius.circular(20);

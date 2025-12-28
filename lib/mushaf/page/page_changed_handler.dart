@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf_page_controller.dart';
-import 'package:mushaf_mistake_marker/providers/shared_prefs.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/sprite.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite_sheet.dart';
 
@@ -18,7 +17,7 @@ class PageChangedHandler {
 
     final targetPage = isDualPageMode ? index * 2 : index;
 
-    mushafPgCtrlProv.setPage(targetPage);
+    mushafPgCtrlProv.setUserPage(targetPage);
   }
 
   List<int> get getJumpToOffsets => [0, -1, -2, -3, 1, 2, 3];
@@ -90,14 +89,21 @@ class PageChangedHandler {
   }
 
   void onJumpToPage(int index) async {
-    final prefs = ref.read(sharedPrefsProv);
+    //final prefs = ref.read(sharedPrefsProv);
     final mshfPgCtrlProv = ref.read(mushafPgCtrlProvider.notifier);
 
-    final isDualPageMode = prefs.getBool('isDualPageMode') ?? false;
-    final actualPage = isDualPageMode ? index * 2 : index;
-    mshfPgCtrlProv.setPage(index);
+    mshfPgCtrlProv.setUserPage(index);
 
     spriteProv.clearAll();
-    await fetchMissingImages(actualPage, getJumpToOffsets);
+
+    //final isDualPageMode = prefs.getBool('isDualPageMode') ?? false;
+    //late final int actualPage;
+
+    //actualPage = isDualPageMode ? index * 2 : index;
+
+    //mshfPgCtrlProv.setPage(index);
+
+    //spriteProv.clearAll();
+    //await fetchMissingImages(actualPage, getJumpToOffsets);
   }
 }

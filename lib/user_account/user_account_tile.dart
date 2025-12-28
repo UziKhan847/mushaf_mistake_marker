@@ -5,6 +5,7 @@ import 'package:mushaf_mistake_marker/objectbox/entities/user.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/settings.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf_page_controller.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/entities/user.dart';
+import 'package:mushaf_mistake_marker/providers/shared_prefs.dart';
 
 class UserAccountTile extends ConsumerWidget {
   const UserAccountTile({
@@ -29,8 +30,14 @@ class UserAccountTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userProv = ref.read(userProvider.notifier);
-    final mushafPgCtrlProv = ref.read(mushafPgCtrlProvider);
+    final (prefs, userProv, mushafPgCtrlProv) = (
+      ref.read(sharedPrefsProv),
+      ref.read(userProvider.notifier),
+      ref.read(mushafPgCtrlProvider),
+    );
+
+   
+
     final onPgChgHandler = PageChangedHandler(ref: ref);
 
     final userLastPage = userSettings.initPage;
@@ -56,9 +63,17 @@ class UserAccountTile extends ConsumerWidget {
         ),
         child: InkWell(
           onTap: () {
-            userProv.setUser(user);
-            mushafPgCtrlProv.jumpToPage(userLastPage);
-            onPgChgHandler.onJumpToPage(userLastPage);
+            if (!isSelected) {
+              final isDualPageMode = prefs.getBool('isDualPageMode')!;
+              print('------------------');
+              print('Is Dual Page Mode: $isDualPageMode');
+              print('------------------');
+              userProv.setUser(user);
+              mushafPgCtrlProv.jumpToPage(
+                isDualPageMode ? userLastPage ~/ 2 : userLastPage,
+              );
+              onPgChgHandler.onJumpToPage(userLastPage);
+            }
           },
           borderRadius: .circular(8),
           child: Padding(

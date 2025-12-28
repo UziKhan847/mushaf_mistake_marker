@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/header/page_number.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/screen.dart';
 import 'package:mushaf_mistake_marker/page_data/page_data.dart';
-import 'package:mushaf_mistake_marker/surah/pages_with_multiple_surahs.dart';
-
 class MushafSinglePageTile extends StatelessWidget {
   const MushafSinglePageTile({
     super.key,
@@ -49,12 +47,6 @@ class MushafSinglePageTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final pageNumber = index + 1;
 
-    final surahsNum = pageData.srNum;
-
-    if (pagesWithLastLineNextSurah.contains(pageNumber)) {
-      surahsNum.add(surahsNum.last + 1);
-    }
-
     final (pageW, pageH) = (pageData.pSize!.first, pageData.pSize!.last);
 
     final (w, h) = getWH(pageW, pageH);
@@ -82,7 +74,6 @@ class MushafSinglePageTile extends StatelessWidget {
               pageW: pageW,
               pageH: pageH,
               index: index,
-              surahsNum: surahsNum.toList(),
             ),
           ],
         ),
