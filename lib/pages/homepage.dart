@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mushaf_mistake_marker/mushaf/container.dart';
+import 'package:mushaf_mistake_marker/mushaf/page_mode_listener.dart';
 import 'package:mushaf_mistake_marker/custom_nav_bar/nav_bar.dart';
 
 class Homepage extends StatelessWidget {
@@ -12,7 +12,7 @@ class Homepage extends StatelessWidget {
     return Flex(
       direction: orientation == .portrait ? .vertical : .horizontal,
       children: [
-        Expanded(child: MushafContainer(isPortrait: orientation == .portrait)),
+        Expanded(child: MushafPageModeListener()),
         CustomNavBar(),
       ],
     );

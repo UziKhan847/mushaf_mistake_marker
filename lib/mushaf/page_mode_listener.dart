@@ -4,17 +4,13 @@ import 'package:mushaf_mistake_marker/mushaf/page/page_pre_fetcher.dart';
 import 'package:mushaf_mistake_marker/providers/dual_page_mode.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf_page_controller.dart';
 
-class MushafContainer extends ConsumerWidget {
-  const MushafContainer({super.key, required this.isPortrait});
-
-  final bool isPortrait;
+class MushafPageModeListener extends ConsumerWidget {
+  const MushafPageModeListener({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<bool>(dualPageModeProvider, (_, isDualMode) {
-      ref
-          .read(mushafPgCtrlProvider.notifier)
-          .preservePage(isDualMode ? .dualPage : .singlePage);
+    ref.listen<bool>(dualPageModeProvider, (_, _) {
+      ref.read(mushafPgCtrlProvider.notifier).preservePage();
     });
 
     return LayoutBuilder(

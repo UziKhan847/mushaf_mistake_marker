@@ -15,18 +15,17 @@ class DualPageItem extends ConsumerWidget {
       ref.watch(dualPageToggleProvider),
     );
 
-    final mushafPageCrtlProv = ref.read(mushafPgCtrlProvider.notifier);
-
     return NavBarItem(
       iconLabel: 'Dual Page',
       isSelected: isDualPgTglOn,
       onTap: () {
         dualPgTglProv.switchToggle();
-        final newIsDualPage = !isDualPgTglOn;
-        mushafPageCrtlProv.preservePage(
-          newIsDualPage ? .dualPage : .singlePage,
-        );
-      }, selectedAsset: MyFlutterApp.dual_page, unselectedAsset: MyFlutterApp.dual_page_outlined,
+        ref
+            .read(mushafPgCtrlProvider.notifier)
+            .preservePage(recalcTarget: false);
+      },
+      selectedAsset: MyFlutterApp.dual_page,
+      unselectedAsset: MyFlutterApp.dual_page_outlined,
     );
   }
 }
