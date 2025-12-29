@@ -20,9 +20,7 @@ class DualPageItem extends ConsumerWidget {
       isSelected: isDualPgTglOn,
       onTap: () {
         dualPgTglProv.switchToggle();
-        ref
-            .read(mushafPgCtrlProvider.notifier)
-            .preservePage(recalcTarget: false);
+        //ref.read(mushafPgCtrlProvider.notifier).preservePageOnToggle();
       },
       selectedAsset: MyFlutterApp.dual_page,
       unselectedAsset: MyFlutterApp.dual_page_outlined,

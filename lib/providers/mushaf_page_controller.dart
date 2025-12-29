@@ -32,19 +32,19 @@ class MushafPageControllerProvider extends Notifier<PageController> {
     return pageController;
   }
 
-  void preservePage({bool recalcTarget = true}) {
+  void preservePage() {
     if (!state.hasClients) return;
 
     final dualPgMode = ref.read(dualPageModeProvider);
+
     final pageIndex = state.page!.round();
 
-    final targetPage = recalcTarget
-        ? (dualPgMode ? pageIndex ~/ 2 : pageIndex * 2)
-        : pageIndex;
+    final targetPage = dualPgMode ? pageIndex ~/ 2 : pageIndex * 2;
 
     state.jumpToPage(targetPage);
 
     final setInitPage = dualPgMode ? targetPage * 2 : targetPage;
+
     setUserPage(setInitPage);
   }
 
