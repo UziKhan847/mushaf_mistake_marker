@@ -3,66 +3,61 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/mushaf/tiles/dual_page.dart';
 import 'package:mushaf_mistake_marker/mushaf/tiles/single_page.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/page_changed_handler.dart';
+import 'package:mushaf_mistake_marker/providers/dual_page_mode.dart';
+import 'package:mushaf_mistake_marker/providers/mushaf_page_controller.dart';
 import 'package:mushaf_mistake_marker/providers/pages_provider.dart';
 
-class MushafPageBuilder extends ConsumerStatefulWidget {
-  const MushafPageBuilder({
+class MushafPageViewBuilder extends ConsumerStatefulWidget {
+  const MushafPageViewBuilder({
     super.key,
-    required this.isDualPageMode,
-    required this.controller,
     required this.constraints,
-    this.isPortrait = false,
-    this.reverse = true,
-    this.initPage = 0,
   });
 
-  final bool isDualPageMode;
-  final PageController controller;
   final BoxConstraints constraints;
-  final bool isPortrait;
-  final bool reverse;
-  final int initPage;
 
   @override
-  ConsumerState<MushafPageBuilder> createState() => _MushafPagerState();
+  ConsumerState<MushafPageViewBuilder> createState() => _MushafPagerState();
 }
 
-class _MushafPagerState extends ConsumerState<MushafPageBuilder> {
+class _MushafPagerState extends ConsumerState<MushafPageViewBuilder>
+    with AutomaticKeepAliveClientMixin {
   late int prevPage;
   late final onPageHandler = PageChangedHandler(ref: ref);
   late final pages = ref.read(pagesProvider).value!;
+  late final mshfPgCtrl = ref.read(mushafPgCtrlProvider);
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
-    prevPage = widget.initPage;
+    prevPage = mshfPgCtrl.initialPage;
   }
 
   @override
   Widget build(BuildContext context) {
-    final int itemCount = widget.isDualPageMode ? 302 : 604;
+    super.build(context);
+
+    final dualPgMode = ref.watch(dualPageModeProvider);
+
+    final int itemCount = dualPgMode ? 302 : 604;
 
     return PageView.builder(
-      reverse: widget.reverse,
-      controller: widget.controller,
+      reverse: true,
+      controller: mshfPgCtrl,
       onPageChanged: (int index) async {
         prevPage = await onPageHandler.onPageChanged(
           prevPage,
           index,
-          widget.isDualPageMode,
+          dualPgMode,
         );
       },
       itemCount: itemCount,
       itemBuilder: (_, index) {
-        if (widget.isDualPageMode) {
+        if (dualPgMode) {
           final int rightPage = index * 2;
           final int leftPage = rightPage + 1;
-
-          print('-----------------------------------');
-          print('Index: $index');
-          print('Right Page: $rightPage');
-          print('Left Page: $leftPage');
-          print('-----------------------------------');
 
           return MushafDualPageTile(
             constraints: widget.constraints,
@@ -73,7 +68,6 @@ class _MushafPagerState extends ConsumerState<MushafPageBuilder> {
           return MushafSinglePageTile(
             constraints: widget.constraints,
             pageData: pages.pagesData[index],
-            isPortrait: widget.isPortrait,
             index: index,
           );
         }

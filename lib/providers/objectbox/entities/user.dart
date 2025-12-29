@@ -37,6 +37,7 @@ class UserNotifier extends Notifier<User> {
   }
 
   void setUser(User user) {
+    ref.read(sharedPrefsProv).setInt('userId', user.id);
     state = user;
   }
 
@@ -59,6 +60,8 @@ class UserNotifier extends Notifier<User> {
     user.mushafData.target = mushafData;
 
     userBox.put(user);
+
+    ref.read(sharedPrefsProv).setInt('userId', user.id);
 
     state = user;
   }

@@ -10,7 +10,7 @@ class UserSettings {
   int initPage;
   //bool isDarkMode = false;
   //bool dualPageToggleOn = false;
-  //bool isDualPageMode = false;
+  //bool dualPageMode = false;
   //bool isHighlightMode = false;
   //bool isLeftHand = false;
 

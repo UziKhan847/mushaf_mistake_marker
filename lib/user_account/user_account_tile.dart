@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/page_changed_handler.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/user.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/settings.dart';
+import 'package:mushaf_mistake_marker/providers/dual_page_mode.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf_page_controller.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/entities/user.dart';
 import 'package:mushaf_mistake_marker/providers/shared_prefs.dart';
@@ -30,13 +31,12 @@ class UserAccountTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (prefs, userProv, mushafPgCtrlProv) = (
+    final (prefs, userProv, mushafPgCtrlProv, dualPgMode) = (
       ref.read(sharedPrefsProv),
       ref.read(userProvider.notifier),
       ref.read(mushafPgCtrlProvider),
+      ref.watch(dualPageModeProvider),
     );
-
-   
 
     final onPgChgHandler = PageChangedHandler(ref: ref);
 
@@ -64,13 +64,9 @@ class UserAccountTile extends ConsumerWidget {
         child: InkWell(
           onTap: () {
             if (!isSelected) {
-              final isDualPageMode = prefs.getBool('isDualPageMode')!;
-              print('------------------');
-              print('Is Dual Page Mode: $isDualPageMode');
-              print('------------------');
               userProv.setUser(user);
               mushafPgCtrlProv.jumpToPage(
-                isDualPageMode ? userLastPage ~/ 2 : userLastPage,
+                dualPgMode ? userLastPage ~/ 2 : userLastPage,
               );
               onPgChgHandler.onJumpToPage(userLastPage);
             }

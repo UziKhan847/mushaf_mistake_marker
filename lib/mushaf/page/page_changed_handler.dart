@@ -12,10 +12,10 @@ class PageChangedHandler {
   final SpriteNotifier spriteProv;
   final List<SpriteSheet> spriteSheets;
 
-  void savePageIndex(int index, bool isDualPageMode) {
+  void savePageIndex(int index, bool dualPageMode) {
     final mushafPgCtrlProv = ref.read(mushafPgCtrlProvider.notifier);
 
-    final targetPage = isDualPageMode ? index * 2 : index;
+    final targetPage = dualPageMode ? index * 2 : index;
 
     mushafPgCtrlProv.setUserPage(targetPage);
   }
@@ -66,7 +66,7 @@ class PageChangedHandler {
   Future<int> onPageChanged(
     int prevPage,
     int index,
-    bool isDualPageMode,
+    bool dualPageMode,
   ) async {
     final isSwipe = (index - prevPage).abs() == 1;
 
@@ -74,10 +74,10 @@ class PageChangedHandler {
       return index;
     }
 
-    savePageIndex(index, isDualPageMode);
+    savePageIndex(index, dualPageMode);
 
     final swipedLeft = index > prevPage;
-    final actualPage = isDualPageMode ? index * 2 : index;
+    final actualPage = dualPageMode ? index * 2 : index;
 
     List<int> fetchOffsets = getFetchOffsets(swipedLeft);
     List<int> clearOffsets = getClearOffsets(swipedLeft);
@@ -96,10 +96,9 @@ class PageChangedHandler {
 
     spriteProv.clearAll();
 
-    //final isDualPageMode = prefs.getBool('isDualPageMode') ?? false;
     //late final int actualPage;
 
-    //actualPage = isDualPageMode ? index * 2 : index;
+    //actualPage = dualPageMode ? index * 2 : index;
 
     //mshfPgCtrlProv.setPage(index);
 

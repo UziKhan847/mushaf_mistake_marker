@@ -2,19 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/header/page_number.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/screen.dart';
 import 'package:mushaf_mistake_marker/page_data/page_data.dart';
+
 class MushafSinglePageTile extends StatelessWidget {
   const MushafSinglePageTile({
     super.key,
     required this.pageData,
     required this.constraints,
-    required this.isPortrait,
+    // required this.isPortrait,
     required this.index,
   });
 
   final int index;
   final PageData pageData;
   final BoxConstraints constraints;
-  final bool isPortrait;
+  // final bool isPortrait;
 
   bool elemBounds({
     required double top,
@@ -30,7 +31,7 @@ class MushafSinglePageTile extends StatelessWidget {
         scaledY <= bottom;
   }
 
-  (double, double) getWH(double pageW, double pageH) {
+  (double, double) getWH(double pageW, double pageH, bool isPortrait) {
     double w = constraints.maxWidth * 0.9;
     double h = constraints.maxHeight * 0.875;
 
@@ -45,11 +46,14 @@ class MushafSinglePageTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
+
     final pageNumber = index + 1;
 
     final (pageW, pageH) = (pageData.pSize!.first, pageData.pSize!.last);
 
-    final (w, h) = getWH(pageW, pageH);
+    final (w, h) = getWH(pageW, pageH, isPortrait);
 
     return SingleChildScrollView(
       scrollDirection: .vertical,
@@ -63,9 +67,7 @@ class MushafSinglePageTile extends StatelessWidget {
               width: w,
               child: Row(
                 mainAxisAlignment: .spaceBetween,
-                children: [
-                  PageNumberHeader(pageNumber: pageNumber),
-                ],
+                children: [PageNumberHeader(pageNumber: pageNumber)],
               ),
             ),
             MushafPageScreen(
