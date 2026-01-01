@@ -17,3 +17,5 @@ enum MarkType {
 enum Phase { initial, submitting, success, error }
 
 enum PageLayout { singlePage, dualPage }
+
+enum PageSide { rightSide, leftSide, none }

@@ -39,10 +39,6 @@ class _MushafPageScreenState extends ConsumerState<MushafPageScreen> {
       spriteProvider.select((state) => state[widget.index].image),
     );
 
-    print('----------------------------');
-    print('Rebuilt Mushaf Page Screen');
-    print('----------------------------');
-
     return SizedBox(
       width: widget.w,
       height: widget.h,

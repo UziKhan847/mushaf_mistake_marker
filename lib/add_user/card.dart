@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/add_user/form/builder.dart';
 import 'package:mushaf_mistake_marker/add_user/success_builder.dart';
-import 'package:mushaf_mistake_marker/mushaf/page/page_changed_handler.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/user.dart';
 import 'package:mushaf_mistake_marker/overlay/overlay_type/popup_card.dart';
 import 'package:mushaf_mistake_marker/providers/add_user/error_message.dart';
@@ -50,8 +49,6 @@ class _AddUserCardState extends ConsumerState<AddUserCard> {
       ref.read(mushafPgCtrlProvider),
     );
 
-    final onPgChgHandler = PageChangedHandler(ref: ref);
-
     final usernames = userBoxProv.lowerCaseUsernames;
 
     return PopupCard(
@@ -98,16 +95,8 @@ class _AddUserCardState extends ConsumerState<AddUserCard> {
 
                         final user = User(username: textCtrl.text);
 
-                        final onPageOne = mushafPgCtrlProv.page == 0;
-
                         try {
                           await userProv.saveUser(user);
-
-                          if (!onPageOne) {
-                            mushafPgCtrlProv.jumpToPage(0);
-                            onPgChgHandler.onJumpToPage(0);
-                          }
-
                           phaseProv.setPhase(.success);
                         } catch (e) {
                           errMsgProv.setErrorMsg('$e');

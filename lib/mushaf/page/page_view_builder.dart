@@ -8,10 +8,7 @@ import 'package:mushaf_mistake_marker/providers/mushaf_page_controller.dart';
 import 'package:mushaf_mistake_marker/providers/pages_provider.dart';
 
 class MushafPageViewBuilder extends ConsumerStatefulWidget {
-  const MushafPageViewBuilder({
-    super.key,
-    required this.constraints,
-  });
+  const MushafPageViewBuilder({super.key, required this.constraints});
 
   final BoxConstraints constraints;
 
@@ -47,11 +44,7 @@ class _MushafPagerState extends ConsumerState<MushafPageViewBuilder>
       reverse: true,
       controller: mshfPgCtrl,
       onPageChanged: (int index) async {
-        prevPage = await onPageHandler.onPageChanged(
-          prevPage,
-          index,
-          dualPgMode,
-        );
+        prevPage = await onPageHandler.onPageSwipe(prevPage, index, dualPgMode);
       },
       itemCount: itemCount,
       itemBuilder: (_, index) {

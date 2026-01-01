@@ -50,7 +50,7 @@ class MushafDualPageTile extends StatelessWidget {
         child: Row(
           mainAxisAlignment: .spaceEvenly,
           children: [
-            PageNumberHeader(pageNumber: pageTwoNum + 1),
+            PageNumberHeader(pageNumber: pageTwoNum + 1, pageSide: .leftSide),
             MushafPageScreen(
               w: p2w,
               h: p2h,
@@ -65,7 +65,7 @@ class MushafDualPageTile extends StatelessWidget {
               pageH: pageOne['h'] as double,
               index: dualPageIndex.first,
             ),
-            PageNumberHeader(pageNumber: pageOneNum + 1),
+            PageNumberHeader(pageNumber: pageOneNum + 1, pageSide: .rightSide),
           ],
         ),
       ),

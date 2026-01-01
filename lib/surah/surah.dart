@@ -7,7 +7,7 @@ class Surah {
 
   static Surah fromJson(Map<String, dynamic> json) => Surah(
     name: json['name'] as String,
-    number: json['number'] as int,
-    numOfVs: json['numOfVs'] as int,
+    number: json['num'] as int,
+    numOfVs: json['totalVrs'] as int,
   );
 }

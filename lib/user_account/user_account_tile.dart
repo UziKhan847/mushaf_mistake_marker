@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mushaf_mistake_marker/mushaf/page/page_changed_handler.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/user.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/settings.dart';
 import 'package:mushaf_mistake_marker/providers/dual_page_mode.dart';
@@ -38,10 +37,6 @@ class UserAccountTile extends ConsumerWidget {
       ref.watch(dualPageModeProvider),
     );
 
-    final onPgChgHandler = PageChangedHandler(ref: ref);
-
-    final userLastPage = userSettings.initPage;
-
     final backgroundColor = isSelected
         ? colorScheme.secondaryContainer.withAlpha(100)
         : colorScheme.surface;
@@ -65,10 +60,6 @@ class UserAccountTile extends ConsumerWidget {
           onTap: () {
             if (!isSelected) {
               userProv.setUser(user);
-              mushafPgCtrlProv.jumpToPage(
-                dualPgMode ? userLastPage ~/ 2 : userLastPage,
-              );
-              onPgChgHandler.onJumpToPage(userLastPage);
             }
           },
           borderRadius: .circular(8),

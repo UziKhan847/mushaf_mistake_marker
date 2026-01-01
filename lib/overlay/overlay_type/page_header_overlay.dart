@@ -8,6 +8,8 @@ class PageHeaderOverlay extends ConsumerWidget {
     required this.widgetKey,
     required this.itemCount,
     required this.itemBuilder,
+    required this.initialIndex,
+    this.itemHeight = 60,
     this.elevation = 4.0,
     this.verticalOffset = 8.0,
     this.borderRadius,
@@ -18,6 +20,8 @@ class PageHeaderOverlay extends ConsumerWidget {
   final double verticalOffset;
   final double elevation;
   final int itemCount;
+  final int initialIndex;
+  final double itemHeight;
   final IndexedWidgetBuilder itemBuilder;
   final BorderRadius? borderRadius;
 
@@ -65,9 +69,13 @@ class PageHeaderOverlay extends ConsumerWidget {
             minHeight: 200,
           ),
           child: ListView.builder(
+            controller: ScrollController(
+              initialScrollOffset: initialIndex * 60.0,
+            ),
             padding: .zero,
             shrinkWrap: true,
             itemCount: itemCount,
+            itemExtent: itemHeight,
             itemBuilder: itemBuilder,
           ),
         ),

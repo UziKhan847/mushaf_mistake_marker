@@ -20,8 +20,6 @@ class PageChangedHandler {
     mushafPgCtrlProv.setUserPage(targetPage);
   }
 
-  List<int> get getJumpToOffsets => [0, -1, -2, -3, 1, 2, 3];
-
   List<int> getFetchOffsets(bool swipedLeft) =>
       swipedLeft ? [0, 1, 2, 3, -1, -2] : [0, -1, -2, -3, 1, 2];
 
@@ -53,26 +51,10 @@ class PageChangedHandler {
     }
   }
 
-  void clearUnusedSprite(int baseIndex, List<int> offsets) {
-    for (final offset in offsets) {
-      final index = baseIndex + offset;
-
-      if (isValidIndex(index) && spriteSheets[index].image != null) {
-        spriteProv.clearSprite(index);
-      }
-    }
-  }
-
-  Future<int> onPageChanged(
-    int prevPage,
-    int index,
-    bool dualPageMode,
-  ) async {
+  Future<int> onPageSwipe(int prevPage, int index, bool dualPageMode) async {
     final isSwipe = (index - prevPage).abs() == 1;
 
-    if (!isSwipe) {
-      return index;
-    }
+    if (!isSwipe) return index;
 
     savePageIndex(index, dualPageMode);
 
@@ -86,23 +68,5 @@ class PageChangedHandler {
     clearUnusedImages(actualPage, clearOffsets);
 
     return index;
-  }
-
-  void onJumpToPage(int index) async {
-    //final prefs = ref.read(sharedPrefsProv);
-    final mshfPgCtrlProv = ref.read(mushafPgCtrlProvider.notifier);
-
-    mshfPgCtrlProv.setUserPage(index);
-
-    spriteProv.clearAll();
-
-    //late final int actualPage;
-
-    //actualPage = dualPageMode ? index * 2 : index;
-
-    //mshfPgCtrlProv.setPage(index);
-
-    //spriteProv.clearAll();
-    //await fetchMissingImages(actualPage, getJumpToOffsets);
   }
 }
