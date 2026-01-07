@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/pages/loading_page.dart';
-import 'package:mushaf_mistake_marker/providers/mushaf_listeners.dart';
+import 'package:mushaf_mistake_marker/providers/mushaf/listeners.dart';
 import 'package:mushaf_mistake_marker/providers/orientation.dart';
 
 class OrientationSync extends ConsumerWidget {

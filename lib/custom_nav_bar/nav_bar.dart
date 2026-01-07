@@ -28,11 +28,11 @@ class _CustomNavBarState extends State<CustomNavBar> {
         return Material(
           elevation: 20,
           color: bgColor,
-          borderRadius: .only(
-            topLeft: radius,
-            topRight: isPortrait ? radius : .zero,
-            bottomLeft: isPortrait ? .zero : radius,
-          ),
+          // borderRadius: .only(
+          //   topLeft: radius,
+          //   topRight: isPortrait ? radius : .zero,
+          //   bottomLeft: isPortrait ? .zero : radius,
+          // ),
           clipBehavior: .hardEdge,
           child: SizedBox(
             height: isPortrait ? null : constraints.maxHeight,

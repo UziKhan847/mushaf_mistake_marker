@@ -9,7 +9,7 @@ class PageHeaderOverlay extends ConsumerWidget {
     required this.itemCount,
     required this.itemBuilder,
     required this.initialIndex,
-    this.itemHeight = 60,
+    this.itemHeight = 40,
     this.elevation = 4.0,
     this.verticalOffset = 8.0,
     this.borderRadius,
@@ -35,30 +35,18 @@ class PageHeaderOverlay extends ConsumerWidget {
     }
 
     final renderBox = renderObject;
-    final (btnW, btnH) = (renderBox.size.width, renderBox.size.height);
-    final buttonBottom = renderBox.localToGlobal(Offset.zero).dy + btnH;
+    final btnW = renderBox.size.width;
+    final buttonOffset = renderBox.localToGlobal(Offset.zero).dy;
+    final scrH = MediaQuery.of(context).size.height;
 
-    final mediaQ = MediaQuery.of(context);
-
-    final (scrH, bottomInset, bottomPadding) = (
-      mediaQ.size.height,
-      mediaQ.viewInsets.bottom,
-      mediaQ.padding.bottom,
-    );
-
-    final availableHeight =
-        scrH -
-        buttonBottom -
-        verticalOffset -
-        bottomInset -
-        bottomPadding -
-        8.0;
+    final availableHeight = scrH - buttonOffset - 20;
 
     return CompositedTransformFollower(
       link: link,
       showWhenUnlinked: false,
-      offset: Offset(0, btnH + verticalOffset),
+      //offset: Offset(0, 0),
       child: Material(
+        clipBehavior: .hardEdge,
         elevation: elevation,
         borderRadius: borderRadius ?? .circular(4),
         color: Theme.of(context).colorScheme.surface,
@@ -66,11 +54,11 @@ class PageHeaderOverlay extends ConsumerWidget {
           constraints: BoxConstraints(
             maxWidth: btnW,
             maxHeight: availableHeight,
-            minHeight: 200,
+            minHeight: itemHeight,
           ),
           child: ListView.builder(
             controller: ScrollController(
-              initialScrollOffset: initialIndex * 60.0,
+              initialScrollOffset: initialIndex * itemHeight,
             ),
             padding: .zero,
             shrinkWrap: true,

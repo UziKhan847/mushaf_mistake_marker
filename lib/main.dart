@@ -51,6 +51,7 @@ class MyApp extends ConsumerWidget {
       theme: MyThemes.lightTheme,
       darkTheme: MyThemes.darkTheme,
       home: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: OrientationSync(),
         backgroundColor: isDarkMode ? null : Color(0xFFFFF2EB),
       ),

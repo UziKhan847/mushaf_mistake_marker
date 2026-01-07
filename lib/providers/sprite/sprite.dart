@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mushaf_mistake_marker/providers/dual_page_mode.dart';
+import 'package:mushaf_mistake_marker/providers/page_mode.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/img.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/page_data.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite_sheet.dart';
@@ -70,7 +70,7 @@ class SpriteNotifier extends Notifier<List<SpriteSheet>> {
   }
 
   Future<void> preFetchPages(int initPage) async {
-    final dualPgMode = ref.read(dualPageModeProvider);
+    final dualPgMode = ref.read(pageModeProvider);
 
     final offsets = [0, 1, -1, 2, -2, 3, 4];
     final List<Future> futures = [];

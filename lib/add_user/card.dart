@@ -6,7 +6,7 @@ import 'package:mushaf_mistake_marker/objectbox/entities/user.dart';
 import 'package:mushaf_mistake_marker/overlay/overlay_type/popup_card.dart';
 import 'package:mushaf_mistake_marker/providers/add_user/error_message.dart';
 import 'package:mushaf_mistake_marker/providers/add_user/phase.dart';
-import 'package:mushaf_mistake_marker/providers/mushaf_page_controller.dart';
+import 'package:mushaf_mistake_marker/providers/mushaf/page_controller.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/box/user.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/entities/user.dart';
 

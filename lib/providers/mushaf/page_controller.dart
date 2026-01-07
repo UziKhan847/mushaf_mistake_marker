@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mushaf_mistake_marker/providers/dual_page_mode.dart';
+import 'package:mushaf_mistake_marker/enums.dart';
+import 'package:mushaf_mistake_marker/providers/mushaf/is_dual_page_mode.dart';
+import 'package:mushaf_mistake_marker/providers/page_mode.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/box/settings.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/entities/settings.dart';
 import 'package:mushaf_mistake_marker/providers/shared_prefs.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/entities/user.dart';
+import 'package:mushaf_mistake_marker/providers/sprite/sprite.dart';
 
 final mushafPgCtrlProvider =
     NotifierProvider<MushafPageControllerProvider, PageController>(
@@ -17,7 +20,7 @@ class MushafPageControllerProvider extends Notifier<PageController> {
     final (prefs, user, dualPgMode) = (
       ref.read(sharedPrefsProv),
       ref.read(userProvider),
-      ref.read(dualPageModeProvider),
+      ref.read(pageModeProvider),
     );
 
     final initPage = user.settings.target!.initPage;
@@ -34,7 +37,7 @@ class MushafPageControllerProvider extends Notifier<PageController> {
   void preservePage() {
     if (!state.hasClients) return;
 
-    final dualPgMode = ref.read(dualPageModeProvider);
+    final dualPgMode = ref.read(pageModeProvider);
 
     final pageIndex = state.page!.round();
 
@@ -56,5 +59,20 @@ class MushafPageControllerProvider extends Notifier<PageController> {
     settings!.initPage = index;
 
     settingsBox.put(settings);
+  }
+
+  void navigateToPage({
+    required int targetUserPage,
+    required int targetIndex,
+    bool isSwipe = false,
+  }) {
+    if (isSwipe) {
+      state.jumpToPage(targetIndex);
+      return;
+    }
+
+    ref.read(spriteProvider.notifier).clearAll();
+    setUserPage(targetUserPage);
+    state.jumpToPage(targetIndex);
   }
 }

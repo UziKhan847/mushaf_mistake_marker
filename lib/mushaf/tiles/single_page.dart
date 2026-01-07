@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/header/page_number.dart';
+import 'package:mushaf_mistake_marker/mushaf/page/header/surah_number.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/screen.dart';
 import 'package:mushaf_mistake_marker/page_data/page_data.dart';
 
@@ -49,35 +50,39 @@ class MushafSinglePageTile extends StatelessWidget {
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
 
-    final pageNumber = index + 1;
-
     final (pageW, pageH) = (pageData.pSize!.first, pageData.pSize!.last);
 
     final (w, h) = getWH(pageW, pageH, isPortrait);
 
     return SingleChildScrollView(
       scrollDirection: .vertical,
-      child: ConstrainedBox(
-        constraints: BoxConstraints(minHeight: constraints.maxHeight),
-        child: Column(
-          spacing: 20,
-          mainAxisAlignment: .center,
-          children: [
-            SizedBox(
-              width: w,
-              child: Row(
-                mainAxisAlignment: .spaceBetween,
-                children: [PageNumberHeader(pageNumber: pageNumber)],
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: isPortrait ? 0 : 20),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: Column(
+            spacing: 20,
+            mainAxisAlignment: .center,
+            children: [
+              SizedBox(
+                width: w,
+                child: Row(
+                  mainAxisAlignment: .spaceBetween,
+                  children: [
+                    SurahNumberHeader(index: index),
+                    PageNumberHeader(currentPgIndex: index),
+                  ],
+                ),
               ),
-            ),
-            MushafPageScreen(
-              w: w,
-              h: h,
-              pageW: pageW,
-              pageH: pageH,
-              index: index,
-            ),
-          ],
+              MushafPageScreen(
+                w: w,
+                h: h,
+                pageW: pageW,
+                pageH: pageH,
+                index: index,
+              ),
+            ],
+          ),
         ),
       ),
     );

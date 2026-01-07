@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mushaf_mistake_marker/mushaf/page/page_pre_fetcher.dart';
+import 'package:mushaf_mistake_marker/mushaf/page/pre_fetcher.dart';
 import 'package:mushaf_mistake_marker/custom_nav_bar/nav_bar.dart';
 
 class Homepage extends StatelessWidget {

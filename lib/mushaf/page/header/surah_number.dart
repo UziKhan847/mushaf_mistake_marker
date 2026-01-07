@@ -2,21 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/extensions/context_extensions.dart';
-import 'package:mushaf_mistake_marker/mushaf/page/header/variables.dart';
 import 'package:mushaf_mistake_marker/overlay/overlay_type/page_header_overlay.dart';
-import 'package:mushaf_mistake_marker/providers/dual_page_mode.dart';
-import 'package:mushaf_mistake_marker/providers/mushaf_page_controller.dart';
+import 'package:mushaf_mistake_marker/providers/page_mode.dart';
+import 'package:mushaf_mistake_marker/providers/mushaf/page_controller.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/entities/settings.dart';
+import 'package:mushaf_mistake_marker/providers/sprite/family/sprite_ids.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/sprite.dart';
+import 'package:mushaf_mistake_marker/surah/surah.dart';
+import 'package:mushaf_mistake_marker/surah/surah_names_data.dart';
 
 class SurahNumberHeader extends ConsumerStatefulWidget {
   const SurahNumberHeader({
     super.key,
-    required this.pageNumber,
+    required this.index,
     this.pageSide = .none,
   });
 
-  final int pageNumber;
+  final int index;
   final PageSide pageSide;
 
   @override
@@ -26,55 +28,73 @@ class SurahNumberHeader extends ConsumerStatefulWidget {
 class _SurahNumberHeaderState extends ConsumerState<SurahNumberHeader> {
   late final mushafPgCtrl = ref.read(mushafPgCtrlProvider);
   late final mushafPgCtrlProv = ref.read(mushafPgCtrlProvider.notifier);
-  late final dualPageMode = ref.read(dualPageModeProvider);
+  late final dualPageMode = ref.read(pageModeProvider);
   late final sprProv = ref.read(spriteProvider.notifier);
+  late final userId = ref.read(userSettingsProvider)!.initPage;
+  late final regExp = RegExp(r's(\d{1,3})');
 
-  final link = LayerLink();
+  late final link = LayerLink();
 
-  final widgetKey = GlobalKey();
+  late final widgetKey = GlobalKey();
 
   OverlayEntry? overlay;
 
-  int pageNumberFromIndex({
-    required int index,
-    required bool dualPageMode,
-    required PageSide pageSide,
+  Set<int> getSurahNums({
+    required List<String> pEleIds,
+    required RegExp regExp,
   }) {
-    if (!dualPageMode) return index + 1;
+    final surahNums = <int>{};
 
-    return pageSide == .rightSide ? (index * 2) + 1 : (index * 2) + 2;
+    for (final e in pEleIds) {
+      final match = regExp.matchAsPrefix(e);
+
+      if (match != null) surahNums.add(int.parse(match.group(1)!));
+    }
+
+    return surahNums;
   }
 
-  int initialIndexFromPage({
-    required int page,
-    required bool dualPageMode,
-    required PageSide pageSide,
-  }) => dualPageMode ? (page) ~/ 2 : page;
+  List<Surah> getSurahs(Set<int> surahNums) {
+    final surahs = <Surah>[];
 
-  bool isSelectedFromPage({
-    required int index,
-    required int currentUserIndex,
-    required bool dualPageMode,
-  }) =>
-      dualPageMode ? index * 2 == currentUserIndex : index == currentUserIndex;
+    for (final num in surahNums) {
+      final surah = Surah.fromJson(surahsData[num - 1]);
+
+      surahs.add(surah);
+    }
+
+    return surahs;
+  }
 
   @override
   Widget build(BuildContext context) {
-  
+    final pageElementIds = ref.watch(spriteIdsProvider(userId));
+    if (pageElementIds == null) return const SizedBox.shrink();
+
+    final buffer = StringBuffer();
+    final surahNums = getSurahNums(pEleIds: pageElementIds, regExp: regExp);
+    if (surahNums.isEmpty) return const SizedBox.shrink();
+    final surahs = getSurahs(surahNums);
+    if (surahs.isEmpty) return const SizedBox.shrink();
+    final surahsListLength = dualPageMode ? surahs.length : 1;
+
+    for (int i = 0; i < surahsListLength; i++) {
+      final surah = surahs[i];
+      buffer.write('${surah.number} ');
+      buffer.write(surah.name);
+      buffer.write(' (${surah.numOfVs})');
+      if (i > 0) buffer.writeln();
+    }
+
+    final surahText = buffer.toString();
+
+    final isSelected = false;
 
     return CompositedTransformTarget(
       link: link,
       child: TextButton(
         key: widgetKey,
         onPressed: () {
-          final currentUserIndex = ref.read(userSettingsProvider)!.initPage;
-
-          final initialIndex = initialIndexFromPage(
-            page: currentUserIndex,
-            dualPageMode: dualPageMode,
-            pageSide: widget.pageSide,
-          );
-
           overlay = context.insertOverlay(
             onTapOutside: () {
               context.removeOverlayEntry(overlay);
@@ -82,22 +102,10 @@ class _SurahNumberHeaderState extends ConsumerState<SurahNumberHeader> {
             children: [
               PageHeaderOverlay(
                 link: link,
-                initialIndex: initialIndex,
+                initialIndex: 0,
                 widgetKey: widgetKey,
-                itemCount: dualPageMode ? 302 : 604,
+                itemCount: 114,
                 itemBuilder: (context, index) {
-                  final displayPageNumber = pageNumberFromIndex(
-                    index: index,
-                    dualPageMode: dualPageMode,
-                    pageSide: widget.pageSide,
-                  );
-
-                  final isSelected = isSelectedFromPage(
-                    index: index,
-                    currentUserIndex: currentUserIndex,
-                    dualPageMode: dualPageMode,
-                  );
-
                   return Material(
                     color: isSelected
                         ? Theme.of(context).colorScheme.primary.withAlpha(38)
@@ -105,7 +113,7 @@ class _SurahNumberHeaderState extends ConsumerState<SurahNumberHeader> {
                     child: InkWell(
                       onTap: () {
                         context.removeOverlayEntry(overlay);
-                        if (isSelected) return;
+                        return;
 
                         sprProv.clearAll();
                         mushafPgCtrlProv.setUserPage(
@@ -117,7 +125,7 @@ class _SurahNumberHeaderState extends ConsumerState<SurahNumberHeader> {
                         height: 60,
                         child: Center(
                           child: Text(
-                            '$displayPageNumber',
+                            '${0}',
                             style: TextStyle(
                               fontWeight: isSelected
                                   ? FontWeight.bold
@@ -134,7 +142,7 @@ class _SurahNumberHeaderState extends ConsumerState<SurahNumberHeader> {
           );
         },
         child: Text(
-          '${widget.pageNumber}',
+          surahText,
           style: TextStyle(decoration: .underline, decorationStyle: .dashed),
         ),
       ),

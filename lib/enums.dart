@@ -8,10 +8,8 @@ enum MarkType {
   const MarkType(this.id);
   final int id;
 
-  static MarkType fromId(int? id) => MarkType.values.firstWhere(
-    (e) => e.id == id,
-    orElse: () => .unknown,
-  );
+  static MarkType fromId(int? id) =>
+      MarkType.values.firstWhere((e) => e.id == id, orElse: () => .unknown);
 }
 
 enum Phase { initial, submitting, success, error }
@@ -19,3 +17,5 @@ enum Phase { initial, submitting, success, error }
 enum PageLayout { singlePage, dualPage }
 
 enum PageSide { rightSide, leftSide, none }
+
+enum PageChangeOrigin { modeChange, swipe }

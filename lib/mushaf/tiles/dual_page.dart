@@ -30,7 +30,10 @@ class MushafDualPageTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final (pageOneNum, pageTwoNum) = (dualPageIndex.first, dualPageIndex.last);
+    final (pageOneIndex, pageTwoIndex) = (
+      dualPageIndex.first,
+      dualPageIndex.last,
+    );
 
     final (pageOne, pageTwo) = (
       {'w': pageData.first.pSize!.first, 'h': pageData.first.pSize!.last},
@@ -50,7 +53,7 @@ class MushafDualPageTile extends StatelessWidget {
         child: Row(
           mainAxisAlignment: .spaceEvenly,
           children: [
-            PageNumberHeader(pageNumber: pageTwoNum + 1, pageSide: .leftSide),
+            PageNumberHeader(currentPgIndex: pageTwoIndex, pageSide: .leftSide),
             MushafPageScreen(
               w: p2w,
               h: p2h,
@@ -65,7 +68,7 @@ class MushafDualPageTile extends StatelessWidget {
               pageH: pageOne['h'] as double,
               index: dualPageIndex.first,
             ),
-            PageNumberHeader(pageNumber: pageOneNum + 1, pageSide: .rightSide),
+            PageNumberHeader(currentPgIndex: pageOneIndex, pageSide: .rightSide),
           ],
         ),
       ),

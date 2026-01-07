@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mushaf_mistake_marker/providers/mushaf_page_controller.dart';
+import 'package:mushaf_mistake_marker/providers/mushaf/page_controller.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/sprite.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite_sheet.dart';
 
@@ -52,9 +52,9 @@ class PageChangedHandler {
   }
 
   Future<int> onPageSwipe(int prevPage, int index, bool dualPageMode) async {
-    final isSwipe = (index - prevPage).abs() == 1;
+    //final isSwipe = (index - prevPage).abs() == 1;
 
-    if (!isSwipe) return index;
+    //if (!isSwipe) return index;
 
     savePageIndex(index, dualPageMode);
 

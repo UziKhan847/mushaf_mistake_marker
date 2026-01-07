@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/user.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/settings.dart';
-import 'package:mushaf_mistake_marker/providers/dual_page_mode.dart';
-import 'package:mushaf_mistake_marker/providers/mushaf_page_controller.dart';
+import 'package:mushaf_mistake_marker/providers/page_mode.dart';
+import 'package:mushaf_mistake_marker/providers/mushaf/page_controller.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/entities/user.dart';
 import 'package:mushaf_mistake_marker/providers/shared_prefs.dart';
 
@@ -34,7 +34,7 @@ class UserAccountTile extends ConsumerWidget {
       ref.read(sharedPrefsProv),
       ref.read(userProvider.notifier),
       ref.read(mushafPgCtrlProvider),
-      ref.watch(dualPageModeProvider),
+      ref.watch(pageModeProvider),
     );
 
     final backgroundColor = isSelected

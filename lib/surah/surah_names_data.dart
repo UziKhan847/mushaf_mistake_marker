@@ -1,4 +1,4 @@
-final surahs = [
+final surahsData = [
   {"name": "Al-Fātiḥah", "num": 1, "totalVrs": 7},
   {"name": "Al-Baqarah", "num": 2, "totalVrs": 286},
   {"name": "Āl ʿImrān", "num": 3, "totalVrs": 200},
