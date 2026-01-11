@@ -79,7 +79,11 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
 
           final isWord = id.contains(RegExp(r'[w]'));
 
-          if (!isWord || !isClicked) continue;
+          print('Element Id: $id');
+          print('------------------');
+
+          // if (!isWord || !isClicked) continue;
+          if (!isClicked) continue;
 
           final eMarkDataIndex = eleMarkDataList.indexWhere((e) => e.key == id);
 

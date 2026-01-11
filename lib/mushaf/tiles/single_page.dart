@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mushaf_mistake_marker/mushaf/page/header/juz_number.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/header/page_number.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/header/surah_number.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/screen.dart';
@@ -69,8 +70,9 @@ class MushafSinglePageTile extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: .spaceBetween,
                   children: [
-                    SurahNumberHeader(index: index),
+                    SurahNumberHeader(currentPgIndex: index),
                     PageNumberHeader(currentPgIndex: index),
+                    JuzNumberHeader(currentPgIndex: index),
                   ],
                 ),
               ),

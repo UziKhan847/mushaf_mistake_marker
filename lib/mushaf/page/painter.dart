@@ -25,8 +25,8 @@ class MushafPagePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final double scaleX = size.width / vBoxSize.width;
-    final double scaleY = size.height / vBoxSize.height;
+    final scaleX = size.width / vBoxSize.width;
+    final scaleY = size.height / vBoxSize.height;
 
     canvas.scale(scaleX, scaleY);
 
@@ -77,14 +77,6 @@ class MushafPagePainter extends CustomPainter {
         .tajwid => greenInt,
         _ => isDarkMode ? whiteInt : blackInt,
       };
-
-      //       colorList[i] = switch (markedPaths[id]) {
-      //   .doubt => purpleInt,
-      //   .mistake => redInt,
-      //   .oldMistake => blueInt,
-      //   .tajwid => greenInt,
-      //   _ => isDarkMode ? whiteInt : blackInt,
-      // };
     }
 
     final paint = Paint()..filterQuality = FilterQuality.high;

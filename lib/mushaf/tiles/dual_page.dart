@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/header/page_number.dart';
+import 'package:mushaf_mistake_marker/mushaf/page/header/surah_number.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/screen.dart';
 import 'package:mushaf_mistake_marker/page_data/page_data.dart';
 
@@ -53,7 +54,15 @@ class MushafDualPageTile extends StatelessWidget {
         child: Row(
           mainAxisAlignment: .spaceEvenly,
           children: [
-            PageNumberHeader(currentPgIndex: pageTwoIndex, pageSide: .leftSide),
+            Column(
+              children: [
+                SurahNumberHeader(currentPgIndex: pageTwoIndex),
+                PageNumberHeader(
+                  currentPgIndex: pageTwoIndex,
+                  pageSide: .leftSide,
+                ),
+              ],
+            ),
             MushafPageScreen(
               w: p2w,
               h: p2h,
@@ -68,7 +77,15 @@ class MushafDualPageTile extends StatelessWidget {
               pageH: pageOne['h'] as double,
               index: dualPageIndex.first,
             ),
-            PageNumberHeader(currentPgIndex: pageOneIndex, pageSide: .rightSide),
+            Column(
+              children: [
+                SurahNumberHeader(currentPgIndex: pageOneIndex),
+                PageNumberHeader(
+                  currentPgIndex: pageOneIndex,
+                  pageSide: .rightSide,
+                ),
+              ],
+            ),
           ],
         ),
       ),

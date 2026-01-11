@@ -135,15 +135,10 @@ class PageNumberHeader extends ConsumerWidget {
                           dualPageMode: dualPageMode,
                         );
 
-                        if (swipe) {
-                          mushafPgCtrl.jumpToPage(itemIndex);
-                          return;
-                        }
-
                         mushafPgCtrlProv.navigateToPage(
                           targetUserPage: targetUserPage,
                           targetIndex: itemIndex,
-                          isSwipe: false,
+                          isSwipe: swipe,
                         );
                       },
                       child: SizedBox(

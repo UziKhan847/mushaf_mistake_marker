@@ -1,131 +1,167 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/extensions/context_extensions.dart';
+import 'package:mushaf_mistake_marker/mushaf/page/header/variables.dart';
 import 'package:mushaf_mistake_marker/overlay/overlay_type/page_header_overlay.dart';
-import 'package:mushaf_mistake_marker/providers/page_mode.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf/page_controller.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/entities/settings.dart';
+import 'package:mushaf_mistake_marker/providers/page_mode.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/sprite_ids.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/sprite.dart';
 import 'package:mushaf_mistake_marker/surah/surah.dart';
 import 'package:mushaf_mistake_marker/surah/surah_names_data.dart';
 
-class SurahNumberHeader extends ConsumerStatefulWidget {
+class SurahNumberHeader extends ConsumerWidget {
   const SurahNumberHeader({
     super.key,
-    required this.index,
+    required this.currentPgIndex,
     this.pageSide = .none,
   });
 
-  final int index;
+  final int currentPgIndex;
   final PageSide pageSide;
+  static const double itemHeight = 50.0;
+  static final RegExp _surahRegExp = RegExp(r's(\d{1,3})');
 
-  @override
-  ConsumerState<SurahNumberHeader> createState() => _SurahNumberHeaderState();
-}
-
-class _SurahNumberHeaderState extends ConsumerState<SurahNumberHeader> {
-  late final mushafPgCtrl = ref.read(mushafPgCtrlProvider);
-  late final mushafPgCtrlProv = ref.read(mushafPgCtrlProvider.notifier);
-  late final dualPageMode = ref.read(pageModeProvider);
-  late final sprProv = ref.read(spriteProvider.notifier);
-  late final userId = ref.read(userSettingsProvider)!.initPage;
-  late final regExp = RegExp(r's(\d{1,3})');
-
-  late final link = LayerLink();
-
-  late final widgetKey = GlobalKey();
-
-  OverlayEntry? overlay;
-
-  Set<int> getSurahNums({
-    required List<String> pEleIds,
-    required RegExp regExp,
-  }) {
+  Set<int> getSurahNums({required List<String> pEleIds}) {
     final surahNums = <int>{};
 
     for (final e in pEleIds) {
-      final match = regExp.matchAsPrefix(e);
-
-      if (match != null) surahNums.add(int.parse(match.group(1)!));
+      final match = _surahRegExp.matchAsPrefix(e);
+      if (match != null) {
+        surahNums.add(int.parse(match.group(1)!));
+      }
     }
 
     return surahNums;
   }
 
   List<Surah> getSurahs(Set<int> surahNums) {
-    final surahs = <Surah>[];
+    return surahNums.map((n) => Surah.fromJson(surahsData[n - 1])).toList();
+  }
 
-    for (final num in surahNums) {
-      final surah = Surah.fromJson(surahsData[num - 1]);
+  bool isOnSurahStartPage(int currentPg, int clickedIndex, Set<int> surahNums) {
+    final clickedSurahNum = surahNums.firstWhere(
+      (e) => e == clickedIndex + 1,
+      orElse: () => 0,
+    );
 
-      surahs.add(surah);
-    }
+    if (clickedSurahNum == 0) return false;
 
-    return surahs;
+    final surahStrtPg = surahStartPage[clickedSurahNum];
+
+    return surahStrtPg == currentPg;
   }
 
   @override
-  Widget build(BuildContext context) {
-    final pageElementIds = ref.watch(spriteIdsProvider(userId));
+  Widget build(BuildContext context, WidgetRef ref) {
+    final (
+      mushafPgCtrl,
+      mushafPgCtrlProv,
+      sprProv,
+      userId,
+      dualPageMode,
+      pageElementIds,
+    ) = (
+      ref.read(mushafPgCtrlProvider),
+      ref.read(mushafPgCtrlProvider.notifier),
+      ref.read(spriteProvider.notifier),
+      ref.read(userSettingsProvider)!.initPage,
+      ref.watch(pageModeProvider),
+      ref.watch(spriteIdsProvider(currentPgIndex)),
+    );
+
     if (pageElementIds == null) return const SizedBox.shrink();
 
-    final buffer = StringBuffer();
-    final surahNums = getSurahNums(pEleIds: pageElementIds, regExp: regExp);
+    final surahNums = getSurahNums(pEleIds: pageElementIds);
     if (surahNums.isEmpty) return const SizedBox.shrink();
+
     final surahs = getSurahs(surahNums);
     if (surahs.isEmpty) return const SizedBox.shrink();
-    final surahsListLength = dualPageMode ? surahs.length : 1;
 
+    final surahsListLength = surahs.length;
+    final surahsNameList = <String>{};
+
+    final buffer = StringBuffer();
     for (int i = 0; i < surahsListLength; i++) {
       final surah = surahs[i];
-      buffer.write('${surah.number} ');
-      buffer.write(surah.name);
-      buffer.write(' (${surah.numOfVs})');
-      if (i > 0) buffer.writeln();
+
+      surahsNameList.add(surah.name);
+
+      if (!dualPageMode && i > 0) continue;
+      buffer
+        ..write('${surah.number} ')
+        ..write(surah.name)
+        ..write(' (${surah.numOfVs}),');
+      if (dualPageMode) buffer.writeln();
     }
+
+    print(surahsNameList);
 
     final surahText = buffer.toString();
 
-    final isSelected = false;
+    final link = LayerLink();
+    final widgetKey = GlobalKey();
 
     return CompositedTransformTarget(
       link: link,
       child: TextButton(
         key: widgetKey,
         onPressed: () {
+          OverlayEntry? overlay;
+
           overlay = context.insertOverlay(
             onTapOutside: () {
-              context.removeOverlayEntry(overlay);
+              overlay?.remove();
+              overlay = null;
             },
             children: [
               PageHeaderOverlay(
                 link: link,
-                initialIndex: 0,
+                initialIndex: surahNums.first - 1,
                 widgetKey: widgetKey,
+                itemHeight: itemHeight,
                 itemCount: 114,
                 itemBuilder: (context, index) {
+                  final surahName = surahsData[index]['name'] as String;
+                  final isSelected = surahsNameList.contains(surahName);
+
                   return Material(
                     color: isSelected
                         ? Theme.of(context).colorScheme.primary.withAlpha(38)
                         : Colors.transparent,
                     child: InkWell(
                       onTap: () {
-                        context.removeOverlayEntry(overlay);
-                        return;
+                        overlay?.remove();
+                        overlay = null;
 
-                        sprProv.clearAll();
-                        mushafPgCtrlProv.setUserPage(
-                          dualPageMode ? index * 2 : index,
+                        final isOnStrtPg = isOnSurahStartPage(
+                          currentPgIndex + 1,
+                          index,
+                          surahNums,
                         );
-                        mushafPgCtrl.jumpToPage(index);
+
+                        if (isOnStrtPg) return;
+
+                        final targetUserPage = surahStartPage[index + 1]! - 1;
+
+                        final targetIndex = dualPageMode
+                            ? targetUserPage ~/ 2
+                            : targetUserPage;
+
+                        mushafPgCtrlProv.navigateToPage(
+                          targetUserPage: targetUserPage,
+                          targetIndex: targetIndex,
+                          isSwipe: false,
+                        );
                       },
                       child: SizedBox(
-                        height: 60,
+                        height: itemHeight,
                         child: Center(
                           child: Text(
-                            '${0}',
+                            surahName,
                             style: TextStyle(
                               fontWeight: isSelected
                                   ? FontWeight.bold
@@ -143,7 +179,10 @@ class _SurahNumberHeaderState extends ConsumerState<SurahNumberHeader> {
         },
         child: Text(
           surahText,
-          style: TextStyle(decoration: .underline, decorationStyle: .dashed),
+          style: const TextStyle(
+            decoration: TextDecoration.underline,
+            decorationStyle: TextDecorationStyle.dashed,
+          ),
         ),
       ),
     );
