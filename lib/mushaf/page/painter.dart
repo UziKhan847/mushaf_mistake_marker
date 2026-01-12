@@ -1,10 +1,11 @@
 import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/element_mark_data.dart';
 import 'package:mushaf_mistake_marker/sprite/rst_offset.dart';
 import 'package:mushaf_mistake_marker/sprite/sprite_ele_data.dart';
-import 'package:mushaf_mistake_marker/variables.dart';
+import 'package:mushaf_mistake_marker/constants.dart';
 
 class MushafPagePainter extends CustomPainter {
   MushafPagePainter({
@@ -25,6 +26,9 @@ class MushafPagePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    final rectPaint = Paint()
+      ..isAntiAlias = false
+      ..style = PaintingStyle.fill;
     final scaleX = size.width / vBoxSize.width;
     final scaleY = size.height / vBoxSize.height;
 
@@ -50,8 +54,8 @@ class MushafPagePainter extends CustomPainter {
       final rectLTRB = [
         rectLTWH.$1,
         rectLTWH.$2,
-        (rectLTWH.$1 + rectLTWH.$3),
-        (rectLTWH.$2 + rectLTWH.$4),
+        rectLTWH.$1 + rectLTWH.$3,
+        rectLTWH.$2 + rectLTWH.$4,
       ];
 
       final rstValues = [1.0, 0.0, rstOffset.x, rstOffset.y];
@@ -69,6 +73,29 @@ class MushafPagePainter extends CustomPainter {
       }
 
       final eleMarkData = eleMarkDataList[eleMarkDataIndex];
+
+      if (eleMarkData.highlight != MarkType.unknown) {
+        rectPaint.color = switch (eleMarkData.highlight) {
+          .mistake => Color(isDarkMode ? redHighlightDarkInt : redHighlightInt),
+          .oldMistake => Color(
+            isDarkMode ? blueHighlightDarkInt : blueHighlightInt,
+          ),
+          .tajwid => Color(
+            isDarkMode ? greenHighlightDarkInt : greenHighlightInt,
+          ),
+          _ => Color(isDarkMode ? purpleHighlightDarkInt : purpleHighlightInt),
+        };
+
+        canvas.drawRect(
+          Rect.fromLTWH(
+            sprite.eLTWH.first,
+            sprite.eLTWH[1],
+            sprite.eLTWH[2],
+            sprite.eLTWH.last,
+          ),
+          rectPaint,
+        );
+      }
 
       colorList[i] = switch (eleMarkData.mark) {
         .doubt => purpleInt,

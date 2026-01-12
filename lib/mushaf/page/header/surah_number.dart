@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/enums.dart';
@@ -97,8 +96,6 @@ class SurahNumberHeader extends ConsumerWidget {
         ..write(' (${surah.numOfVs}),');
       if (dualPageMode) buffer.writeln();
     }
-
-    print(surahsNameList);
 
     final surahText = buffer.toString();
 

@@ -3,8 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/mushaf/tiles/dual_page.dart';
 import 'package:mushaf_mistake_marker/mushaf/tiles/single_page.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/changed_handler.dart';
-import 'package:mushaf_mistake_marker/providers/mushaf/is_dual_page_mode.dart';
-import 'package:mushaf_mistake_marker/providers/on_page_mode_changed.dart';
 import 'package:mushaf_mistake_marker/providers/page_mode.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf/page_controller.dart';
 import 'package:mushaf_mistake_marker/providers/pages_provider.dart';

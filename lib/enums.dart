@@ -19,3 +19,5 @@ enum PageLayout { singlePage, dualPage }
 enum PageSide { rightSide, leftSide, none }
 
 enum PageChangeOrigin { modeChange, swipe }
+
+enum MarkupMode { mark, highlight }

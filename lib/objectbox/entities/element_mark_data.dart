@@ -59,6 +59,22 @@ class ElementMarkData {
   set highlight(MarkType value) => highlightId = value.id;
 
   @Transient()
+  void updateHighlight() {
+    switch (highlight) {
+      case .unknown:
+        highlight = .doubt;
+      case .doubt:
+        highlight = .mistake;
+      case .mistake:
+        highlight = .oldMistake;
+      case .oldMistake:
+        highlight = .tajwid;
+      default:
+        highlight = .unknown;
+    }
+  }
+
+  @Transient()
   ElementMarkData copyWith({
     int? id,
     String? key,

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mushaf_mistake_marker/enums.dart';
-import 'package:mushaf_mistake_marker/providers/mushaf/is_dual_page_mode.dart';
 import 'package:mushaf_mistake_marker/providers/page_mode.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/box/settings.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/entities/settings.dart';

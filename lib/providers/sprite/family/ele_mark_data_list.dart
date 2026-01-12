@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/element_mark_data.dart';
 import 'package:mushaf_mistake_marker/objectbox/objectbox.g.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/box/element_mark_data.dart';
@@ -62,12 +63,19 @@ class SprEleDataProvider
     state = newList;
   }
 
-  void addElement(String key) {
+  void addElementWithMarkUp(String key, bool isHighlight) {
     final mushafData = ref.read(userMushafDataProvider)!;
     final eleMarkDataBox = ref.read(elementMarkDataBoxProvider);
     final mushafDataBox = ref.read(mushafDataBoxProvider);
 
-    final newEMarkData = ElementMarkData(key: key, mark: .doubt);
+    final MarkType mark = isHighlight ? .unknown : .doubt;
+    final MarkType highlight = isHighlight ? .doubt : .unknown;
+
+    final newEMarkData = ElementMarkData(
+      key: key,
+      mark: mark,
+      highlight: highlight,
+    );
     newEMarkData.mushafData.target = mushafData;
     eleMarkDataBox.put(newEMarkData);
     mushafData.elementMarkData.add(newEMarkData);

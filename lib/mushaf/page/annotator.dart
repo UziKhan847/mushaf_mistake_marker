@@ -5,6 +5,7 @@ import 'package:mushaf_mistake_marker/mushaf/page/annotator_handler.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/painter.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/element_mark_data.dart';
 import 'package:mushaf_mistake_marker/objectbox/objectbox.g.dart';
+import 'package:mushaf_mistake_marker/providers/buttons/highlighter.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/box/element_mark_data.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/ele_mark_data_list.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/sprite.dart';
@@ -82,19 +83,22 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
           print('Element Id: $id');
           print('------------------');
 
-          // if (!isWord || !isClicked) continue;
-          if (!isClicked) continue;
+          if (!isWord || !isClicked) continue;
 
           final eMarkDataIndex = eleMarkDataList.indexWhere((e) => e.key == id);
 
+          final isHighlightMode = ref.read(highlightProvider);
+
           if (eMarkDataIndex == -1) {
-            eleMarkDataProv.addElement(id);
+            eleMarkDataProv.addElementWithMarkUp(id, isHighlightMode);
             return;
           }
 
           final eleMarkData = eleMarkDataList[eMarkDataIndex];
 
-          eleMarkData.updateMark();
+          isHighlightMode
+              ? eleMarkData.updateHighlight()
+              : eleMarkData.updateMark();
 
           if (eleMarkData.isEmpty) {
             eleMarkDataProv.removeElement(eleMarkData, eMarkDataIndex);
