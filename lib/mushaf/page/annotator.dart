@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/annotator_handler.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/painter.dart';
-import 'package:mushaf_mistake_marker/objectbox/entities/element_mark_data.dart';
 import 'package:mushaf_mistake_marker/objectbox/objectbox.g.dart';
-import 'package:mushaf_mistake_marker/providers/buttons/highlighter.dart';
+import 'package:mushaf_mistake_marker/providers/buttons/markup_mode.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/box/element_mark_data.dart';
+import 'package:mushaf_mistake_marker/providers/sprite/family/cached_atlas.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/ele_mark_data_list.dart';
+import 'package:mushaf_mistake_marker/providers/sprite/family/page_marks.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/sprite.dart';
-import 'package:mushaf_mistake_marker/sprite/sprite_ele_data.dart';
 
-class MushafPageAnnotator extends ConsumerStatefulWidget {
+class MushafPageAnnotator extends ConsumerWidget {
   const MushafPageAnnotator({
     super.key,
     required this.index,
@@ -30,44 +30,41 @@ class MushafPageAnnotator extends ConsumerStatefulWidget {
   final ui.Image image;
 
   @override
-  ConsumerState<MushafPageAnnotator> createState() =>
-      _MushafPageAnnotatorState();
-}
-
-class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
-  late final List<SpriteEleData> sprites;
-  late final SprEleDataProvider eleMarkDataProv;
-  late final Box<ElementMarkData> eleMarkDataBox;
-
-  @override
-  void initState() {
-    super.initState();
-
-    if (!mounted) return;
-
-    sprites = ref.read(spriteProvider)[widget.index].sprMnfst;
-    eleMarkDataProv = ref.read(sprEleDataProvider(widget.index).notifier);
-    eleMarkDataBox = ref.read(elementMarkDataBoxProvider);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final eleMarkDataList = ref.watch(sprEleDataProvider(widget.index));
+  Widget build(BuildContext context, WidgetRef ref) {
+    final (sprites, pageMarks, atlasCache) = (
+      ref.read(spriteProvider)[index].sprMnfst,
+      ref.watch(pageMarksProvider(index)),
+      ref.watch(cachedAtlasProvider(index)),
+    );
 
     return GestureDetector(
       onTapDown: (details) {
+        final (eleListProv, eleBox, pageMarksProv, markupMode) = (
+          ref.read(sprEleDataListProvider(index)),
+          ref.read(elementMarkDataBoxProvider),
+          ref.read(pageMarksProvider(index).notifier),
+          ref.read(markupModeProvider),
+        );
+
         final localPos = details.localPosition;
 
-        final (scaleX, scaleY) = (
-          widget.w / widget.pageW,
-          widget.h / widget.pageH,
-        );
+        final scaleX = w / pageW;
+        final scaleY = h / pageH;
 
         final scaledPoint = Offset(localPos.dx / scaleX, localPos.dy / scaleY);
 
-        for (final e in sprites) {
+        // AnnotatorHandler.handleTap(
+        //   ref: ref,
+        //   sprites: sprites,
+        //   tapPoint: scaledPoint,
+        //   pageIndex: index,
+        // );
+
+        for (final sprite in sprites) {
           final (id, left, top, right, bottom, scaledX, scaledY) =
-              AnnotatorHandler.getSpriteData(e, scaledPoint);
+              AnnotatorHandler.getSpriteData(sprite, tapPoint);
+
+          if (!id.contains('w')) continue;
 
           final isClicked = AnnotatorHandler.elemBounds(
             top: top,
@@ -78,46 +75,98 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
             scaledY: scaledY,
           );
 
-          final isWord = id.contains(RegExp(r'[w]'));
+          if (!isClicked) continue;
 
-          print('Element Id: $id');
-          print('------------------');
+          final eleMarkData = eleBox
+              .query(ElementMarkData_.key.equals(id))
+              .build()
+              .findFirst();
 
-          if (!isWord || !isClicked) continue;
+          applyMarkup(
+            markupMode: markupMode,
+            element: eleMarkData,
+            elementId: id,
+            pageMarkProv: pageMarksProv,
+          );
 
-          final eMarkDataIndex = eleMarkDataList.indexWhere((e) => e.key == id);
-
-          final isHighlightMode = ref.read(highlightProvider);
-
-          if (eMarkDataIndex == -1) {
-            eleMarkDataProv.addElementWithMarkUp(id, isHighlightMode);
-            return;
-          }
-
-          final eleMarkData = eleMarkDataList[eMarkDataIndex];
-
-          isHighlightMode
-              ? eleMarkData.updateHighlight()
-              : eleMarkData.updateMark();
-
-          if (eleMarkData.isEmpty) {
-            eleMarkDataProv.removeElement(eleMarkData, eMarkDataIndex);
-            return;
-          }
-
-          eleMarkDataProv.updateElement(eleMarkData, eMarkDataIndex);
           return;
         }
       },
       child: CustomPaint(
-        painter: MushafPagePainter(
-          vBoxSize: Size(widget.pageW, widget.pageH),
-          eleMarkDataList: eleMarkDataList,
-          sprites: sprites,
-          image: widget.image,
-          isDarkMode: Theme.of(context).brightness == .dark,
+        painter: MushafPageMarksPainter(
+          pageMarksAtlas: atlasCache.pageMarkAtlas,
+          idToIndex: atlasCache.idToIndex,
+          pageMarks: pageMarks,
+          vBoxSize: Size(pageW, pageH),
+          image: image,
         ),
       ),
     );
   }
 }
+
+
+
+
+// import 'dart:ui' as ui;
+// import 'package:flutter/material.dart';
+// import 'package:flutter_riverpod/flutter_riverpod.dart';
+// import 'package:mushaf_mistake_marker/mushaf/page/annotator_handler.dart';
+// import 'package:mushaf_mistake_marker/mushaf/page/painter.dart';
+// import 'package:mushaf_mistake_marker/providers/objectbox/box/element_mark_data.dart';
+// import 'package:mushaf_mistake_marker/providers/sprite/family/ele_mark_data_map.dart';
+// import 'package:mushaf_mistake_marker/providers/sprite/sprite.dart';
+
+// class MushafPageAnnotator extends ConsumerWidget {
+//   const MushafPageAnnotator({
+//     super.key,
+//     required this.index,
+//     required this.h,
+//     required this.w,
+//     required this.pageH,
+//     required this.pageW,
+//     required this.image,
+//   });
+
+//   final int index;
+//   final double w;
+//   final double h;
+//   final double pageW;
+//   final double pageH;
+//   final ui.Image image;
+
+//   @override
+//   Widget build(BuildContext context, WidgetRef ref) {
+//     final (sprites, eleMarkDataMap) = (
+//       ref.read(spriteProvider)[index].sprMnfst,
+//       ref.watch(sprEleDataMapProvider(index)),
+//     );
+
+//     return GestureDetector(
+//       onTapDown: (details) {
+//         final localPos = details.localPosition;
+
+//         final scaleX = w / pageW;
+//         final scaleY = h / pageH;
+
+//         final scaledPoint = Offset(localPos.dx / scaleX, localPos.dy / scaleY);
+
+//         AnnotatorHandler.handleTap(
+//           ref: ref,
+//           sprites: sprites,
+//           tapPoint: scaledPoint,
+//           pageIndex: index,
+//         );
+//       },
+//       child: CustomPaint(
+//         painter: MushafPagePainter(
+//           vBoxSize: Size(pageW, pageH),
+//           eleMarkDataMap: eleMarkDataMap,
+//           sprites: sprites,
+//           image: image,
+//           isDarkMode: Theme.of(context).brightness == .dark,
+//         ),
+//       ),
+//     );
+//   }
+// }

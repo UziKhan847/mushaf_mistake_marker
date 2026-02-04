@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf/page_controller.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/sprite.dart';
-import 'package:mushaf_mistake_marker/sprite/sprite_sheet.dart';
+import 'package:mushaf_mistake_marker/sprite_models/sprite_sheet.dart';
 
 class PageChangedHandler {
   PageChangedHandler({required this.ref})

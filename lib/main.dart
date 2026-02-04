@@ -24,6 +24,7 @@ Future<void> main() async {
         'userSettingsId',
         'isLeftHand',
         'isHighlightMode',
+        'markupMode'
       },
     ),
   );

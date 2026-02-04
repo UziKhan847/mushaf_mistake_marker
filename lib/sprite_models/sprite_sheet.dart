@@ -1,6 +1,6 @@
 import 'dart:ui' as ui;
 
-import 'package:mushaf_mistake_marker/sprite/sprite_ele_data.dart';
+import 'package:mushaf_mistake_marker/sprite_models/sprite_ele_data.dart';
 
 class SpriteSheet {
   SpriteSheet({required this.sprMnfst, this.image});

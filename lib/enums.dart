@@ -20,4 +20,17 @@ enum PageSide { rightSide, leftSide, none }
 
 enum PageChangeOrigin { modeChange, swipe }
 
-enum MarkupMode { mark, highlight }
+enum MarkupMode {
+  mark(0),
+  highlight(1),
+  eraser(2);
+
+  const MarkupMode(this.id);
+
+  final int id;
+
+  static MarkupMode fromId(int? id) =>
+      MarkupMode.values.firstWhere((e) => e.id == id, orElse: () => .mark);
+}
+
+enum GradientEdge { start, end }

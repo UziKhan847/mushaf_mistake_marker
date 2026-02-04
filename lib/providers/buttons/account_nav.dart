@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final accountNavBtnProvider = NotifierProvider<AccountNavBtnProvider, bool>(
-  AccountNavBtnProvider.new,
+final accountNavBtnProvider = NotifierProvider<AccountNavBtnNotifier, bool>(
+  AccountNavBtnNotifier.new,
 );
 
-class AccountNavBtnProvider extends Notifier<bool> {
+class AccountNavBtnNotifier extends Notifier<bool> {
   @override
   bool build() => false;
 

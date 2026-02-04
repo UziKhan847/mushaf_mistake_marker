@@ -39,7 +39,7 @@ class ElementMarkData {
   set mark(MarkType value) => markId = value.id;
 
   @Transient()
-  void updateMark() {
+  MarkType updateMark() {
     switch (mark) {
       case .unknown:
         mark = .doubt;
@@ -52,6 +52,8 @@ class ElementMarkData {
       default:
         mark = .unknown;
     }
+
+    return mark;
   }
 
   @Transient()

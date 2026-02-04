@@ -1,117 +1,37 @@
 import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mushaf_mistake_marker/atlas_models/page_mark_atlas.dart';
 import 'package:mushaf_mistake_marker/enums.dart';
-import 'package:mushaf_mistake_marker/objectbox/entities/element_mark_data.dart';
-import 'package:mushaf_mistake_marker/sprite/rst_offset.dart';
-import 'package:mushaf_mistake_marker/sprite/sprite_ele_data.dart';
-import 'package:mushaf_mistake_marker/constants.dart';
 
-class MushafPagePainter extends CustomPainter {
-  MushafPagePainter({
-    required this.sprites,
+class MushafPageMarksPainter extends CustomPainter {
+  MushafPageMarksPainter({
     required this.image,
     required this.vBoxSize,
-    required this.eleMarkDataList,
-    required this.isDarkMode,
+    required this.pageMarks,
+    required this.pageMarksAtlas,
+    required this.idToIndex,
   });
 
-  final List<SpriteEleData> sprites;
-  final List<ElementMarkData> eleMarkDataList;
   final ui.Image image;
   final Size vBoxSize;
-  final bool isDarkMode;
-
-  ColorFilter changeColor(Color color) => .mode(color, .srcIn);
+  final Map<String, MarkType> pageMarks;
+  final PageMarksAtlas pageMarksAtlas;
+  final Map<String, int> idToIndex;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final rectPaint = Paint()
-      ..isAntiAlias = false
-      ..style = PaintingStyle.fill;
     final scaleX = size.width / vBoxSize.width;
     final scaleY = size.height / vBoxSize.height;
 
     canvas.scale(scaleX, scaleY);
 
-    final floatListLength = sprites.length * 4;
-    final rectList = Float32List(floatListLength);
-    final transformList = Float32List(floatListLength);
-    final colorList = Int32List(sprites.length);
-
-    for (int i = 0; i < sprites.length; i++) {
-      final sprite = sprites[i];
-      final id = sprite.id;
-      final byteIndex = i * 4;
-      final rectLTWH = (
-        sprite.sprXY.first,
-        sprite.sprXY.last,
-        sprite.eLTWH[2].ceil(),
-        sprite.eLTWH.last.ceil(),
-      );
-      final rstOffset = RstOffset(x: sprite.eLTWH.first, y: sprite.eLTWH[1]);
-
-      final rectLTRB = [
-        rectLTWH.$1,
-        rectLTWH.$2,
-        rectLTWH.$1 + rectLTWH.$3,
-        rectLTWH.$2 + rectLTWH.$4,
-      ];
-
-      final rstValues = [1.0, 0.0, rstOffset.x, rstOffset.y];
-
-      for (int x = 0; x < 4; x++) {
-        rectList[byteIndex + x] = rectLTRB[x];
-        transformList[byteIndex + x] = rstValues[x];
-      }
-
-      final eleMarkDataIndex = eleMarkDataList.indexWhere((e) => e.key == id);
-
-      if (eleMarkDataIndex == -1) {
-        colorList[i] = isDarkMode ? whiteInt : blackInt;
-        continue;
-      }
-
-      final eleMarkData = eleMarkDataList[eleMarkDataIndex];
-
-      if (eleMarkData.highlight != MarkType.unknown) {
-        rectPaint.color = switch (eleMarkData.highlight) {
-          .mistake => Color(isDarkMode ? redHighlightDarkInt : redHighlightInt),
-          .oldMistake => Color(
-            isDarkMode ? blueHighlightDarkInt : blueHighlightInt,
-          ),
-          .tajwid => Color(
-            isDarkMode ? greenHighlightDarkInt : greenHighlightInt,
-          ),
-          _ => Color(isDarkMode ? purpleHighlightDarkInt : purpleHighlightInt),
-        };
-
-        canvas.drawRect(
-          Rect.fromLTWH(
-            sprite.eLTWH.first,
-            sprite.eLTWH[1],
-            sprite.eLTWH[2],
-            sprite.eLTWH.last,
-          ),
-          rectPaint,
-        );
-      }
-
-      colorList[i] = switch (eleMarkData.mark) {
-        .doubt => purpleInt,
-        .mistake => redInt,
-        .oldMistake => blueInt,
-        .tajwid => greenInt,
-        _ => isDarkMode ? whiteInt : blackInt,
-      };
-    }
-
     final paint = Paint()..filterQuality = FilterQuality.high;
     canvas.drawRawAtlas(
       image,
-      transformList,
-      rectList,
-      colorList,
+      pageMarksAtlas.transformList,
+      pageMarksAtlas.rectList,
+      pageMarksAtlas.colorList,
       .dstATop,
       null,
       paint,
@@ -119,6 +39,125 @@ class MushafPagePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant MushafPagePainter oldDelegate) =>
-      !listEquals(oldDelegate.eleMarkDataList, eleMarkDataList);
+  bool shouldRepaint(covariant MushafPageMarksPainter oldDelegate) =>
+      !mapEquals(oldDelegate.pageMarks, pageMarks);
 }
+
+
+
+
+  // void generateLists() {
+  //   if (isBuffered) return;
+
+  //   isBuffered = true;
+
+  //   for (int i = 0; i < sprites.length; i++, byteIndex += 4) {
+  //     final sprite = sprites[i];
+  //     final id = sprite.id;
+  //     final rectLTWH = (
+  //       sprite.sprXY.first,
+  //       sprite.sprXY.last,
+  //       sprite.eLTWH[2].ceil(),
+  //       sprite.eLTWH.last.ceil(),
+  //     );
+
+  //     idToIndex[id] = i;
+
+  //     final rstOffset = RstOffset(x: sprite.eLTWH.first, y: sprite.eLTWH[1]);
+
+  //     final rectLTRB = [
+  //       rectLTWH.$1,
+  //       rectLTWH.$2,
+  //       rectLTWH.$1 + rectLTWH.$3,
+  //       rectLTWH.$2 + rectLTWH.$4,
+  //     ];
+
+  //     final rstValues = [1.0, 0.0, rstOffset.x, rstOffset.y];
+
+  //     for (int x = 0; x < 4; x++) {
+  //       rectList[byteIndex + x] = rectLTRB[x];
+  //       transformList[byteIndex + x] = rstValues[x];
+  //     }
+
+  //     final eleMark = pageMarks[id];
+
+  //     colorList[i] = switch (eleMark) {
+  //       .doubt => purpleInt,
+  //       .mistake => redInt,
+  //       .oldMistake => blueInt,
+  //       .tajwid => greenInt,
+  //       _ => isDarkMode ? whiteInt : blackInt,
+  //     };
+  //   }
+  // }
+
+
+
+    // final rectPaint = Paint()
+    //   ..isAntiAlias = false
+    //   ..style = PaintingStyle.fill;
+
+    // for (int i = 0; i < sprites.length; i++, byteIndex += 4) {
+    //   final sprite = sprites[i];
+    //   final id = sprite.id;
+    //   final rectLTWH = (
+    //     sprite.sprXY.first,
+    //     sprite.sprXY.last,
+    //     sprite.eLTWH[2].ceil(),
+    //     sprite.eLTWH.last.ceil(),
+    //   );
+    //   final rstOffset = RstOffset(x: sprite.eLTWH.first, y: sprite.eLTWH[1]);
+
+    //   final rectLTRB = [
+    //     rectLTWH.$1,
+    //     rectLTWH.$2,
+    //     rectLTWH.$1 + rectLTWH.$3,
+    //     rectLTWH.$2 + rectLTWH.$4,
+    //   ];
+
+    //   final rstValues = [1.0, 0.0, rstOffset.x, rstOffset.y];
+
+    //   for (int x = 0; x < 4; x++) {
+    //     rectList[byteIndex + x] = rectLTRB[x];
+    //     transformList[byteIndex + x] = rstValues[x];
+    //   }
+
+    //   final eleMarkData = eleMarkDataMap[id];
+    //   idToIndex[id] = i;
+
+    //   if (eleMarkData == null) {
+    //     colorList[i] = isDarkMode ? whiteInt : blackInt;
+    //     continue;
+    //   }
+
+    //   // if (eleMarkData.highlight != MarkType.unknown) {
+    //   //   rectPaint.color = switch (eleMarkData.highlight) {
+    //   //     .mistake => Color(isDarkMode ? redHighlightDarkInt : redHighlightInt),
+    //   //     .oldMistake => Color(
+    //   //       isDarkMode ? blueHighlightDarkInt : blueHighlightInt,
+    //   //     ),
+    //   //     .tajwid => Color(
+    //   //       isDarkMode ? greenHighlightDarkInt : greenHighlightInt,
+    //   //     ),
+    //   //     _ => Color(isDarkMode ? purpleHighlightDarkInt : purpleHighlightInt),
+    //   //   };
+
+    //   //   canvas.drawRect(
+    //   //     Rect.fromLTWH(
+    //   //       sprite.eLTWH.first,
+    //   //       sprite.eLTWH[1],
+    //   //       sprite.eLTWH[2],
+    //   //       sprite.eLTWH.last,
+    //   //     ),
+    //   //     rectPaint,
+    //   //   );
+    //   // }
+
+    //   colorList[i] = switch (eleMarkData.mark) {
+    //     .doubt => purpleInt,
+    //     .mistake => redInt,
+    //     .oldMistake => blueInt,
+    //     .tajwid => greenInt,
+    //     _ => isDarkMode ? whiteInt : blackInt,
+    //   };
+    // }

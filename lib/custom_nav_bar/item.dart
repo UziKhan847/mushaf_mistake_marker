@@ -33,10 +33,9 @@ class NavBarItem extends StatelessWidget {
         padding: const EdgeInsets.all(4),
         child: Material(
           color: Colors.transparent,
-          shape: const CircleBorder(),
           child: Ink(
-            width: 34, // smaller circle width
-            height: 34, // smaller circle height
+            width: 34,
+            height: 34,
             decoration: circleColor != null
                 ? BoxDecoration(shape: BoxShape.circle, color: circleColor)
                 : null,

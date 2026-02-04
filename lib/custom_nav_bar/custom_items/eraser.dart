@@ -4,8 +4,8 @@ import 'package:mushaf_mistake_marker/custom_nav_bar/item.dart';
 import 'package:mushaf_mistake_marker/icons/my_flutter_app_icons.dart';
 import 'package:mushaf_mistake_marker/providers/buttons/markup_mode.dart';
 
-class HighlighterItem extends ConsumerWidget {
-  const HighlighterItem({super.key});
+class EraserItem extends ConsumerWidget {
+  const EraserItem({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -15,13 +15,13 @@ class HighlighterItem extends ConsumerWidget {
     );
 
     return NavBarItem(
-      iconLabel: 'Highlight',
-      isSelected: markupMode == .highlight,
+      iconLabel: 'Eraser',
+      isSelected: markupMode == .eraser,
       onTap: () {
-        markupModeProv.switchMarkupMode(.highlight);
+        markupModeProv.switchMarkupMode(.eraser);
       },
-      selectedAsset: MyFlutterApp.highlighter,
-      unselectedAsset: MyFlutterApp.highlighter,
+      selectedAsset: MyFlutterApp.eraser,
+      unselectedAsset: MyFlutterApp.eraser,
     );
   }
 }
