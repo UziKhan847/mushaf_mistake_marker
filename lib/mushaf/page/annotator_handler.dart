@@ -1,15 +1,11 @@
 import 'dart:ui';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as ref;
 import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/element_mark_data.dart';
 import 'package:mushaf_mistake_marker/objectbox/objectbox.g.dart';
-import 'package:mushaf_mistake_marker/providers/buttons/markup_mode.dart';
-import 'package:mushaf_mistake_marker/providers/objectbox/box/element_mark_data.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/box/mushaf_data.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/entities/mushaf_data.dart';
-import 'package:mushaf_mistake_marker/providers/sprite/family/ele_mark_data_list.dart';
-import 'package:mushaf_mistake_marker/providers/sprite/family/page_marks.dart';
+import 'package:mushaf_mistake_marker/providers/sprite/family/page/marks.dart';
 import 'package:mushaf_mistake_marker/sprite_models/sprite_ele_data.dart';
 
 class AnnotatorHandler {
@@ -46,6 +42,119 @@ class AnnotatorHandler {
     scaledPoint.dy,
   );
 
+    static void removeElement(
+    {
+    required ElementMarkData? element,
+    required Box<ElementMarkData> eleBox,
+    required PageMarksNotifier pageMarksProv,
+    }
+  ) {
+    if (element != null) {
+    eleBox.remove(element.id);
+    pageMarksProv.remove(element.key);
+    }
+  }
+
+  static void removeMarkUp(
+    {
+    required ElementMarkData? element,
+    required Box<ElementMarkData> eleBox,
+    required PageMarksNotifier pageMarksProv,
+    }
+  ) {
+    if (element != null) {
+    eleBox.remove(element.id);
+    pageMarksProv.remove(element.key);
+    }
+  }
+
+  static void addElement({
+    required WidgetRef ref,
+    required String key,
+    required MarkupMode markupMode,
+    required Box<ElementMarkData> eleBox,
+    required PageMarksNotifier pageMarksProv,
+  }) {
+    final (mushafData, mushafDataBox) = (ref.read(userMushafDataProvider)!, ref.read(mushafDataBoxProvider));
+
+    final isMarkMode = markupMode == .mark;
+
+    final MarkType mark = isMarkMode ? .doubt : .unknown;
+    final MarkType highlight = isMarkMode ? .unknown : .doubt;
+
+    final newEMarkData = ElementMarkData(
+      key: key,
+      mark: mark,
+      highlight: highlight,
+    );
+    newEMarkData.mushafData.target = mushafData;
+    eleBox.put(newEMarkData);
+    mushafData.elementMarkData.add(newEMarkData);
+    mushafDataBox.put(mushafData);
+
+    if (isMarkMode) {
+      pageMarksProv.update(key, mark);
+    }
+  }
+
+    static void updateElement({
+    required MarkupMode markupMode,
+    required ElementMarkData element,
+    required Box<ElementMarkData> eleBox,
+    required PageMarksNotifier pageMarksProv,
+  }) {
+
+    final isMarkMode = markupMode == .mark;
+
+    if (isMarkMode) {
+      final mark = element.updateMark();
+
+      // if (mark == .unknown) {
+      //   pageMarksProv.remove(element.key);
+      // } else {
+      //   pageMarksProv.update(element.key, mark);
+      // }
+     
+    } else {
+      // final highlight = element.updateHighlight();
+      // eleBox.put(element);
+    }
+
+    if (element.mark == .unknown && element.highlight == .unknown && element.annotation == null) {
+      eleBox.remove(element.id);
+    } else {
+      eleBox.put(element);
+    }
+  }
+
+  static void applyMark({
+    required WidgetRef ref,
+    required MarkupMode markupMode,
+    required ElementMarkData? element,
+    required String elementKey,
+    required PageMarksNotifier pageMarksProv,
+    required Box<ElementMarkData> eleBox,
+  }) {
+    if (markupMode == .eraser) {
+      removeElement(element: element, eleBox: eleBox, pageMarksProv: pageMarksProv);
+      return;
+    }
+
+    if (element == null) {
+      addElement(ref: ref, key: elementKey, markupMode: markupMode, eleBox: eleBox, pageMarksProv: pageMarksProv);
+      return;
+    }
+
+    updateElement(markupMode: markupMode, element: element, eleBox: eleBox, pageMarksProv: pageMarksProv);
+  }
+
+
+
+
+
+
+
+
   // static void applyMarkup({
   //   required MarkupMode markupMode,
   //   required ElementMarkData? element,
@@ -81,99 +190,71 @@ class AnnotatorHandler {
   //   // }
   // }
 
-  void removeElement(Box<ElementMarkData> eleBox, ElementMarkData element) {
-    eleBox.remove(element.id);
-  }
+  // void removeElement(Box<ElementMarkData> eleBox, ElementMarkData element) {
+  //   eleBox.remove(element.id);
+  // }
 
-  void addElementWithMarkUp({
-    required WidgetRef ref,
-    required PageMarksNotifier pageMarkProv,
-    required String key,
-    required MarkupMode markupMode,
-  }) {
-    final mushafData = ref.read(userMushafDataProvider)!;
-    final eleMarkDataBox = ref.read(elementMarkDataBoxProvider);
-    final mushafDataBox = ref.read(mushafDataBoxProvider);
 
-    final MarkType mark = markupMode == .mark ? .doubt : .unknown;
-    final MarkType highlight = markupMode == .highlight ? .doubt : .unknown;
 
-    final newEMarkData = ElementMarkData(
-      key: key,
-      mark: mark,
-      highlight: highlight,
-    );
-    newEMarkData.mushafData.target = mushafData;
-    eleMarkDataBox.put(newEMarkData);
-    mushafData.elementMarkData.add(newEMarkData);
-    mushafDataBox.put(mushafData);
 
-    pageMarkProv.update(key, mark);
-  }
 
-  void applyMark({
-    required MarkupMode markupMode,
-    required ElementMarkData? element,
-    required String elementId,
-    required PageMarksNotifier pageMarkProv,
-    required Box<ElementMarkData> eleBox,
-  }) {
-    if (markupMode == .eraser) {
-      if (element != null) {
-        removeElement(eleBox, element);
-        pageMarkProv.remove(elementId);
-      }
-      return;
-    }
 
-    if (element == null) {}
-  }
 
-  static void handleTap({
-    required WidgetRef ref,
-    required List sprites,
-    required Offset tapPoint,
-    required int pageIndex,
-  }) {
-    final (eleListProv, eleBox, pageMarksProv, markupMode) = (
-      ref.read(sprEleDataListProvider(pageIndex)),
-      ref.read(elementMarkDataBoxProvider),
-      ref.read(pageMarksProvider(pageIndex).notifier),
-      ref.read(markupModeProvider),
-    );
 
-    for (final sprite in sprites) {
-      final (id, left, top, right, bottom, scaledX, scaledY) =
-          AnnotatorHandler.getSpriteData(sprite, tapPoint);
 
-      if (!id.contains('w')) continue;
 
-      final isClicked = AnnotatorHandler.elemBounds(
-        top: top,
-        bottom: bottom,
-        left: left,
-        right: right,
-        scaledX: scaledX,
-        scaledY: scaledY,
-      );
 
-      if (!isClicked) continue;
 
-      final eleMarkData = eleBox
-          .query(ElementMarkData_.key.equals(id))
-          .build()
-          .findFirst();
 
-      applyMarkup(
-        markupMode: markupMode,
-        element: eleMarkData,
-        elementId: id,
-        pageMarkProv: pageMarksProv,
-      );
 
-      return;
-    }
-  }
+
+
+
+  // static void handleTap({
+  //   required WidgetRef ref,
+  //   required List sprites,
+  //   required Offset tapPoint,
+  //   required int pageIndex,
+  // }) {
+  //   final (eleListProv, eleBox, pageMarksProv, markupMode) = (
+  //     ref.read(sprEleDataListProvider(pageIndex)),
+  //     ref.read(elementMarkDataBoxProvider),
+  //     ref.read(pageMarksProvider(pageIndex).notifier),
+  //     ref.read(markupModeProvider),
+  //   );
+
+  //   for (final sprite in sprites) {
+  //     final (id, left, top, right, bottom, scaledX, scaledY) =
+  //         AnnotatorHandler.getSpriteData(sprite, tapPoint);
+
+  //     if (!id.contains('w')) continue;
+
+  //     final isClicked = AnnotatorHandler.elemBounds(
+  //       top: top,
+  //       bottom: bottom,
+  //       left: left,
+  //       right: right,
+  //       scaledX: scaledX,
+  //       scaledY: scaledY,
+  //     );
+
+  //     if (!isClicked) continue;
+
+  //     final eleMarkData = eleBox
+  //         .query(ElementMarkData_.key.equals(id))
+  //         .build()
+  //         .findFirst();
+
+  //     applyMarkup(
+  //       markupMode: markupMode,
+  //       element: eleMarkData,
+  //       elementId: id,
+  //       pageMarkProv: pageMarksProv,
+  //     );
+
+  //     return;
+  //   }
+  // }
 }
 
 // import 'dart:ui';

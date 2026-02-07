@@ -4,7 +4,7 @@ import 'package:mushaf_mistake_marker/atlas_models/cache.dart';
 import 'package:mushaf_mistake_marker/atlas_models/page_mark_atlas.dart';
 import 'package:mushaf_mistake_marker/constants.dart';
 import 'package:mushaf_mistake_marker/providers/buttons/theme.dart';
-import 'package:mushaf_mistake_marker/providers/sprite/family/page_marks.dart';
+import 'package:mushaf_mistake_marker/providers/sprite/family/page/marks.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/sprite.dart';
 import 'package:mushaf_mistake_marker/sprite_models/rst_offset.dart';
 

@@ -1,3 +1,4 @@
+import 'package:mushaf_mistake_marker/constants.dart';
 import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/mushaf_data.dart';
 import 'package:objectbox/objectbox.dart';
@@ -39,7 +40,7 @@ class ElementMarkData {
   set mark(MarkType value) => markId = value.id;
 
   @Transient()
-  MarkType updateMark() {
+  void updateMark() {
     switch (mark) {
       case .unknown:
         mark = .doubt;
@@ -52,9 +53,16 @@ class ElementMarkData {
       default:
         mark = .unknown;
     }
-
-    return mark;
   }
+
+  @Transient()
+  int? get markColor => switch (mark) {
+    .doubt => purpleInt,
+    .mistake => redInt,
+    .oldMistake => blueInt,
+    .tajwid => greenInt,
+    _ => null,
+  };
 
   @Transient()
   MarkType get highlight => .fromId(highlightId);

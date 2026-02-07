@@ -1,14 +1,22 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mushaf_mistake_marker/constants.dart';
+import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/annotator_handler.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/painter.dart';
+import 'package:mushaf_mistake_marker/objectbox/entities/element_mark_data.dart';
 import 'package:mushaf_mistake_marker/objectbox/objectbox.g.dart';
 import 'package:mushaf_mistake_marker/providers/buttons/markup_mode.dart';
+import 'package:mushaf_mistake_marker/providers/buttons/theme.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/box/element_mark_data.dart';
+import 'package:mushaf_mistake_marker/providers/objectbox/box/mushaf_data.dart';
+import 'package:mushaf_mistake_marker/providers/objectbox/entities/mushaf_data.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/cached_atlas.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/ele_mark_data_list.dart';
-import 'package:mushaf_mistake_marker/providers/sprite/family/page_marks.dart';
+import 'package:mushaf_mistake_marker/providers/sprite/family/page/annotations.dart';
+import 'package:mushaf_mistake_marker/providers/sprite/family/page/highlights.dart';
+import 'package:mushaf_mistake_marker/providers/sprite/family/page/marks.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/sprite.dart';
 
 class MushafPageAnnotator extends ConsumerWidget {
@@ -39,11 +47,26 @@ class MushafPageAnnotator extends ConsumerWidget {
 
     return GestureDetector(
       onTapDown: (details) {
-        final (eleListProv, eleBox, pageMarksProv, markupMode) = (
+        final (
+          eleListProv,
+          eleBox,
+          pageMarksProv,
+          pagehighlightProv,
+          pageAnnoteProv,
+          markupMode,
+          mushafData,
+          mushafDataBox,
+          isDarkMode,
+        ) = (
           ref.read(sprEleDataListProvider(index)),
           ref.read(elementMarkDataBoxProvider),
           ref.read(pageMarksProvider(index).notifier),
+          ref.read(pageHighlightsProvider(index).notifier),
+          ref.read(pageAnnotationsProvider(index).notifier),
           ref.read(markupModeProvider),
+          ref.read(userMushafDataProvider)!,
+          ref.read(mushafDataBoxProvider),
+          ref.read(themeProvider),
         );
 
         final localPos = details.localPosition;
@@ -53,18 +76,11 @@ class MushafPageAnnotator extends ConsumerWidget {
 
         final scaledPoint = Offset(localPos.dx / scaleX, localPos.dy / scaleY);
 
-        // AnnotatorHandler.handleTap(
-        //   ref: ref,
-        //   sprites: sprites,
-        //   tapPoint: scaledPoint,
-        //   pageIndex: index,
-        // );
-
         for (final sprite in sprites) {
-          final (id, left, top, right, bottom, scaledX, scaledY) =
-              AnnotatorHandler.getSpriteData(sprite, tapPoint);
+          if (!sprite.id.contains('w')) continue;
 
-          if (!id.contains('w')) continue;
+          final (id, left, top, right, bottom, scaledX, scaledY) =
+              AnnotatorHandler.getSpriteData(sprite, scaledPoint);
 
           final isClicked = AnnotatorHandler.elemBounds(
             top: top,
@@ -77,17 +93,63 @@ class MushafPageAnnotator extends ConsumerWidget {
 
           if (!isClicked) continue;
 
-          final eleMarkData = eleBox
+          final index = atlasCache.idToIndex[id]!;
+
+          final defaultColor = isDarkMode ? whiteInt : blackInt;
+
+          final element = eleBox
               .query(ElementMarkData_.key.equals(id))
               .build()
               .findFirst();
 
-          applyMarkup(
-            markupMode: markupMode,
-            element: eleMarkData,
-            elementId: id,
-            pageMarkProv: pageMarksProv,
-          );
+          if (markupMode == .eraser) {
+            if (element != null) {
+              eleBox.remove(element.id);
+              atlasCache.pageMarkAtlas.colorList[index] = defaultColor;
+              pageMarksProv.remove(id);
+              pagehighlightProv.remove(id);
+              // pageAnnoteProv.remove(id);
+            }
+            return;
+          }
+
+          final isMarkMode = markupMode == .mark;
+
+          if (element == null) {
+            final MarkType mark = isMarkMode ? .doubt : .unknown;
+            final MarkType highlight = isMarkMode ? .unknown : .doubt;
+
+            final newEMarkData = ElementMarkData(
+              key: id,
+              mark: mark,
+              highlight: highlight,
+            );
+
+            newEMarkData.mushafData.target = mushafData;
+            eleBox.put(newEMarkData);
+            mushafData.elementMarkData.add(newEMarkData);
+            mushafDataBox.put(mushafData);
+
+            if (isMarkMode) {
+              atlasCache.pageMarkAtlas.colorList[index] =
+                  newEMarkData.markColor!;
+              pageMarksProv.update(id, mark);
+            } else {
+              pagehighlightProv.update(id, mark);
+            }
+
+            return;
+          }
+
+          if (isMarkMode) {
+            element.updateMark();
+            atlasCache.pageMarkAtlas.colorList[index] =
+                element.markColor ?? defaultColor;
+            pageMarksProv.update(id, element.mark);
+          } else {
+            element.updateHighlight();
+            pagehighlightProv.update(id, element.mark);
+          }
 
           return;
         }

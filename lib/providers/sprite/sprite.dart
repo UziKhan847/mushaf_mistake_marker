@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/providers/page_mode.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/img.dart';
-import 'package:mushaf_mistake_marker/providers/sprite/family/page_data.dart';
+import 'package:mushaf_mistake_marker/providers/sprite/family/page/data.dart';
 import 'package:mushaf_mistake_marker/sprite_models/sprite_sheet.dart';
 import 'package:flutter/material.dart';
 
