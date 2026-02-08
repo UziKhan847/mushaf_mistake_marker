@@ -10,17 +10,19 @@ class MushafPageMarksPainter extends CustomPainter {
     required this.vBoxSize,
     required this.pageMarks,
     required this.pageMarksAtlas,
-    required this.idToIndex,
+    required this.isDarkMode,
   });
 
   final ui.Image image;
   final Size vBoxSize;
   final Map<String, MarkType> pageMarks;
   final PageMarksAtlas pageMarksAtlas;
-  final Map<String, int> idToIndex;
+  final bool isDarkMode;
 
   @override
   void paint(Canvas canvas, Size size) {
+    print('PAINTING!');
+
     final scaleX = size.width / vBoxSize.width;
     final scaleY = size.height / vBoxSize.height;
 
@@ -40,7 +42,8 @@ class MushafPageMarksPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant MushafPageMarksPainter oldDelegate) =>
-      !mapEquals(oldDelegate.pageMarks, pageMarks);
+      !mapEquals(oldDelegate.pageMarks, pageMarks) ||
+      oldDelegate.isDarkMode != isDarkMode;
 }
 
 
