@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/atlas_models/cache.dart';
 import 'package:mushaf_mistake_marker/constants.dart';
@@ -157,6 +156,7 @@ class MushafAnnotatorNotifier extends AutoDisposeFamilyNotifier<void, int> {
         pageMarksProv.update(id, mark);
       } else {
         pageHighlightProv.update(id, highlight);
+        pageHighlightProv.update(id, highlight);
       }
       return;
     }
@@ -174,6 +174,14 @@ class MushafAnnotatorNotifier extends AutoDisposeFamilyNotifier<void, int> {
     } else {
       element.updateHighlight();
       eleBox.put(element);
+
+      final highlightColorIndex = element.highlightColorIndex;
+
+      final highlightColor = isDarkMode
+          ? highlightDarkColors[highlightColorIndex]
+          : highlightColors[highlightColorIndex];
+
+      atlasCache.pageHighlightsAtlas.colorList[atlasIndex] = highlightColor;
 
       element.highlight == .unknown
           ? pageHighlightProv.remove(id)

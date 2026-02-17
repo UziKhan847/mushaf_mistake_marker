@@ -1,11 +1,15 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mushaf_mistake_marker/mushaf/page/painter.dart';
+import 'package:mushaf_mistake_marker/mushaf/page/painter/highlights.dart';
+import 'package:mushaf_mistake_marker/mushaf/page/painter/marks.dart';
+import 'package:mushaf_mistake_marker/mushaf/page/painter/painter.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf/annotator.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/cached_atlas.dart';
+import 'package:mushaf_mistake_marker/providers/sprite/family/page/highlights.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/page/marks.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/sprite.dart';
+import 'package:mushaf_mistake_marker/providers/white_rect.dart';
 
 class MushafPageAnnotator extends ConsumerWidget {
   const MushafPageAnnotator({
@@ -27,9 +31,10 @@ class MushafPageAnnotator extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (sprites, pageMarks, atlasCache, isDarkMode) = (
+    final (sprites, pageMarks, pageHighlights, atlasCache, isDarkMode) = (
       ref.read(spriteProvider)[index].sprMnfst,
       ref.watch(pageMarksProvider(index)),
+      ref.watch(pageHighlightsProvider(index)),
       ref.read(cachedAtlasProvider(index)),
       Theme.of(context).brightness == .dark,
     );
@@ -46,11 +51,14 @@ class MushafPageAnnotator extends ConsumerWidget {
       },
       child: RepaintBoundary(
         child: CustomPaint(
-          painter: MushafPageMarksPainter(
-            pageMarksAtlas: atlasCache.pageMarkAtlas,
-            pageMarks: pageMarks,
-            vBoxSize: Size(pageW, pageH),
+          painter: MushafPagePainter(
             image: image,
+            whiteRect: ref.read(whiteRectProvider)!,
+            vBoxSize: Size(pageW, pageH),
+            pageMarks: pageMarks,
+            pageMarksAtlas: atlasCache.pageMarkAtlas,
+            pageHighlights: pageHighlights,
+            pageHighlightsAtlas: atlasCache.pageHighlightsAtlas,
             isDarkMode: isDarkMode,
           ),
         ),
@@ -58,6 +66,61 @@ class MushafPageAnnotator extends ConsumerWidget {
     );
   }
 }
+
+
+// Stack(
+//           children: [
+//             SizedBox.expand(
+//               child: CustomPaint(
+//                 painter: MushafPageHighlightsPainter(
+//                   pageHighlightsAtlas: atlasCache.pageHighlightsAtlas,
+//                   pageHighlights: pageHighlights,
+//                   vBoxSize: Size(pageW, pageH),
+//                   whiteRect: ref.read(whiteRectProvider)!,
+//                   isDarkMode: isDarkMode,
+//                 ),
+//               ),
+//             ),
+//             SizedBox.expand(
+//               child: CustomPaint(
+//                 painter: MushafPageMarksPainter(
+//                   pageMarksAtlas: atlasCache.pageMarkAtlas,
+//                   pageMarks: pageMarks,
+//                   vBoxSize: Size(pageW, pageH),
+//                   image: image,
+//                   isDarkMode: isDarkMode,
+//                 ),
+//               ),
+//             ),
+//           ],
+//         )
+
+// Stack(
+//         children: [
+//           RepaintBoundary(
+//             child: CustomPaint(
+//               painter: MushafPageHighlightsPainter(
+//                 pageHighlightsAtlas: atlasCache.pageHighlightsAtlas,
+//                 pageHighlights: pageHighlights,
+//                 vBoxSize: Size(pageW, pageH),
+//                 whiteRect: ref.read(whiteRectProvider)!,
+//                 isDarkMode: isDarkMode,
+//               ),
+//             ),
+//           ),
+//           RepaintBoundary(
+//             child: CustomPaint(
+//               painter: MushafPageMarksPainter(
+//                 pageMarksAtlas: atlasCache.pageMarkAtlas,
+//                 pageMarks: pageMarks,
+//                 vBoxSize: Size(pageW, pageH),
+//                 image: image,
+//                 isDarkMode: isDarkMode,
+//               ),
+//             ),
+//           ),
+//         ],
+//       )
 
 
 

@@ -1,7 +1,7 @@
 import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mushaf_mistake_marker/atlas_models/page_mark_atlas.dart';
+import 'package:mushaf_mistake_marker/atlas_models/page_marks_atlas.dart';
 import 'package:mushaf_mistake_marker/enums.dart';
 
 class MushafPageMarksPainter extends CustomPainter {
@@ -21,7 +21,7 @@ class MushafPageMarksPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    print('PAINTING!');
+    print('PAINTING MARKS!');
 
     final scaleX = size.width / vBoxSize.width;
     final scaleY = size.height / vBoxSize.height;

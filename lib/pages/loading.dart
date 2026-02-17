@@ -9,7 +9,7 @@ class LoadingPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.read(whiteRectProvider);
+    ref.read(whiteRectProvider.notifier).generateImg();
 
     return ref
         .watch(pagesProvider)
