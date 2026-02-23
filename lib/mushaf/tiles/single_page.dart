@@ -67,12 +67,16 @@ class MushafSinglePageTile extends StatelessWidget {
             children: [
               SizedBox(
                 width: w,
-                child: Row(
-                  mainAxisAlignment: .spaceBetween,
+                child: Stack(
                   children: [
-                    SurahNumberHeader(currentPgIndex: index),
-                    PageNumberHeader(currentPgIndex: index),
-                    JuzNumberHeader(currentPgIndex: index),
+                    Center(child: PageNumberHeader(currentPgIndex: index)),
+                    Row(
+                      mainAxisAlignment: .spaceBetween,
+                      children: [
+                        SurahNumberHeader(currentPgIndex: index),
+                        JuzNumberHeader(currentPgIndex: index),
+                      ],
+                    ),
                   ],
                 ),
               ),

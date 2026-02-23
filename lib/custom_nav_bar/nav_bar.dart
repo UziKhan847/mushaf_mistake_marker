@@ -40,6 +40,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
                 SingleChildScrollView(
                   scrollDirection: direction,
                   child: Flex(
+                    spacing: 1,
                     direction: direction,
                     mainAxisSize: .min,
                     children: [

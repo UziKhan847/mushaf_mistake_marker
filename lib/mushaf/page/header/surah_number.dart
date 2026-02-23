@@ -5,10 +5,8 @@ import 'package:mushaf_mistake_marker/extensions/context_extensions.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/header/variables.dart';
 import 'package:mushaf_mistake_marker/overlay/overlay_type/page_header_overlay.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf/page_controller.dart';
-import 'package:mushaf_mistake_marker/providers/objectbox/entities/settings.dart';
 import 'package:mushaf_mistake_marker/providers/page_mode.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/sprite_ids.dart';
-import 'package:mushaf_mistake_marker/providers/sprite/sprite.dart';
 import 'package:mushaf_mistake_marker/surah/surah.dart';
 import 'package:mushaf_mistake_marker/surah/surah_names_data.dart';
 
@@ -56,21 +54,9 @@ class SurahNumberHeader extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (
-      mushafPgCtrl,
-      mushafPgCtrlProv,
-      sprProv,
-      userId,
-      dualPageMode,
-      pageElementIds,
-    ) = (
-      ref.read(mushafPgCtrlProvider),
-      ref.read(mushafPgCtrlProvider.notifier),
-      ref.read(spriteProvider.notifier),
-      ref.read(userSettingsProvider)!.initPage,
-      ref.watch(pageModeProvider),
-      ref.watch(spriteIdsProvider(currentPgIndex)),
-    );
+    final mushafPgCtrlProv = ref.read(mushafPgCtrlProvider.notifier);
+    final dualPageMode = ref.watch(pageModeProvider);
+    final pageElementIds = ref.watch(spriteIdsProvider(currentPgIndex));
 
     if (pageElementIds == null) return const SizedBox.shrink();
 
@@ -83,21 +69,21 @@ class SurahNumberHeader extends ConsumerWidget {
     final surahsListLength = surahs.length;
     final surahsNameList = <String>{};
 
-    final buffer = StringBuffer();
+    // final buffer = StringBuffer();
     for (int i = 0; i < surahsListLength; i++) {
       final surah = surahs[i];
 
       surahsNameList.add(surah.name);
 
-      if (!dualPageMode && i > 0) continue;
-      buffer
-        ..write('${surah.number} ')
-        ..write(surah.name)
-        ..write(' (${surah.numOfVs}),');
-      if (dualPageMode) buffer.writeln();
+      // if (!dualPageMode && i > 0) continue;
+      // buffer
+      //   ..write('${surah.number} ')
+      //   ..write(surah.name)
+      //   ..write(' (${surah.numOfVs}),');
+      // if (dualPageMode) buffer.writeln();
     }
 
-    final surahText = buffer.toString();
+    // final surahText = buffer.toString();
 
     final link = LayerLink();
     final widgetKey = GlobalKey();
@@ -175,7 +161,7 @@ class SurahNumberHeader extends ConsumerWidget {
           );
         },
         child: Text(
-          surahText,
+          surahsNameList.first,
           style: const TextStyle(
             decoration: TextDecoration.underline,
             decorationStyle: TextDecorationStyle.dashed,

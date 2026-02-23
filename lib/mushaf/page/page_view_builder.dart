@@ -43,11 +43,9 @@ class _MushafPagerState extends ConsumerState<MushafPageViewBuilder>
       controller: mshfPgCtrl,
       onPageChanged: (int index) async {
         final isSwipe = (index - prevPage).abs() == 1;
-        // final pageModeChanged = ref.read(pageModeChangedProvider);
 
         if (!isSwipe) {
           prevPage = index;
-          // ref.read(pageModeChangedProvider.notifier).setValue(false);
           return;
         }
 

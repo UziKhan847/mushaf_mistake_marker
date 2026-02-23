@@ -64,12 +64,9 @@ class PageNumberHeader extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (mushafPgCtrl, mushafPgCtrlProv, userInitPage, dualPageMode) = (
-      ref.read(mushafPgCtrlProvider),
-      ref.read(mushafPgCtrlProvider.notifier),
-      ref.read(userSettingsProvider)!.initPage,
-      ref.watch(pageModeProvider),
-    );
+    final mushafPgCtrlProv = ref.read(mushafPgCtrlProvider.notifier);
+    final userInitPage = ref.read(userSettingsProvider)!.initPage;
+    final dualPageMode = ref.watch(pageModeProvider);
 
     final link = LayerLink();
     final widgetKey = GlobalKey();

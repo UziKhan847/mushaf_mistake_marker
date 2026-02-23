@@ -13,10 +13,6 @@ import 'package:mushaf_mistake_marker/providers/objectbox/box/element_mark_data.
 import 'package:mushaf_mistake_marker/providers/objectbox/box/mushaf_data.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/entities/mushaf_data.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/cached_atlas.dart';
-import 'package:mushaf_mistake_marker/providers/sprite/family/ele_mark_data_list.dart';
-import 'package:mushaf_mistake_marker/providers/sprite/family/page/annotations.dart';
-import 'package:mushaf_mistake_marker/providers/sprite/family/page/highlights.dart';
-import 'package:mushaf_mistake_marker/providers/sprite/family/page/marks.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/sprite.dart';
 
 final mushafAnnotatorProvider =
@@ -38,31 +34,7 @@ class MushafAnnotatorNotifier extends AutoDisposeFamilyNotifier<void, int> {
     required Size viewSize,
     required Size pageSize,
   }) {
-    final (
-      sprites,
-      atlasCache,
-      eleListProv,
-      eleBox,
-      pageMarksProv,
-      pageHighlightProv,
-      pageAnnoteProv,
-      markupMode,
-      mushafData,
-      mushafDataBox,
-      isDarkMode,
-    ) = (
-      ref.read(spriteProvider)[pageIndex].sprMnfst,
-      ref.read(cachedAtlasProvider(pageIndex)),
-      ref.read(sprEleDataListProvider(pageIndex)),
-      ref.read(elementMarkDataBoxProvider),
-      ref.read(pageMarksProvider(pageIndex).notifier),
-      ref.read(pageHighlightsProvider(pageIndex).notifier),
-      ref.read(pageAnnotationsProvider(pageIndex).notifier),
-      ref.read(markupModeProvider),
-      ref.read(userMushafDataProvider)!,
-      ref.read(mushafDataBoxProvider),
-      ref.read(themeProvider),
-    );
+    final sprites = ref.read(spriteProvider)[pageIndex].sprMnfst;
 
     final scaleX = viewSize.width / pageSize.width;
     final scaleY = viewSize.height / pageSize.height;
@@ -89,48 +61,35 @@ class MushafAnnotatorNotifier extends AutoDisposeFamilyNotifier<void, int> {
 
       if (!isClicked) continue;
 
-      handleElementHit(
-        id: id,
-        atlasIndex: atlasCache.idToIndex[id]!,
-        atlasCache: atlasCache,
-        eleBox: eleBox,
-        pageMarksProv: pageMarksProv,
-        pageHighlightProv: pageHighlightProv,
-        markupMode: markupMode,
-        mushafData: mushafData,
-        mushafDataBox: mushafDataBox,
-        isDarkMode: isDarkMode,
-      );
+      handleElementHit(id: id);
 
       return;
     }
   }
 
-  void handleElementHit({
-    required String id,
-    required int atlasIndex,
-    required AtlasCache atlasCache,
-    required Box<ElementMarkData> eleBox,
-    required PageMarksNotifier pageMarksProv,
-    required PageHighlightsNotifier pageHighlightProv,
-    required MarkupMode markupMode,
-    required UserMushafData mushafData,
-    required Box<UserMushafData> mushafDataBox,
-    required bool isDarkMode,
-  }) {
+  void handleElementHit({required String id}) {
+    final atlasCache = ref.read(cachedAtlasProvider(pageIndex));
+    final eleBox = ref.read(elementMarkDataBoxProvider);
+    final markupMode = ref.read(markupModeProvider);
+    final mushafData = ref.read(userMushafDataProvider)!;
+    final mushafDataBox = ref.read(mushafDataBoxProvider);
+    final isDarkMode = ref.read(themeProvider);
+
     final defaultColor = isDarkMode ? whiteInt : blackInt;
 
-    final element = eleBox
-        .query(ElementMarkData_.key.equals(id))
-        .build()
-        .findFirst();
+    final query = eleBox.query(ElementMarkData_.key.equals(id)).build();
+
+    final element = query.findFirst();
+
+    final atlasIndex = atlasCache.idToIndex[id]!;
+
+    query.close();
 
     if (markupMode == .eraser) {
       if (element != null) {
         eleBox.remove(element.id);
         atlasCache.pageMarkAtlas.colorList[atlasIndex] = defaultColor;
-        pageMarksProv.remove(id);
-        pageHighlightProv.remove(id);
+        atlasCache.pageHighlightsAtlas.colorList[atlasIndex] = 0x00000000;
       }
       return;
     }
@@ -152,11 +111,10 @@ class MushafAnnotatorNotifier extends AutoDisposeFamilyNotifier<void, int> {
       mushafDataBox.put(mushafData);
 
       if (isMarkMode) {
-        atlasCache.pageMarkAtlas.colorList[atlasIndex] = newElement.markColor!;
-        pageMarksProv.update(id, mark);
+        atlasCache.pageMarkAtlas.colorList[atlasIndex] = purpleInt;
       } else {
-        pageHighlightProv.update(id, highlight);
-        pageHighlightProv.update(id, highlight);
+        atlasCache.pageHighlightsAtlas.colorList[atlasIndex] =
+            highlightColors[0];
       }
       return;
     }
@@ -167,10 +125,6 @@ class MushafAnnotatorNotifier extends AutoDisposeFamilyNotifier<void, int> {
 
       atlasCache.pageMarkAtlas.colorList[atlasIndex] =
           element.markColor ?? defaultColor;
-
-      element.mark == .unknown
-          ? pageMarksProv.remove(id)
-          : pageMarksProv.update(id, element.mark);
     } else {
       element.updateHighlight();
       eleBox.put(element);
@@ -182,10 +136,6 @@ class MushafAnnotatorNotifier extends AutoDisposeFamilyNotifier<void, int> {
           : highlightColors[highlightColorIndex];
 
       atlasCache.pageHighlightsAtlas.colorList[atlasIndex] = highlightColor;
-
-      element.highlight == .unknown
-          ? pageHighlightProv.remove(id)
-          : pageHighlightProv.update(id, element.highlight);
     }
 
     if (element.mark == .unknown &&

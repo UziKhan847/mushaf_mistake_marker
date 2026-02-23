@@ -9,7 +9,7 @@ class SettingsItem extends StatelessWidget {
     final outlineColor = Theme.of(context).colorScheme.outline.withAlpha(180);
 
     return Padding(
-      padding: const EdgeInsets.all(4.0),
+      padding: const EdgeInsets.symmetric(horizontal: 4.0),
       child: Material(
         shape: CircleBorder(),
         child: Ink(
@@ -17,8 +17,8 @@ class SettingsItem extends StatelessWidget {
             shape: .circle,
             border: Border.all(color: outlineColor),
           ),
-          height: 34,
-          width: 34,
+          height: 40,
+          width: 40,
           child: InkWell(
             customBorder: const CircleBorder(),
             onTap: () {},

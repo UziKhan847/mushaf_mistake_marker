@@ -5,10 +5,8 @@ import 'package:mushaf_mistake_marker/extensions/context_extensions.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/header/variables.dart';
 import 'package:mushaf_mistake_marker/overlay/overlay_type/page_header_overlay.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf/page_controller.dart';
-import 'package:mushaf_mistake_marker/providers/objectbox/entities/settings.dart';
 import 'package:mushaf_mistake_marker/providers/page_mode.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/sprite_ids.dart';
-import 'package:mushaf_mistake_marker/providers/sprite/sprite.dart';
 
 class JuzNumberHeader extends ConsumerWidget {
   const JuzNumberHeader({
@@ -50,21 +48,9 @@ class JuzNumberHeader extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (
-      mushafPgCtrl,
-      mushafPgCtrlProv,
-      sprProv,
-      userId,
-      dualPageMode,
-      pageElementIds,
-    ) = (
-      ref.read(mushafPgCtrlProvider),
-      ref.read(mushafPgCtrlProvider.notifier),
-      ref.read(spriteProvider.notifier),
-      ref.read(userSettingsProvider)!.initPage,
-      ref.watch(pageModeProvider),
-      ref.watch(spriteIdsProvider(currentPgIndex)),
-    );
+    final mushafPgCtrlProv = ref.read(mushafPgCtrlProvider.notifier);
+    final dualPageMode = ref.watch(pageModeProvider);
+    final pageElementIds = ref.watch(spriteIdsProvider(currentPgIndex));
 
     if (pageElementIds == null) return const SizedBox.shrink();
 
