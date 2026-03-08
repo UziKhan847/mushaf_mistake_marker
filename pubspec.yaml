@@ -41,6 +41,7 @@ flutter:
 
   assets:
     - images/
+    - assets/
     - assets/old_madani_pages_data.json
     - assets/sprite_manifests/
     - assets/sprite_sheets_webp/

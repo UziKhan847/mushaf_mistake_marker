@@ -6,7 +6,6 @@ import 'package:mushaf_mistake_marker/objectbox/entities/user.dart';
 import 'package:mushaf_mistake_marker/overlay/overlay_type/popup_card.dart';
 import 'package:mushaf_mistake_marker/providers/add_user/error_message.dart';
 import 'package:mushaf_mistake_marker/providers/add_user/phase.dart';
-import 'package:mushaf_mistake_marker/providers/mushaf/page_controller.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/box/user.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/entities/user.dart';
 
@@ -37,17 +36,11 @@ class _AddUserCardState extends ConsumerState<AddUserCard> {
 
   @override
   Widget build(BuildContext context) {
-    final (phase, phaseProv) = (
-      ref.watch(addUserPhaseProvider),
-      ref.read(addUserPhaseProvider.notifier),
-    );
-
-    final (errMsgProv, userProv, userBoxProv, mushafPgCtrlProv) = (
-      ref.read(addUserErrorMsgProvider.notifier),
-      ref.read(userProvider.notifier),
-      ref.read(userBoxProvider.notifier),
-      ref.read(mushafPgCtrlProvider),
-    );
+    final phase = ref.watch(addUserPhaseProvider);
+    final phaseProv = ref.read(addUserPhaseProvider.notifier);
+    final errMsgProv = ref.read(addUserErrorMsgProvider.notifier);
+    final userProv = ref.read(userProvider.notifier);
+    final userBoxProv = ref.read(userBoxProvider.notifier);
 
     final usernames = userBoxProv.lowerCaseUsernames;
 

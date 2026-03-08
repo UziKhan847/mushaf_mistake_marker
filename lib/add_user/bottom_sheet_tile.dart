@@ -37,7 +37,9 @@ class _AddUserBtmSheetTileState extends ConsumerState<AddUserBtmSheetTile> {
           child: InkWell(
             onTap: () {
               ref.read(addUserPhaseProvider.notifier).setPhase(.initial);
-              overlay = context.insertOverlay(
+              overlay = context.insertAnimatedOverlay(
+                backdropOn: true,
+                modalBarrierOn: true,
                 onTapOutside: () {
                   context.removeOverlayEntry(overlay);
                 },

@@ -15,7 +15,7 @@ class PageChangedHandler {
   void savePageIndex(int index, bool dualPageMode) {
     final mushafPgCtrlProv = ref.read(mushafPgCtrlProvider.notifier);
 
-    final targetPage = dualPageMode ? index * 2 : index;
+    final targetPage = resolvePage(index, dualPageMode);
 
     mushafPgCtrlProv.setUserPage(targetPage);
   }
@@ -52,14 +52,10 @@ class PageChangedHandler {
   }
 
   Future<int> onPageSwipe(int prevPage, int index, bool dualPageMode) async {
-    //final isSwipe = (index - prevPage).abs() == 1;
-
-    //if (!isSwipe) return index;
-
     savePageIndex(index, dualPageMode);
 
     final swipedLeft = index > prevPage;
-    final actualPage = dualPageMode ? index * 2 : index;
+    final actualPage = resolvePage(index, dualPageMode);
 
     List<int> fetchOffsets = getFetchOffsets(swipedLeft);
     List<int> clearOffsets = getClearOffsets(swipedLeft);
@@ -69,4 +65,7 @@ class PageChangedHandler {
 
     return index;
   }
+
+  int resolvePage(int index, bool dualPageMode) =>
+      dualPageMode ? index * 2 : index;
 }

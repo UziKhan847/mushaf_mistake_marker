@@ -5,14 +5,14 @@ import 'package:mushaf_mistake_marker/providers/sprite/family/ele_mark_data_list
 final pageHighlightsProvider =
     AutoDisposeNotifierProviderFamily<
       PageHighlightsNotifier,
-      Map<String, MarkType>,
+      Map<String, HighlightType>,
       int
     >(PageHighlightsNotifier.new);
 
 class PageHighlightsNotifier
-    extends AutoDisposeFamilyNotifier<Map<String, MarkType>, int> {
+    extends AutoDisposeFamilyNotifier<Map<String, HighlightType>, int> {
   @override
-  Map<String, MarkType> build(int index) {
+  Map<String, HighlightType> build(int index) {
     final eleMarkData = ref.read(sprEleDataListProvider(index));
 
     if (eleMarkData.isEmpty) return {};
@@ -20,7 +20,7 @@ class PageHighlightsNotifier
     return {for (final e in eleMarkData) e.key: e.highlight};
   }
 
-  void update(String key, MarkType mark) {
+  void update(String key, HighlightType mark) {
     final newMap = {...state}..[key] = mark;
     state = newMap;
   }

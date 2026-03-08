@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/user.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/settings.dart';
-import 'package:mushaf_mistake_marker/providers/page_mode.dart';
-import 'package:mushaf_mistake_marker/providers/mushaf/page_controller.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/entities/user.dart';
-import 'package:mushaf_mistake_marker/providers/shared_prefs.dart';
 
 class UserAccountTile extends ConsumerWidget {
   const UserAccountTile({
@@ -30,13 +27,7 @@ class UserAccountTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (prefs, userProv, mushafPgCtrlProv, dualPgMode) = (
-      ref.read(sharedPrefsProv),
-      ref.read(userProvider.notifier),
-      ref.read(mushafPgCtrlProvider),
-      ref.watch(pageModeProvider),
-    );
-
+    final userProv = ref.read(userProvider.notifier);
     final backgroundColor = isSelected
         ? colorScheme.secondaryContainer.withAlpha(100)
         : colorScheme.surface;

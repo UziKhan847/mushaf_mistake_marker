@@ -89,8 +89,8 @@ final sprEleDataListProvider =
   //   final eleMarkDataBox = ref.read(elementMarkDataBoxProvider);
   //   final mushafDataBox = ref.read(mushafDataBoxProvider);
 
-  //   final MarkType mark = markupMode == .mark ? .doubt : .unknown;
-  //   final MarkType highlight = markupMode == .highlight ? .doubt : .unknown;
+  //   final HighlightType mark = markupMode == .mark ? .doubt : .unknown;
+  //   final HighlightType highlight = markupMode == .highlight ? .doubt : .unknown;
 
   //   final newEMarkData = ElementMarkData(
   //     key: key,

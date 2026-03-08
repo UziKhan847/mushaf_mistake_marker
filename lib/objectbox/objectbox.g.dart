@@ -138,12 +138,6 @@ final _entities = <obx_int.ModelEntity>[
         indexId: const obx_int.IdUid(5, 7632002995825719715),
       ),
       obx_int.ModelProperty(
-        id: const obx_int.IdUid(3, 6650173391912013736),
-        name: 'markId',
-        type: 2,
-        flags: 0,
-      ),
-      obx_int.ModelProperty(
         id: const obx_int.IdUid(4, 5042218223865353105),
         name: 'highlightId',
         type: 2,
@@ -207,6 +201,11 @@ Future<obx.Store> openStore({
 /// [obx.Store.new].
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
+    // If this version is not found, it means that this file was generated
+    // with an older version of the ObjectBox Dart generator.
+    // Please regenerate this file with the current generator version.
+    // Typically, this is done with `dart run build_runner build`.
+    generatorVersion: obx_int.GeneratorVersion.v2025_12_16,
     entities: _entities,
     lastEntityId: const obx_int.IdUid(6, 974318578506458044),
     lastIndexId: const obx_int.IdUid(6, 151883220986246337),
@@ -227,6 +226,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
       3820782552421138780,
       1143108290443860278,
       5794467697471834517,
+      6650173391912013736,
     ],
     retiredRelationUids: const [1867234926092955552],
     modelVersion: 5,
@@ -370,7 +370,6 @@ obx_int.ModelDefinition getObjectBoxModel() {
         fbb.startTable(7);
         fbb.addInt64(0, object.id);
         fbb.addOffset(1, keyOffset);
-        fbb.addInt8(2, object.markId);
         fbb.addInt8(3, object.highlightId);
         fbb.addOffset(4, annotationOffset);
         fbb.addInt64(5, object.mushafData.targetId);
@@ -397,12 +396,6 @@ obx_int.ModelDefinition getObjectBoxModel() {
                 id: idParam,
                 key: keyParam,
                 annotation: annotationParam,
-              )
-              ..markId = const fb.Int8Reader().vTableGet(
-                buffer,
-                rootOffset,
-                8,
-                0,
               )
               ..highlightId = const fb.Int8Reader().vTableGet(
                 buffer,
@@ -495,24 +488,19 @@ class ElementMarkData_ {
     _entities[3].properties[1],
   );
 
-  /// See [ElementMarkData.markId].
-  static final markId = obx.QueryIntegerProperty<ElementMarkData>(
-    _entities[3].properties[2],
-  );
-
   /// See [ElementMarkData.highlightId].
   static final highlightId = obx.QueryIntegerProperty<ElementMarkData>(
-    _entities[3].properties[3],
+    _entities[3].properties[2],
   );
 
   /// See [ElementMarkData.annotation].
   static final annotation = obx.QueryStringProperty<ElementMarkData>(
-    _entities[3].properties[4],
+    _entities[3].properties[3],
   );
 
   /// See [ElementMarkData.mushafData].
   static final mushafData =
       obx.QueryRelationToOne<ElementMarkData, UserMushafData>(
-        _entities[3].properties[5],
+        _entities[3].properties[4],
       );
 }

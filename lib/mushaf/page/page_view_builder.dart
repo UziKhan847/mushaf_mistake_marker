@@ -18,7 +18,7 @@ class MushafPageViewBuilder extends ConsumerStatefulWidget {
 
 class _MushafPagerState extends ConsumerState<MushafPageViewBuilder>
     with AutomaticKeepAliveClientMixin {
-  late int prevPage;
+  late int prevIndex;
   late final onPageHandler = PageChangedHandler(ref: ref);
   late final pages = ref.read(pagesProvider).value!;
   late final mshfPgCtrl = ref.read(mushafPgCtrlProvider);
@@ -29,7 +29,7 @@ class _MushafPagerState extends ConsumerState<MushafPageViewBuilder>
   @override
   void initState() {
     super.initState();
-    prevPage = mshfPgCtrl.initialPage;
+    prevIndex = mshfPgCtrl.initialPage;
   }
 
   @override
@@ -42,14 +42,18 @@ class _MushafPagerState extends ConsumerState<MushafPageViewBuilder>
       reverse: true,
       controller: mshfPgCtrl,
       onPageChanged: (int index) async {
-        final isSwipe = (index - prevPage).abs() == 1;
+        final isSwipe = (index - prevIndex).abs() == 1;
 
         if (!isSwipe) {
-          prevPage = index;
+          prevIndex = index;
           return;
         }
 
-        prevPage = await onPageHandler.onPageSwipe(prevPage, index, dualPgMode);
+        prevIndex = await onPageHandler.onPageSwipe(
+          prevIndex,
+          index,
+          dualPgMode,
+        );
       },
       itemCount: dualPgMode ? 302 : 604,
       itemBuilder: (_, index) {

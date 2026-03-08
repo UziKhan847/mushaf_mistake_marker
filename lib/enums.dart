@@ -1,15 +1,17 @@
-enum MarkType {
+enum HighlightType {
   unknown(0),
   mistake(1),
   oldMistake(2),
   doubt(3),
   tajwid(4);
 
-  const MarkType(this.id);
+  const HighlightType(this.id);
   final int id;
 
-  static MarkType fromId(int? id) =>
-      MarkType.values.firstWhere((e) => e.id == id, orElse: () => .unknown);
+  static HighlightType fromId(int? id) => HighlightType.values.firstWhere(
+    (e) => e.id == id,
+    orElse: () => .unknown,
+  );
 }
 
 enum Phase { initial, submitting, success, error }

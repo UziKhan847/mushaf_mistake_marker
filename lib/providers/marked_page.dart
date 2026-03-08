@@ -4,14 +4,14 @@ import 'package:mushaf_mistake_marker/enums.dart';
 final markedPageProvider =
     AutoDisposeAsyncNotifierProviderFamily<
       MarkedPageProvider,
-      Map<String, MarkType>,
+      Map<String, HighlightType>,
       int
     >(MarkedPageProvider.new);
 
 class MarkedPageProvider
-    extends AutoDisposeFamilyAsyncNotifier<Map<String, MarkType>, int> {
+    extends AutoDisposeFamilyAsyncNotifier<Map<String, HighlightType>, int> {
   @override
-  Future<Map<String, MarkType>> build(int pageNumber) async {
+  Future<Map<String, HighlightType>> build(int pageNumber) async {
     return {};
   }
 }

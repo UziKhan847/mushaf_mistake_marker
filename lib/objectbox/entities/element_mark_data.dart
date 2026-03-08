@@ -7,11 +7,9 @@ class ElementMarkData {
   ElementMarkData({
     this.id = 0,
     required this.key,
-    MarkType mark = .unknown,
-    MarkType highlight = .unknown,
+    HighlightType highlight = .unknown,
     this.annotation,
   }) {
-    markId = mark.id;
     highlightId = highlight.id;
   }
 
@@ -22,9 +20,6 @@ class ElementMarkData {
   String key;
 
   @Property(type: .byte)
-  int markId = 0;
-
-  @Property(type: .byte)
   int highlightId = 0;
 
   String? annotation;
@@ -32,42 +27,29 @@ class ElementMarkData {
   final mushafData = ToOne<UserMushafData>();
 
   @Transient()
-  bool get isEmpty => markId == 0 && highlightId == 0 && (annotation == null);
+  bool get isEmpty => highlightId == 0 && (annotation == null);
 
   @Transient()
-  MarkType get mark => .fromId(markId);
-  set mark(MarkType value) => markId = value.id;
+  HighlightType get highlight => .fromId(highlightId);
+  set highlight(HighlightType value) => highlightId = value.id;
 
-  @Transient()
-  void updateMark() {
-    switch (mark) {
-      case .unknown:
-        mark = .doubt;
-      case .doubt:
-        mark = .mistake;
-      case .mistake:
-        mark = .oldMistake;
-      case .oldMistake:
-        mark = .tajwid;
-      default:
-        mark = .unknown;
-    }
-  }
+  // @Transient()
+  // void updateHighlight() {
+  //   switch (highlight) {
+  //     case .unknown:
+  //       highlight = .doubt;
+  //     case .doubt:
+  //       highlight = .mistake;
+  //     case .mistake:
+  //       highlight = .oldMistake;
+  //     case .oldMistake:
+  //       highlight = .tajwid;
+  //     default:
+  //       highlight = .unknown;
+  //   }
+  // }
 
-  @Transient()
-  int? get markColor => switch (mark) {
-    .doubt => 0,
-    .mistake => 1,
-    .oldMistake => 2,
-    .tajwid => 3,
-    _ => null,
-  };
-
-  @Transient()
-  MarkType get highlight => .fromId(highlightId);
-  set highlight(MarkType value) => highlightId = value.id;
-
-  @Transient()
+    @Transient()
   void updateHighlight() {
     switch (highlight) {
       case .unknown:
@@ -83,7 +65,7 @@ class ElementMarkData {
     }
   }
 
-    @Transient()
+  @Transient()
   int get highlightColorIndex => switch (highlight) {
     .doubt => 0,
     .mistake => 1,
@@ -92,18 +74,15 @@ class ElementMarkData {
     _ => 4,
   };
 
-
   @Transient()
   ElementMarkData copyWith({
     int? id,
     String? key,
-    MarkType? mark,
-    MarkType? highlight,
+    HighlightType? highlight,
     String? annotation,
   }) => ElementMarkData(
     id: id ?? this.id,
     key: key ?? this.key,
-    mark: mark ?? this.mark,
     highlight: highlight ?? this.highlight,
     annotation: annotation ?? this.annotation,
   );

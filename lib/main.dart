@@ -24,7 +24,7 @@ Future<void> main() async {
         'userSettingsId',
         'isLeftHand',
         'isHighlightMode',
-        'markupMode'
+        'annotateMode',
       },
     ),
   );
@@ -48,6 +48,7 @@ class MyApp extends ConsumerWidget {
 
     return MaterialApp(
       scrollBehavior: AppScrollBehaviour(),
+      //showPerformanceOverlay: true,
       themeMode: isDarkMode ? .dark : .light,
       theme: MyThemes.lightTheme,
       darkTheme: MyThemes.darkTheme,

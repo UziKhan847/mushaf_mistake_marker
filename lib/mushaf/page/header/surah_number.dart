@@ -69,21 +69,12 @@ class SurahNumberHeader extends ConsumerWidget {
     final surahsListLength = surahs.length;
     final surahsNameList = <String>{};
 
-    // final buffer = StringBuffer();
     for (int i = 0; i < surahsListLength; i++) {
       final surah = surahs[i];
 
       surahsNameList.add(surah.name);
-
-      // if (!dualPageMode && i > 0) continue;
-      // buffer
-      //   ..write('${surah.number} ')
-      //   ..write(surah.name)
-      //   ..write(' (${surah.numOfVs}),');
-      // if (dualPageMode) buffer.writeln();
     }
 
-    // final surahText = buffer.toString();
 
     final link = LayerLink();
     final widgetKey = GlobalKey();
@@ -95,7 +86,9 @@ class SurahNumberHeader extends ConsumerWidget {
         onPressed: () {
           OverlayEntry? overlay;
 
-          overlay = context.insertOverlay(
+          overlay = context.insertAnimatedOverlay(
+            backdropOn: true,
+            modalBarrierOn: true,
             onTapOutside: () {
               overlay?.remove();
               overlay = null;

@@ -69,7 +69,9 @@ class JuzNumberHeader extends ConsumerWidget {
         onPressed: () {
           OverlayEntry? overlay;
 
-          overlay = context.insertOverlay(
+          overlay = context.insertAnimatedOverlay(
+            backdropOn: true,
+            modalBarrierOn: true,
             onTapOutside: () {
               overlay?.remove();
               overlay = null;

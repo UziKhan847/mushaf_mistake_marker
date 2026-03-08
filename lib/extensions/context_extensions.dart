@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:mushaf_mistake_marker/overlay/widgets/animated_backdrop_filter.dart';
 
 extension ContextOverlayExtension on BuildContext {
-  OverlayEntry insertOverlay({
+  OverlayEntry insertAnimatedOverlay({
     required VoidCallback onTapOutside,
     required List<Widget> children,
+    bool backdropOn = false,
+    bool modalBarrierOn = false,
     AnimationController? animController,
   }) {
     final OverlayEntry entry = OverlayEntry(
       builder: (context) {
         return Stack(
           children: [
-            AnimatedBackdropFilter(controller: animController),
+            if (backdropOn) AnimatedBackdropFilter(controller: animController),
 
             ModalBarrier(dismissible: true, onDismiss: onTapOutside),
 

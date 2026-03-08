@@ -8,7 +8,6 @@ final mushafListenersProvider = Provider<void>((ref) {
   ref.listen<bool>(pageModeProvider, (prev, next) {
     if (prev == null || prev == next) return;
 
-    // ref.read(pageModeChangedProvider.notifier).setValue(true);
     ref.read(mushafPgCtrlProvider.notifier).preservePage();
   });
 

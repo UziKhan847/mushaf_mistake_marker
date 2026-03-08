@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mushaf_mistake_marker/custom_nav_bar/custom_items/eraser.dart';
 import 'package:mushaf_mistake_marker/custom_nav_bar/custom_items/highlighter.dart';
 import 'package:mushaf_mistake_marker/custom_nav_bar/custom_items/index.dart';
-import 'package:mushaf_mistake_marker/custom_nav_bar/custom_items/marker.dart';
 import 'package:mushaf_mistake_marker/custom_nav_bar/custom_items/account.dart';
 import 'package:mushaf_mistake_marker/custom_nav_bar/custom_items/dark_mode.dart';
 import 'package:mushaf_mistake_marker/custom_nav_bar/custom_items/dual_page.dart';
@@ -45,13 +44,12 @@ class _CustomNavBarState extends State<CustomNavBar> {
                     mainAxisSize: .min,
                     children: [
                       SizedBox(
-                        height: isPortrait ? 34 : 40,
-                        width: isPortrait ? 40 : 34,
+                        height: isPortrait ? 34 : 42,
+                        width: isPortrait ? 42 : 34,
                       ),
                       const AccountItem(),
                       const IndexItem(),
                       if (!isPortrait) DualPageItem(),
-                      const MarkerItem(),
                       const HighlighterItem(),
                       const EraserItem(),
                       const DarkModeItem(),
@@ -59,15 +57,15 @@ class _CustomNavBarState extends State<CustomNavBar> {
                   ),
                 ),
                 SizedBox(
-                  height: isPortrait ? 38 : 34,
-                  width: isPortrait ? 34 : 38,
+                  height: isPortrait ? 38 : 42,
+                  width: isPortrait ? 42 : 38,
                   child: ColoredBox(color: bgColor),
                 ),
                 EdgeFadeGradient(
                   isPortrait: isPortrait,
                   isStart: true,
                   bgColor: bgColor,
-                  offset: 34,
+                  offset: 42,
                 ),
                 EdgeFadeGradient(
                   isPortrait: isPortrait,

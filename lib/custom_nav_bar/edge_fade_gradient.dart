@@ -26,12 +26,10 @@ class EdgeFadeGradient extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final (left, right, top, bottom) = (
-      isPortrait ? (isStart ? offset : null) : 0.0,
-      isPortrait ? (isStart ? null : offset) : 0.0,
-      isPortrait ? 0.0 : (isStart ? offset : null),
-      isPortrait ? 0.0 : (isStart ? null : offset),
-    );
+    final left = isPortrait ? (isStart ? offset : null) : 0.0;
+    final right = isPortrait ? (isStart ? null : offset) : 0.0;
+    final top = isPortrait ? 0.0 : (isStart ? offset : null);
+    final bottom = isPortrait ? 0.0 : (isStart ? null : offset);
 
     final colors = [
       bgColor,

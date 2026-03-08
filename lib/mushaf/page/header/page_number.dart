@@ -83,7 +83,9 @@ class PageNumberHeader extends ConsumerWidget {
             dualPageMode: dualPageMode,
           );
 
-          overlay = context.insertOverlay(
+          overlay = context.insertAnimatedOverlay(
+            backdropOn: true,
+            modalBarrierOn: true,
             onTapOutside: () {
               overlay?.remove();
               overlay = null;

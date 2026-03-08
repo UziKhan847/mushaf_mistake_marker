@@ -26,7 +26,9 @@ class _AccountItemState extends ConsumerState<AccountItem> {
     return NavBarItem(
       isSelected: isAccBtnSelected,
       onTap: () {
-        overlay = context.insertOverlay(
+        overlay = context.insertAnimatedOverlay(
+          backdropOn: true,
+          modalBarrierOn: true,
           onTapOutside: () {
             accNavBarProv.switchBtnState();
             context.removeOverlayEntry(overlay);

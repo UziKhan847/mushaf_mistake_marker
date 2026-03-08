@@ -17,8 +17,8 @@ class SettingsItem extends StatelessWidget {
             shape: .circle,
             border: Border.all(color: outlineColor),
           ),
-          height: 40,
-          width: 40,
+          height: 42,
+          width: 42,
           child: InkWell(
             customBorder: const CircleBorder(),
             onTap: () {},

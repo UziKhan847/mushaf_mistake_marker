@@ -1,17 +1,18 @@
-import 'package:mushaf_mistake_marker/atlas_models/page_annotations_atlas.dart';
-import 'package:mushaf_mistake_marker/atlas_models/page_highlights_atlas.dart';
-import 'package:mushaf_mistake_marker/atlas_models/page_marks_atlas.dart';
+import 'dart:typed_data';
+
 
 class AtlasCache {
   const AtlasCache({
     required this.idToIndex,
-    required this.pageMarkAtlas,
-    required this.pageHighlightsAtlas,
-    required this.pageAnnotatiosnAtlas,
+    required this.rectList,
+    required this.transformList,
+    required this.elemColorList,
+    required this.highlighColorList,
   });
 
-  final PageMarksAtlas pageMarkAtlas;
-  final PageHighlightsAtlas pageHighlightsAtlas;
-  final PageAnnotationsAtlas pageAnnotatiosnAtlas;
+  final Float32List rectList;
+  final Float32List transformList;
+  final Int32List elemColorList;
+  final Int32List highlighColorList;
   final Map<String, int> idToIndex;
 }
