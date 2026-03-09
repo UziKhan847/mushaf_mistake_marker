@@ -76,3 +76,5 @@ const List<HighlightType> highlightTypes = [
   .tajwid,
   .unknown,
 ];
+
+const annotBbleBounds = Size(350, 130);
