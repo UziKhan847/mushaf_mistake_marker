@@ -44,8 +44,8 @@ class _CustomNavBarState extends State<CustomNavBar> {
                     mainAxisSize: .min,
                     children: [
                       SizedBox(
-                        height: isPortrait ? 34 : 42,
-                        width: isPortrait ? 42 : 34,
+                        height: isPortrait ? 34 : 52,
+                        width: isPortrait ? 52 : 34,
                       ),
                       const AccountItem(),
                       const IndexItem(),
@@ -65,14 +65,14 @@ class _CustomNavBarState extends State<CustomNavBar> {
                   isPortrait: isPortrait,
                   isStart: true,
                   bgColor: bgColor,
-                  offset: 42,
+                  offset: 45,
                 ),
                 EdgeFadeGradient(
                   isPortrait: isPortrait,
                   isStart: false,
                   bgColor: bgColor,
                 ),
-                SettingsItem(),
+                SettingsItem(isPortrait: isPortrait),
               ],
             ),
           ),
