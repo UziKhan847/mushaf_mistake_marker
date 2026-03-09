@@ -20,12 +20,13 @@ class AnnotationBubble extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageRebuild = ref.watch(pageRebuildProvider(index));
+    ref.watch(pageRebuildProvider(index));
     final isDarkMode = Theme.of(context).brightness == .dark;
     final colors = isDarkMode ? annotateDarkColors : annotateLightColors;
     final selectedColors = isDarkMode
         ? annotateLightColors
         : annotateDarkColors;
+    final selectedTextColor = isDarkMode ? Colors.black : Colors.white;
 
     return Material(
       color: Colors.transparent,
@@ -48,12 +49,12 @@ class AnnotationBubble extends ConsumerWidget {
                 ),
                 const Divider(thickness: 0, height: 0),
                 Row(
-                  //mainAxisAlignment: .spaceEvenly,
                   children: List.generate(annotateLabels.length, (i) {
                     return AnnotationButton(
                       label: annotateLabels[i],
                       color: colors[i],
-                      selectedColor: selectedColors[i].withAlpha(100),
+                      selectedColor: selectedColors[i],
+                      selectedTextColor: selectedTextColor,
                       isSelected: hightlight == hightlightTypes[i],
                       onTap: onTaps[i],
                     );

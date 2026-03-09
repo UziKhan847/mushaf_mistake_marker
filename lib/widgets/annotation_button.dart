@@ -8,6 +8,7 @@ class AnnotationButton extends StatelessWidget {
     required this.onTap,
     required this.isSelected,
     required this.selectedColor,
+    required this.selectedTextColor,
   });
 
   final String label;
@@ -15,6 +16,7 @@ class AnnotationButton extends StatelessWidget {
   final VoidCallback onTap;
   final bool isSelected;
   final Color selectedColor;
+  final Color selectedTextColor;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class AnnotationButton extends StatelessWidget {
         width: 50,
         height: 32,
         color: isSelected ? selectedColor : color,
-        alignment: Alignment.center,
+        alignment: .center,
         child: FittedBox(
           fit: .scaleDown,
           child: Padding(
@@ -32,7 +34,10 @@ class AnnotationButton extends StatelessWidget {
             child: Text(
               label,
               textAlign: .center,
-              style: const TextStyle(fontWeight: FontWeight.w500),
+              style: TextStyle(
+                fontWeight: isSelected ? .w700 : .w500,
+                color: isSelected ? selectedTextColor : null,
+              ),
             ),
           ),
         ),
