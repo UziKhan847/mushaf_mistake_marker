@@ -82,6 +82,9 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
             atlasCache.highlighColorList[atlasIndex],
           );
 
+          print('Color:${atlasCache.highlighColorList[atlasIndex]}');
+          print('Hghlightfrom Color: $highlight');
+
           OverlayEntry? overlay;
 
           overlay = context.insertAnimatedOverlay(

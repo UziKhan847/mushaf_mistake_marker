@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/atlas_models/cache.dart';
 import 'package:mushaf_mistake_marker/constants.dart';
@@ -37,10 +39,10 @@ class AnnotatorHandler {
   );
 
   static HighlightType highlightFromColor(int color) => switch (color) {
-    0xFFE6CCFF || 0xFF5A2D82 => .doubt,
-    0xFFFFCCCC || 0xFF8B2C2C => .mistake,
-    0xFFCCE5FF || 0xFF1F4F8B => .oldMistake,
-    0xFFCCFFCC || 0xFF1F6B3A => .tajwid,
+    lightDoubtInt32Purple || darkDoubtInt32Purple => .doubt,
+    lightMistakeInt32Red || darkMistakeInt32Red => .mistake,
+    lightOldMistakeInt32Blue || darkOldMistakeInt32Blue => .oldMistake,
+    lightTajwidInt32Green || darkTajwidInt32Green => .tajwid,
     _ => .unknown,
   };
 

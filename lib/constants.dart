@@ -10,18 +10,39 @@ const blackInt = 0xFF000000;
 const whiteInt = 0xFFFFFFFF;
 const transparentColor = 0x00000000;
 
+const highlightPurple = 0xFFE6CCFF;
+const highlightRed = 0xFFFFCCCC;
+const highlightBlue = 0xFFCCE5FF;
+const highlightGreen = 0xFFCCFFCC;
+
+const highlightDarkPurple = 0xFF5A2D82;
+const highlightDarkRed = 0xFF8B2C2C;
+const highlightDarkBlue = 0xFF1F4F8B;
+const highlightDarkGreen = 0xFF1F6B3A;
+
+const lightDoubtInt32Purple = -1651457;
+const lightMistakeInt32Red = -13108;
+const lightOldMistakeInt32Blue = -3348993;
+const lightTajwidInt32Green = -3342388;
+
+const darkDoubtInt32Purple = -10867326;
+const darkMistakeInt32Red = -7656404;
+const darkOldMistakeInt32Blue = -14725237;
+const darkTajwidInt32Green = -14718150;
+
 const highlightColors = [
-  0xFFE6CCFF,
-  0xFFFFCCCC,
-  0xFFCCE5FF,
-  0xFFCCFFCC,
+  highlightPurple,
+  highlightRed,
+  highlightBlue,
+  highlightGreen,
   transparentColor,
 ];
+
 const highlightDarkColors = [
-  0xFF5A2D82,
-  0xFF8B2C2C,
-  0xFF1F4F8B,
-  0xFF1F6B3A,
+  highlightDarkPurple,
+  highlightDarkRed,
+  highlightDarkBlue,
+  highlightDarkGreen,
   transparentColor,
 ];
 
