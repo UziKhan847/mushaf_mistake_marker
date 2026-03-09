@@ -30,14 +30,14 @@ class NavBarItem extends StatelessWidget {
       selected: isSelected,
       label: iconLabel,
       child: Padding(
-        padding: const EdgeInsets.all(4),
+        padding: const .all(4),
         child: Material(
           color: Colors.transparent,
           child: Ink(
             width: 34,
             height: 34,
             decoration: circleColor != null
-                ? BoxDecoration(shape: BoxShape.circle, color: circleColor)
+                ? BoxDecoration(shape: .circle, color: circleColor)
                 : null,
             child: InkWell(
               onTap: onTap,

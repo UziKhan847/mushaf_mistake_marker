@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mushaf_mistake_marker/atlas_models/cache.dart';
 import 'package:mushaf_mistake_marker/constants.dart';
-import 'package:mushaf_mistake_marker/enums.dart';
+import 'package:mushaf_mistake_marker/mushaf/page/annotator_handler.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/painters/bubble.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/page/rebuild.dart';
 import 'package:mushaf_mistake_marker/widgets/annotation_button.dart';
@@ -9,12 +10,14 @@ import 'package:mushaf_mistake_marker/widgets/annotation_button.dart';
 class AnnotationBubble extends ConsumerWidget {
   const AnnotationBubble({
     super.key,
-    required this.hightlight,
+    required this.atlasCache,
+    required this.atlasIndex,
     required this.index,
     required this.onTaps,
   });
 
-  final HighlightType hightlight;
+  final AtlasCache atlasCache;
+  final int atlasIndex;
   final int index;
   final List<VoidCallback> onTaps;
 
@@ -27,6 +30,9 @@ class AnnotationBubble extends ConsumerWidget {
         ? annotateLightColors
         : annotateDarkColors;
     final selectedTextColor = isDarkMode ? Colors.black : Colors.white;
+    final highlight = AnnotatorHandler.highlightFromColor(
+      atlasCache.highlighColorList[atlasIndex],
+    );
 
     return Material(
       color: Colors.transparent,
@@ -35,7 +41,7 @@ class AnnotationBubble extends ConsumerWidget {
         child: SizedBox(
           width: 250,
           child: Padding(
-            padding: const EdgeInsets.only(bottom: 20),
+            padding: const .only(bottom: 20),
             child: Column(
               children: [
                 SizedBox(
@@ -43,19 +49,19 @@ class AnnotationBubble extends ConsumerWidget {
                   child: TextField(
                     textAlign: .center,
                     decoration: InputDecoration(
-                      contentPadding: EdgeInsets.only(bottom: 10),
+                      contentPadding: .only(bottom: 10),
                     ),
                   ),
                 ),
                 const Divider(thickness: 0, height: 0),
                 Row(
-                  children: List.generate(annotateLabels.length, (i) {
+                  children: .generate(annotateLabels.length, (i) {
                     return AnnotationButton(
                       label: annotateLabels[i],
                       color: colors[i],
                       selectedColor: selectedColors[i],
                       selectedTextColor: selectedTextColor,
-                      isSelected: hightlight == hightlightTypes[i],
+                      isSelected: highlight == highlightTypes[i],
                       onTap: onTaps[i],
                     );
                   }),

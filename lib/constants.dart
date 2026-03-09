@@ -69,7 +69,7 @@ const List<String> annotateLabels = [
   'None',
 ];
 
-const List<HighlightType> hightlightTypes = [
+const List<HighlightType> highlightTypes = [
   .doubt,
   .mistake,
   .oldMistake,

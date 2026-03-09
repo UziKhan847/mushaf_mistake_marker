@@ -78,12 +78,6 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
           );
 
           final atlasIndex = atlasCache.idToIndex[id]!;
-          final highlight = AnnotatorHandler.highlightFromColor(
-            atlasCache.highlighColorList[atlasIndex],
-          );
-
-          print('Color:${atlasCache.highlighColorList[atlasIndex]}');
-          print('Hghlightfrom Color: $highlight');
 
           OverlayEntry? overlay;
 
@@ -98,10 +92,11 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
                 left: globalP.dx,
                 top: globalP.dy,
                 child: AnnotationBubble(
-                  hightlight: highlight,
+                  atlasCache: atlasCache,
+                  atlasIndex: atlasIndex,
                   index: widget.index,
-                  onTaps: List.generate(
-                    hightlightTypes.length,
+                  onTaps: .generate(
+                    highlightTypes.length,
                     (i) =>
                         () => AnnotatorHandler.handleElementHit(
                           ref: ref,
@@ -109,7 +104,7 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
                           index: widget.index,
                           atlasCache: atlasCache,
                           atlasIndex: atlasIndex,
-                          highlight: hightlightTypes[i],
+                          highlight: highlightTypes[i],
                         ),
                   ),
                 ),

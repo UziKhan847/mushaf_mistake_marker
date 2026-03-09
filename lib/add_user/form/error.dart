@@ -12,7 +12,7 @@ class AddUserError extends ConsumerWidget {
     final errMsg = ref.read(addUserErrorMsgProvider);
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10.0),
+      padding: const .only(bottom: 10.0),
       child: Row(
         children: [
           Icon(Icons.error_outline, color: colorScheme.error, size: 18),

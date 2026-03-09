@@ -30,7 +30,7 @@ class AnnotationButton extends StatelessWidget {
         child: FittedBox(
           fit: .scaleDown,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            padding: const .symmetric(horizontal: 10),
             child: Text(
               label,
               textAlign: .center,

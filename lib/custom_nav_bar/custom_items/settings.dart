@@ -9,13 +9,13 @@ class SettingsItem extends StatelessWidget {
     final outlineColor = Theme.of(context).colorScheme.outline.withAlpha(180);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      padding: const .symmetric(horizontal: 4.0),
       child: Material(
         shape: CircleBorder(),
         child: Ink(
           decoration: BoxDecoration(
             shape: .circle,
-            border: Border.all(color: outlineColor),
+            border: .all(color: outlineColor),
           ),
           height: 42,
           width: 42,

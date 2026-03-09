@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/atlas_models/cache.dart';

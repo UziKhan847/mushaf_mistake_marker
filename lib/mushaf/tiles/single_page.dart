@@ -58,7 +58,7 @@ class MushafSinglePageTile extends StatelessWidget {
     return SingleChildScrollView(
       scrollDirection: .vertical,
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: isPortrait ? 0 : 20),
+        padding: .symmetric(vertical: isPortrait ? 0 : 20),
         child: ConstrainedBox(
           constraints: BoxConstraints(minHeight: constraints.maxHeight),
           child: Column(
