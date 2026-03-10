@@ -1,51 +1,57 @@
 import 'package:flutter/material.dart';
 
 class BubblePainter extends CustomPainter {
-  BubblePainter({this.trianglePos = .bottomCenter});
+  BubblePainter({this.trianglePos = .bottomCenter, this.isBubbleTop = true});
 
   final TrianglePosition trianglePos;
+  final bool isBubbleTop;
 
   @override
   void paint(Canvas canvas, Size size) {
-    const tipHeight = 20.0;
-    const tipWidth = 20.0;
+    const triH = 20.0;
+    const triW = 20.0;
 
-    final rectHeight = size.height - tipHeight;
+    final rectHeight = size.height - triH;
 
-    final path = Path()
-      ..addRRect(RRect.fromLTRBAndCorners(0, 0, size.width, rectHeight));
+    final path = Path();
+
+    isBubbleTop
+        ? path.addRRect(RRect.fromLTRBAndCorners(0, 0, size.width, rectHeight))
+        : path.addRRect(
+            RRect.fromLTRBAndCorners(0, triH, size.width, rectHeight),
+          );
 
     switch (trianglePos) {
       case .bottomLeft:
         path
           ..moveTo(0, rectHeight)
           ..lineTo(0, size.height)
-          ..lineTo(size.width, rectHeight);
+          ..lineTo(triW, rectHeight);
       case .bottomCenter:
         path
-          ..moveTo((size.width - tipWidth) / 2, rectHeight)
+          ..moveTo((size.width - triW) / 2, rectHeight)
           ..lineTo(size.width / 2, size.height)
-          ..lineTo((size.width + tipWidth) / 2, rectHeight);
+          ..lineTo((size.width + triW) / 2, rectHeight);
       case .bottomRight:
         path
           ..moveTo(size.width, rectHeight)
           ..lineTo(size.width, size.height)
-          ..lineTo(size.width - tipWidth, rectHeight);
+          ..lineTo(size.width - triW, rectHeight);
       case .topLeft:
         path
-          ..moveTo(0, rectHeight)
-          ..lineTo(0, 0)
-          ..lineTo(tipWidth, rectHeight);
+          ..moveTo(0, 0)
+          ..lineTo(0, triH)
+          ..lineTo(triW, triH);
       case .topCenter:
         path
-          ..moveTo((size.width - tipWidth) / 2, rectHeight)
+          ..moveTo((size.width - triW) / 2, triH)
           ..lineTo(size.width / 2, 0)
-          ..lineTo((size.width + tipWidth) / 2, rectHeight);
+          ..lineTo((size.width + triW) / 2, triH);
       case .topRight:
         path
-          ..moveTo(size.width, rectHeight)
-          ..lineTo(size.width, 0)
-          ..lineTo(size.width - tipWidth, rectHeight);
+          ..moveTo(size.width, 0)
+          ..lineTo(size.width, triH)
+          ..lineTo(size.width - triW, triH);
     }
 
     path.close();

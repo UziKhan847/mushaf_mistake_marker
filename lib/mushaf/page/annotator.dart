@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/constants.dart';
 import 'package:mushaf_mistake_marker/extensions/context_extensions.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/annotator_handler.dart';
+import 'package:mushaf_mistake_marker/mushaf/page/painters/bubble.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/painters/mushaf_page.dart';
 import 'package:mushaf_mistake_marker/widgets/annotation_bubble.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/cached_atlas.dart';
@@ -81,21 +82,23 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
           );
 
           late final double bubbleLeft;
-          late final double bubbleTop;
+          late final TrianglePosition triPos;
 
-          if (gp.dy < 200) {
-            bubbleTop = elemGlobalLT.dy + sprite.eLTWH[3] * scaleY + 10;
-          } else {
-            bubbleTop = elemGlobalLT.dy - 96;
-          }
+          final bool isBubbleTop = gp.dy < 250 ? false : true;
+          final double bubbleTop = isBubbleTop
+              ? elemGlobalLT.dy - 96
+              : elemGlobalLT.dy + sprite.eLTWH[3] * scaleY + 10;
 
           if (gp.dx < 300) {
-            bubbleLeft = elemGlobalLT.dx;
+            bubbleLeft = elemGlobalLT.dx + (sprite.eLTWH[2] * scaleX / 2);
+            triPos = isBubbleTop ? .bottomLeft : .topLeft;
           } else if (gp.dx > scrnSize.width - 300) {
-            bubbleLeft = elemGlobalLT.dx - 250 + sprite.eLTWH[2] * scaleX;
+            bubbleLeft = elemGlobalLT.dx - 250 + sprite.eLTWH[2] * scaleX / 2;
+            triPos = isBubbleTop ? .bottomRight : .topRight;
           } else {
             bubbleLeft =
                 elemGlobalLT.dx - ((250 - sprite.eLTWH[2] * scaleX) / 2);
+            triPos = isBubbleTop ? .bottomCenter : .topCenter;
           }
 
           final atlasIndex = atlasCache.idToIndex[id]!;
@@ -116,6 +119,8 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
                   atlasCache: atlasCache,
                   atlasIndex: atlasIndex,
                   index: widget.index,
+                  trianglePos: triPos,
+                  isBubbleTop: isBubbleTop,
                   onTaps: .generate(
                     highlightTypes.length,
                     (i) =>

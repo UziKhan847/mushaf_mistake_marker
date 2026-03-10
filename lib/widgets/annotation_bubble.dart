@@ -14,12 +14,16 @@ class AnnotationBubble extends ConsumerWidget {
     required this.atlasIndex,
     required this.index,
     required this.onTaps,
+    this.isBubbleTop = true,
+    this.trianglePos = .bottomCenter,
   });
 
   final AtlasCache atlasCache;
   final int atlasIndex;
   final int index;
   final List<VoidCallback> onTaps;
+  final bool isBubbleTop;
+  final TrianglePosition trianglePos;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -37,11 +41,11 @@ class AnnotationBubble extends ConsumerWidget {
     return Material(
       color: Colors.transparent,
       child: CustomPaint(
-        painter: BubblePainter(),
+        painter: BubblePainter(trianglePos: trianglePos, isBubbleTop: isBubbleTop),
         child: SizedBox(
           width: 250,
           child: Padding(
-            padding: const .only(bottom: 20),
+            padding: .only(bottom: isBubbleTop ? 20.0 : 0.0, top: isBubbleTop ? 0.0 : 20.0),
             child: Column(
               children: [
                 SizedBox(
