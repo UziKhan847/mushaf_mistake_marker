@@ -72,10 +72,31 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
 
           final atlasCache = ref.read(cachedAtlasProvider(widget.index));
 
+          final scrnSize = MediaQuery.of(context).size;
+          final gp = details.globalPosition;
+
           final renderbox = context.findRenderObject() as RenderBox;
-          final globalP = renderbox.localToGlobal(
+          final elemGlobalLT = renderbox.localToGlobal(
             Offset(left * scaleX, top * scaleY),
           );
+
+          late final double bubbleLeft;
+          late final double bubbleTop;
+
+          if (gp.dy < 200) {
+            bubbleTop = elemGlobalLT.dy + sprite.eLTWH[3] * scaleY + 10;
+          } else {
+            bubbleTop = elemGlobalLT.dy - 96;
+          }
+
+          if (gp.dx < 300) {
+            bubbleLeft = elemGlobalLT.dx;
+          } else if (gp.dx > scrnSize.width - 300) {
+            bubbleLeft = elemGlobalLT.dx - 250 + sprite.eLTWH[2] * scaleX;
+          } else {
+            bubbleLeft =
+                elemGlobalLT.dx - ((250 - sprite.eLTWH[2] * scaleX) / 2);
+          }
 
           final atlasIndex = atlasCache.idToIndex[id]!;
 
@@ -89,8 +110,8 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
             },
             children: [
               Positioned(
-                left: globalP.dx,
-                top: globalP.dy,
+                left: bubbleLeft,
+                top: bubbleTop,
                 child: AnnotationBubble(
                   atlasCache: atlasCache,
                   atlasIndex: atlasIndex,

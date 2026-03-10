@@ -77,4 +77,4 @@ const List<HighlightType> highlightTypes = [
   .unknown,
 ];
 
-const annotBbleBounds = Size(350, 130);
+const annotBbleBounds = Size(350, 120);
