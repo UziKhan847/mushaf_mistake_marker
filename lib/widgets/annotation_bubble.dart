@@ -41,11 +41,14 @@ class AnnotationBubble extends ConsumerWidget {
     return Material(
       color: Colors.transparent,
       child: CustomPaint(
-        painter: BubblePainter(trianglePos: trianglePos, isBubbleTop: isBubbleTop),
+        painter: BubblePainter(trianglePos: trianglePos),
         child: SizedBox(
           width: 250,
           child: Padding(
-            padding: .only(bottom: isBubbleTop ? 20.0 : 0.0, top: isBubbleTop ? 0.0 : 20.0),
+            padding: .only(
+              bottom: isBubbleTop ? 20.0 : 0.0,
+              top: isBubbleTop ? 0.0 : 20.0,
+            ),
             child: Column(
               children: [
                 SizedBox(
