@@ -50,8 +50,7 @@ class MushafPagePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant MushafPagePainter oldDelegate) {
-    return oldDelegate.pageRebuild != pageRebuild ||
-        oldDelegate.isDarkMode != isDarkMode;
-  }
+  bool shouldRepaint(covariant MushafPagePainter oldDelegate) =>
+      oldDelegate.pageRebuild != pageRebuild ||
+      oldDelegate.isDarkMode != isDarkMode;
 }

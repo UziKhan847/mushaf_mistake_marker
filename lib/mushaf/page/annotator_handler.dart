@@ -1,4 +1,4 @@
-
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/atlas_models/cache.dart';
 import 'package:mushaf_mistake_marker/constants.dart';
@@ -45,6 +45,37 @@ class AnnotatorHandler {
     _ => .unknown,
   };
 
+  static (double, double, TrianglePosition) calcBubblePosition({
+    required Offset globalPos,
+    required Offset elemGlobalLT,
+    required double elemW,
+    required double elemH,
+    required double scaleY,
+    required double screenWidth,
+  }) {
+    final isBubbleTop = globalPos.dy >= 250;
+
+    final double top = isBubbleTop
+        ? elemGlobalLT.dy - 96
+        : elemGlobalLT.dy + elemH * scaleY + 10;
+
+    final double left;
+    final TrianglePosition triPos;
+
+    if (globalPos.dx < 300) {
+      left = elemGlobalLT.dx + (elemW * scaleY / 2);
+      triPos = isBubbleTop ? .bottomLeft : .topLeft;
+    } else if (globalPos.dx > screenWidth - 300) {
+      left = elemGlobalLT.dx - 250 + elemW * scaleY / 2;
+      triPos = isBubbleTop ? .bottomRight : .topRight;
+    } else {
+      left = elemGlobalLT.dx - ((250 - elemW * scaleY) / 2);
+      triPos = isBubbleTop ? .bottomCenter : .topCenter;
+    }
+
+    return (left, top, triPos);
+  }
+
   static void handleElementHit({
     required WidgetRef ref,
     required String id,
@@ -74,7 +105,13 @@ class AnnotatorHandler {
       mushafData.elementMarkData.add(newElement);
       mushafDataBox.put(mushafData);
 
-      atlasCache.highlighColorList[atlasIndex] = highlightColors[0];
+      final highlightColorIndex = newElement.highlightColorIndex;
+
+      final highlightColor = isDarkMode
+          ? highlightDarkColors[highlightColorIndex]
+          : highlightColors[highlightColorIndex];
+
+      atlasCache.highlighColorList[atlasIndex] = highlightColor;
       pageRebuildProv.update();
       return;
     }

@@ -45,21 +45,37 @@ const highlightDarkColors = [
   transparentColor,
 ];
 
-const List<Color> annotateLightColors = [
-  Color(0xFFE7C4FF),
-  Color(0xFFFFC4C4),
-  Color(0xFFC4FFFA),
-  Color(0xFFC4FFC4),
-  Color(0xFFE2E2E2),
+const annotateLightColors = [
+  highlightPurple,
+  highlightRed,
+  highlightBlue,
+  highlightGreen,
+  0xFFE2E2E2,
 ];
 
-const List<Color> annotateDarkColors = [
-  Color(0xFF9B5FC0),
-  Color(0xFFC05F5F),
-  Color(0xFF5FA8A4),
-  Color(0xFF5FA85F),
-  Color(0xFF8A8A8A),
+const annotateDarkColors = [
+  highlightDarkPurple,
+  highlightDarkRed,
+  highlightDarkBlue,
+  highlightDarkGreen,
+  0xFF8A8A8A,
 ];
+
+// const List<Color> annotateLightColors = [
+//   Color(0xFFE7C4FF),
+//   Color(0xFFFFC4C4),
+//   Color(0xFFC4FFFA),
+//   Color(0xFFC4FFC4),
+//   Color(0xFFE2E2E2),
+// ];
+
+// const List<Color> annotateDarkColors = [
+//   Color(0xFF9B5FC0),
+//   Color(0xFFC05F5F),
+//   Color(0xFF5FA8A4),
+//   Color(0xFF5FA85F),
+//   Color(0xFF8A8A8A),
+// ];
 
 const List<String> annotateLabels = [
   'Doubt',

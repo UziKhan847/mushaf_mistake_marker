@@ -12,10 +12,10 @@ class AnnotationButton extends StatelessWidget {
   });
 
   final String label;
-  final Color color;
+  final int color;
   final VoidCallback onTap;
   final bool isSelected;
-  final Color selectedColor;
+  final int selectedColor;
   final Color selectedTextColor;
 
   @override
@@ -25,7 +25,7 @@ class AnnotationButton extends StatelessWidget {
       child: Container(
         width: 50,
         height: 32,
-        color: isSelected ? selectedColor : color,
+        color: Color(isSelected ? selectedColor : color),
         alignment: .center,
         child: FittedBox(
           fit: .scaleDown,

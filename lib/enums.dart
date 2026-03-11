@@ -36,3 +36,12 @@ enum MarkupMode {
 }
 
 enum GradientEdge { start, end }
+
+enum TrianglePosition {
+  bottomLeft,
+  bottomCenter,
+  bottomRight,
+  topLeft,
+  topCenter,
+  topRight,
+}
