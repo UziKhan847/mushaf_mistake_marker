@@ -22,7 +22,8 @@ class AnnotationButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 150),
         width: 50,
         height: 32,
         color: Color(isSelected ? selectedColor : color),

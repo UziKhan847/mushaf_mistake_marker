@@ -86,8 +86,8 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
 
           final bool isBubbleTop = gp.dy < 250 ? false : true;
           final double bubbleTop = isBubbleTop
-              ? elemGlobalLT.dy - 96
-              : elemGlobalLT.dy + sprite.eLTWH[3] * scaleY + 10;
+              ? elemGlobalLT.dy - 86
+              : elemGlobalLT.dy + sprite.eLTWH[3] * scaleY;
 
           if (gp.dx < 300) {
             bubbleLeft = elemGlobalLT.dx + (sprite.eLTWH[2] * scaleX / 2);

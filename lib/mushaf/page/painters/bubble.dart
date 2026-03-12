@@ -126,12 +126,11 @@ class BubblePainter extends CustomPainter {
       path,
       Paint()
         ..color = isDarkMode
-            ? const Color.fromARGB(255, 58, 58, 58)
-            : const Color.fromARGB(255, 255, 255, 255),
+            ? const Color(0xFF3A3A3A)
+            : const Color(0xFFFFFFFF),
     );
   }
 
   @override
   bool shouldRepaint(covariant BubblePainter oldDelegate) => false;
 }
-
