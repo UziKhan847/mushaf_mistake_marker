@@ -1,13 +1,9 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mushaf_mistake_marker/atlas_models/cache.dart';
-import 'package:mushaf_mistake_marker/constants.dart';
-import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/extensions/context_extensions.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/annotator_handler.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/painters/mushaf_page.dart';
-import 'package:mushaf_mistake_marker/providers/objectbox/box/element_mark_data.dart';
 import 'package:mushaf_mistake_marker/widgets/annotation_bubble.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/cached_atlas.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/page/rebuild.dart';
@@ -38,22 +34,7 @@ class MushafPageAnnotator extends ConsumerStatefulWidget {
 }
 
 class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
-  VoidCallback buildOnTap(
-    int i,
-    String id,
-    AtlasCache atlasCache,
-    int atlasIndex,
-  ) =>
-      () => AnnotatorHandler.handleElementHit(
-        ref: ref,
-        id: id,
-        index: widget.index,
-        atlasCache: atlasCache,
-        atlasIndex: atlasIndex,
-        highlight: highlightTypes[i],
-      );
-
-  @override
+   @override
   Widget build(BuildContext context) {
     final atlasCache = ref.read(cachedAtlasProvider(widget.index));
     final isDarkMode = Theme.of(context).brightness == .dark;
@@ -111,11 +92,6 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
             elemGlobalLT.dx,
             isBubbleTop,
           );
-
-          // final element = AnnotatorHandler.getElement(
-          //   id,
-          //   ref.read(elementMarkDataBoxProvider),
-          // );
 
           final atlasIndex = atlasCache.idToIndex[id]!;
 

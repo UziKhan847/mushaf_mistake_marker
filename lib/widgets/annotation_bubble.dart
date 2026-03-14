@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mushaf_mistake_marker/atlas_models/cache.dart';
 import 'package:mushaf_mistake_marker/constants.dart';
 import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/annotator_handler.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/painters/bubble.dart';
-import 'package:mushaf_mistake_marker/objectbox/entities/element_mark_data.dart';
-import 'package:mushaf_mistake_marker/providers/buttons/theme.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/box/element_mark_data.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/box/mushaf_data.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/entities/mushaf_data.dart';
@@ -19,7 +16,6 @@ class AnnotationBubble extends ConsumerStatefulWidget {
   const AnnotationBubble({
     super.key,
     required this.pgIndex,
-    // required this.atlasCache,
     required this.atlasIndex,
     required this.elemId,
     this.isBubbleTop = true,
@@ -31,7 +27,6 @@ class AnnotationBubble extends ConsumerStatefulWidget {
   final String elemId;
   final bool isBubbleTop;
   final TrianglePosition trianglePos;
-  // final AtlasCache atlasCache;
 
   @override
   ConsumerState<AnnotationBubble> createState() => _AnnotationBubbleState();

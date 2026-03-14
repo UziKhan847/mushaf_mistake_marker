@@ -1,17 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mushaf_mistake_marker/atlas_models/cache.dart';
 import 'package:mushaf_mistake_marker/constants.dart';
 import 'package:mushaf_mistake_marker/enums.dart';
-import 'package:mushaf_mistake_marker/objectbox/entities/element_mark_data.dart';
-import 'package:mushaf_mistake_marker/objectbox/entities/mushaf_data.dart';
-import 'package:mushaf_mistake_marker/objectbox/objectbox.g.dart';
-import 'package:mushaf_mistake_marker/providers/buttons/annotate_mode.dart';
-import 'package:mushaf_mistake_marker/providers/buttons/theme.dart';
-import 'package:mushaf_mistake_marker/providers/objectbox/box/element_mark_data.dart';
-import 'package:mushaf_mistake_marker/providers/objectbox/box/mushaf_data.dart';
-import 'package:mushaf_mistake_marker/providers/objectbox/entities/mushaf_data.dart';
-import 'package:mushaf_mistake_marker/providers/sprite/family/page/rebuild.dart';
 import 'package:mushaf_mistake_marker/sprite_models/sprite_ele_data.dart';
 
 class AnnotatorHandler {
@@ -115,13 +104,6 @@ class AnnotatorHandler {
     return (left, top, triPos);
   }
 
-  static ElementMarkData? getElement(String id, Box<ElementMarkData> elemBox) {
-    final query = elemBox.query(ElementMarkData_.key.equals(id)).build();
-    final element = query.findFirst();
-    query.close();
-    return element;
-  }
-
   static (double, TrianglePosition) getBubbleLeftAndTriPos(
     double scrnGLeft,
     double scrnW,
@@ -145,111 +127,5 @@ class AnnotatorHandler {
     }
 
     return (bubbleLeft, triPos);
-  }
-
-  static void addElement(
-    WidgetRef ref,
-    String id,
-    AtlasCache atlasCache,
-    int atlasIndex,
-    int pgIndex,
-    bool isDarkMode,
-    Box<ElementMarkData> elemBox,
-    UserMushafData mshfData,
-    Box<UserMushafData> mshfDataBox, 
-    PageRebuildNotifier pageRebuildProv,
-    {
-    HighlightType? highlight,
-    String? annotation,
-  }) {
-    final element = ElementMarkData(
-      key: id,
-      annotation: annotation,
-      highlight: highlight ?? .unknown,
-    )..mushafData.target = mshfData;
-
-    elemBox.put(element);
-    mshfData.elementMarkData.add(element);
-    mshfDataBox.put(mshfData);
-
-    if (highlight != null) {
-      atlasCache.highlighColorList[atlasIndex] = getHightlightColor(
-        element.highlightColorIndex,
-        isDarkMode,
-      );
-    }
-
-    pageRebuildProv.update();
-  }
-
-  static int getHightlightColor(int colorIndex, bool isDarkMode) => isDarkMode
-      ? highlightDarkColors[colorIndex]
-      : highlightColors[colorIndex];
-
-  static void handleElementHit({
-    required WidgetRef ref,
-    required String id,
-    required int index,
-    required AtlasCache atlasCache,
-    required int atlasIndex,
-    required HighlightType highlight,
-  }) {
-    final eleBox = ref.read(elementMarkDataBoxProvider);
-    final annotateMode = ref.read(annotateModeProvider);
-    final mushafData = ref.read(userMushafDataProvider)!;
-    final mushafDataBox = ref.read(mushafDataBoxProvider);
-    final pageRebuildProv = ref.read(pageRebuildProvider(index).notifier);
-    final isDarkMode = ref.read(themeProvider);
-
-    final defaultColor = isDarkMode ? whiteInt : blackInt;
-
-    final query = eleBox.query(ElementMarkData_.key.equals(id)).build();
-    final element = query.findFirst();
-    query.close();
-
-    if (element == null) {
-      final newElement = ElementMarkData(key: id, highlight: highlight)
-        ..mushafData.target = mushafData;
-
-      eleBox.put(newElement);
-      mushafData.elementMarkData.add(newElement);
-      mushafDataBox.put(mushafData);
-
-      final highlightColorIndex = newElement.highlightColorIndex;
-
-      final highlightColor = isDarkMode
-          ? highlightDarkColors[highlightColorIndex]
-          : highlightColors[highlightColorIndex];
-
-      atlasCache.highlighColorList[atlasIndex] = highlightColor;
-      pageRebuildProv.update();
-      return;
-    }
-
-    if (!annotateMode) {
-      eleBox.remove(element.id);
-
-      atlasCache.elemColorList[atlasIndex] = defaultColor;
-      atlasCache.highlighColorList[atlasIndex] = transparentColor;
-
-      pageRebuildProv.update();
-      return;
-    }
-
-    if (element.highlight != highlight) {
-      element.highlight = highlight;
-      eleBox.put(element);
-
-      final highlightColorIndex = element.highlightColorIndex;
-
-      final highlightColor = isDarkMode
-          ? highlightDarkColors[highlightColorIndex]
-          : highlightColors[highlightColorIndex];
-
-      atlasCache.highlighColorList[atlasIndex] = highlightColor;
-
-      if (element.isEmpty) eleBox.remove(element.id);
-      pageRebuildProv.update();
-    }
   }
 }
