@@ -10,6 +10,9 @@ const blackInt = 0xFF000000;
 const whiteInt = 0xFFFFFFFF;
 const transparentColor = 0x00000000;
 
+const darkGoldenBrown = 0xFF8B0000;
+const lightGoldenBrown = 0xFFFFD97D;
+
 const highlightPurple = 0xFFE6CCFF;
 const highlightRed = 0xFFFFCCCC;
 const highlightBlue = 0xFFCCE5FF;

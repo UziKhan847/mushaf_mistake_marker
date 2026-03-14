@@ -33,7 +33,10 @@ class CachedAtlasNotifier extends AutoDisposeFamilyNotifier<AtlasCache, int> {
 
     int byteIndex = 0;
 
-    final defaultMarkColor = isDarkMode ? whiteInt : blackInt;
+    final defaultElemColor = isDarkMode ? whiteInt : blackInt;
+    final defaultAnnotateColor = isDarkMode
+        ? lightGoldenBrown
+        : darkGoldenBrown;
     final activeHighlightColors = isDarkMode
         ? highlightDarkColors
         : highlightColors;
@@ -60,7 +63,9 @@ class CachedAtlasNotifier extends AutoDisposeFamilyNotifier<AtlasCache, int> {
 
       final elem = elemDataMap[id];
 
-      colorList[i] = elem?.annotation == null ? defaultMarkColor : greyInt;
+      colorList[i] = elem?.annotation == null
+          ? defaultElemColor
+          : defaultAnnotateColor;
 
       highlightColorList[i] = switch (elem?.highlight) {
         .doubt => activeHighlightColors[0],
@@ -110,15 +115,16 @@ class CachedAtlasNotifier extends AutoDisposeFamilyNotifier<AtlasCache, int> {
     bool isDarkMode,
     ElementMarkData? element,
   ) {
-    final defaultColor = isDarkMode ? whiteInt : blackInt;
+    final defaultElemColor = isDarkMode ? whiteInt : blackInt;
+    final defaultAnnotateColor = isDarkMode
+        ? lightGoldenBrown
+        : darkGoldenBrown;
 
-    if (element == null) {
-      state.elemColorList[atlasIndex] = defaultColor;
+    if (element == null ||
+        (element.annotation == null || element.annotation == '')) {
+      state.elemColorList[atlasIndex] = defaultElemColor;
     } else {
-      final noAnnotation =
-          element.annotation == null || element.annotation == '';
-
-      state.elemColorList[atlasIndex] = noAnnotation ? defaultColor : blueInt;
+      state.elemColorList[atlasIndex] = defaultAnnotateColor;
     }
 
     ref.read(pageRebuildProvider(pgIndex).notifier).update();
