@@ -7,6 +7,7 @@ import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/extensions/context_extensions.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/annotator_handler.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/painters/mushaf_page.dart';
+import 'package:mushaf_mistake_marker/providers/objectbox/box/element_mark_data.dart';
 import 'package:mushaf_mistake_marker/widgets/annotation_bubble.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/cached_atlas.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/page/rebuild.dart';
@@ -97,25 +98,24 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
             Offset(left * scaleX, top * scaleY),
           );
 
-          late final double bubbleLeft;
-          late final TrianglePosition triPos;
-
           final bool isBubbleTop = gp.dy < 250 ? false : true;
           final double bubbleTop = isBubbleTop
               ? elemGlobalLT.dy - 86
               : elemGlobalLT.dy + sprite.eLTWH[3] * scaleY;
 
-          if (gp.dx < 300) {
-            bubbleLeft = elemGlobalLT.dx + (sprite.eLTWH[2] * scaleX / 2);
-            triPos = isBubbleTop ? .bottomLeft : .topLeft;
-          } else if (gp.dx > scrnSize.width - 300) {
-            bubbleLeft = elemGlobalLT.dx - 250 + sprite.eLTWH[2] * scaleX / 2;
-            triPos = isBubbleTop ? .bottomRight : .topRight;
-          } else {
-            bubbleLeft =
-                elemGlobalLT.dx - ((250 - sprite.eLTWH[2] * scaleX) / 2);
-            triPos = isBubbleTop ? .bottomCenter : .topCenter;
-          }
+          final (bubbleLeft, triPos) = AnnotatorHandler.getBubbleLeftAndTriPos(
+            gp.dx,
+            scrnSize.width,
+            sprite.eLTWH[2],
+            scaleX,
+            elemGlobalLT.dx,
+            isBubbleTop,
+          );
+
+          // final element = AnnotatorHandler.getElement(
+          //   id,
+          //   ref.read(elementMarkDataBoxProvider),
+          // );
 
           final atlasIndex = atlasCache.idToIndex[id]!;
 
@@ -132,23 +132,11 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
                 left: bubbleLeft,
                 top: bubbleTop,
                 child: AnnotationBubble(
-                  atlasCache: atlasCache,
                   atlasIndex: atlasIndex,
-                  index: widget.index,
+                  elemId: id,
+                  pgIndex: widget.index,
                   trianglePos: triPos,
                   isBubbleTop: isBubbleTop,
-                  onTaps: .generate(
-                    highlightTypes.length,
-                    (i) =>
-                        () => AnnotatorHandler.handleElementHit(
-                          ref: ref,
-                          id: id,
-                          index: widget.index,
-                          atlasCache: atlasCache,
-                          atlasIndex: atlasIndex,
-                          highlight: highlightTypes[i],
-                        ),
-                  ),
                 ),
               ),
             ],

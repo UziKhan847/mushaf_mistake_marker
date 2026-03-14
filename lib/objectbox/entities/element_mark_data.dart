@@ -27,43 +27,20 @@ class ElementMarkData {
   final mushafData = ToOne<UserMushafData>();
 
   @Transient()
-  bool get isEmpty => highlightId == 0 && (annotation == null);
+  bool get isEmpty =>
+      highlightId == 0 && (annotation == null || annotation == '');
 
   @Transient()
   HighlightType get highlight => .fromId(highlightId);
   set highlight(HighlightType value) => highlightId = value.id;
 
-  // @Transient()
-  // void updateHighlight() {
-  //   switch (highlight) {
-  //     case .unknown:
-  //       highlight = .doubt;
-  //     case .doubt:
-  //       highlight = .mistake;
-  //     case .mistake:
-  //       highlight = .oldMistake;
-  //     case .oldMistake:
-  //       highlight = .tajwid;
-  //     default:
-  //       highlight = .unknown;
-  //   }
-  // }
+  @Transient()
+  void updateHighlight(HighlightType? highlight) =>
+      this.highlight = highlight ?? this.highlight;
 
-    @Transient()
-  void updateHighlight() {
-    switch (highlight) {
-      case .unknown:
-        highlight = .doubt;
-      case .doubt:
-        highlight = .mistake;
-      case .mistake:
-        highlight = .oldMistake;
-      case .oldMistake:
-        highlight = .tajwid;
-      default:
-        highlight = .unknown;
-    }
-  }
+  @Transient()
+  void updateAnnotation(String? annotation) =>
+      this.annotation = annotation == '' ? null : annotation;
 
   @Transient()
   int get highlightColorIndex => switch (highlight) {
@@ -79,11 +56,19 @@ class ElementMarkData {
     int? id,
     String? key,
     HighlightType? highlight,
-    String? annotation,
-  }) => ElementMarkData(
-    id: id ?? this.id,
-    key: key ?? this.key,
-    highlight: highlight ?? this.highlight,
-    annotation: annotation ?? this.annotation,
-  );
+    Object? annotation = _nothingPassed,
+  }) {
+    final copy = ElementMarkData(
+      id: id ?? this.id,
+      key: key ?? this.key,
+      highlight: highlight ?? this.highlight,
+      annotation: annotation == _nothingPassed
+          ? this.annotation
+          : annotation as String?,
+    );
+    copy.mushafData.target = mushafData.target;
+    return copy;
+  }
 }
+
+const _nothingPassed = Object();

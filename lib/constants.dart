@@ -5,6 +5,7 @@ const purpleInt = 0xFF800080;
 const redInt = 0xFFFF0000;
 const blueInt = 0xFF0000FF;
 const greenInt = 0xFF00FF00;
+const greyInt = 0xFF808080;
 const blackInt = 0xFF000000;
 const whiteInt = 0xFFFFFFFF;
 const transparentColor = 0x00000000;
@@ -18,6 +19,9 @@ const highlightDarkPurple = 0xFF5A2D82;
 const highlightDarkRed = 0xFF8B2C2C;
 const highlightDarkBlue = 0xFF1F4F8B;
 const highlightDarkGreen = 0xFF1F6B3A;
+
+const annotateLightSelectedGrey = 0xFF8A8A8A;
+const annotateLightUnselectedGrey = 0xFFE2E2E2;
 
 const lightDoubtInt32Purple = -1651457;
 const lightMistakeInt32Red = -13108;
@@ -45,21 +49,55 @@ const highlightDarkColors = [
   transparentColor,
 ];
 
-const annotateLightColors = [
-  highlightPurple,
-  highlightRed,
-  highlightBlue,
-  highlightGreen,
-  0xFFE2E2E2,
-];
+const annotateLightColors = {
+  'selected': [
+    highlightDarkPurple,
+    highlightDarkRed,
+    highlightDarkBlue,
+    highlightDarkGreen,
+    annotateLightSelectedGrey,
+  ],
+  'unselected': [
+    highlightPurple,
+    highlightRed,
+    highlightBlue,
+    highlightGreen,
+    annotateLightUnselectedGrey,
+  ],
+};
 
-const annotateDarkColors = [
-  highlightDarkPurple,
-  highlightDarkRed,
-  highlightDarkBlue,
-  highlightDarkGreen,
-  0xFF8A8A8A,
-];
+const annotateDarkColors = {
+  'unselected': [
+    highlightDarkPurple,
+    highlightDarkRed,
+    highlightDarkBlue,
+    highlightDarkGreen,
+    0xFF8A8A8A,
+  ],
+  'selected': [
+    highlightPurple,
+    highlightRed,
+    highlightBlue,
+    highlightGreen,
+    0xFFE2E2E2,
+  ],
+};
+
+// const annotateLightColors = [
+//   highlightPurple,
+//   highlightRed,
+//   highlightBlue,
+//   highlightGreen,
+//   0xFFE2E2E2,
+// ];
+
+// const annotateDarkColors = [
+//   highlightDarkPurple,
+//   highlightDarkRed,
+//   highlightDarkBlue,
+//   highlightDarkGreen,
+//   0xFF8A8A8A,
+// ];
 
 // const List<Color> annotateLightColors = [
 //   Color(0xFFE7C4FF),

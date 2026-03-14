@@ -5,118 +5,166 @@ import 'package:mushaf_mistake_marker/constants.dart';
 import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/annotator_handler.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/painters/bubble.dart';
+import 'package:mushaf_mistake_marker/objectbox/entities/element_mark_data.dart';
+import 'package:mushaf_mistake_marker/providers/buttons/theme.dart';
+import 'package:mushaf_mistake_marker/providers/objectbox/box/element_mark_data.dart';
+import 'package:mushaf_mistake_marker/providers/objectbox/box/mushaf_data.dart';
+import 'package:mushaf_mistake_marker/providers/objectbox/entities/mushaf_data.dart';
+import 'package:mushaf_mistake_marker/providers/sprite/family/cached_atlas.dart';
+import 'package:mushaf_mistake_marker/providers/sprite/family/element.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/page/rebuild.dart';
 import 'package:mushaf_mistake_marker/widgets/annotation_button.dart';
 
-class AnnotationBubble extends ConsumerWidget {
+class AnnotationBubble extends ConsumerStatefulWidget {
   const AnnotationBubble({
     super.key,
-    required this.atlasCache,
+    required this.pgIndex,
+    // required this.atlasCache,
     required this.atlasIndex,
-    required this.index,
-    required this.onTaps,
+    required this.elemId,
     this.isBubbleTop = true,
     this.trianglePos = .bottomCenter,
   });
 
-  final AtlasCache atlasCache;
+  final int pgIndex;
   final int atlasIndex;
-  final int index;
-  final List<VoidCallback> onTaps;
+  final String elemId;
   final bool isBubbleTop;
   final TrianglePosition trianglePos;
+  // final AtlasCache atlasCache;
 
-  BorderRadius getBubbleBorderRadius(TrianglePosition trianglePos) {
-    const radius = Radius.circular(8.0);
-    return switch (trianglePos) {
-      .bottomLeft => BorderRadius.only(
-        topLeft: radius,
-        topRight: radius,
-        bottomRight: radius,
-      ),
-      .bottomCenter => BorderRadius.only(
-        topLeft: radius,
-        topRight: radius,
-        bottomLeft: radius,
-        bottomRight: radius,
-      ),
-      .bottomRight => BorderRadius.only(
-        topLeft: radius,
-        topRight: radius,
-        bottomLeft: radius,
-      ),
-      .topLeft => BorderRadius.only(
-        topRight: radius,
-        bottomLeft: radius,
-        bottomRight: radius,
-      ),
-      .topCenter => BorderRadius.only(
-        topLeft: radius,
-        topRight: radius,
-        bottomLeft: radius,
-        bottomRight: radius,
-      ),
-      .topRight => BorderRadius.only(
-        topLeft: radius,
-        bottomLeft: radius,
-        bottomRight: radius,
-      ),
-    };
+  @override
+  ConsumerState<AnnotationBubble> createState() => _AnnotationBubbleState();
+}
+
+class _AnnotationBubbleState extends ConsumerState<AnnotationBubble> {
+  late final TextEditingController txtCtrl;
+  late final elemBox = ref.read(elementMarkDataBoxProvider);
+  late final mshfData = ref.read(userMushafDataProvider)!;
+  late final mshfDataBox = ref.read(mushafDataBoxProvider);
+  late final pageRebuildProv = ref.read(
+    pageRebuildProvider(widget.pgIndex).notifier,
+  );
+  late final elemProv = ref.read(elementProvider(widget.elemId).notifier);
+  late final atlasCacheProv = ref.read(
+    cachedAtlasProvider(widget.pgIndex).notifier,
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    final element = ref.read(elementProvider(widget.elemId));
+    txtCtrl = TextEditingController(text: element?.annotation ?? '');
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(pageRebuildProvider(index));
+  void dispose() {
+    txtCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final element = ref.watch(elementProvider(widget.elemId));
     final isDarkMode = Theme.of(context).brightness == .dark;
-    final colors = isDarkMode ? annotateDarkColors : annotateLightColors;
+
+    final colors = isDarkMode
+        ? annotateDarkColors['unselected']
+        : annotateLightColors['unselected'];
     final selectedColors = isDarkMode
-        ? annotateLightColors
-        : annotateDarkColors;
+        ? annotateDarkColors['selected']
+        : annotateLightColors['selected'];
     final selectedTextColor = isDarkMode ? Colors.black : Colors.white;
-    final highlight = AnnotatorHandler.highlightFromColor(
-      atlasCache.highlighColorList[atlasIndex],
-    );
 
     return Material(
       color: Colors.transparent,
       child: CustomPaint(
         painter: BubblePainter(
-          trianglePos: trianglePos,
+          trianglePos: widget.trianglePos,
           isDarkMode: isDarkMode,
         ),
         child: SizedBox(
           width: 250,
           child: Padding(
             padding: .only(
-              bottom: isBubbleTop ? 15.0 : 0.0,
-              top: isBubbleTop ? 0.0 : 15.0,
+              bottom: widget.isBubbleTop ? 15.0 : 0.0,
+              top: widget.isBubbleTop ? 0.0 : 15.0,
             ),
             child: Container(
               clipBehavior: .hardEdge,
               decoration: BoxDecoration(
-                borderRadius: getBubbleBorderRadius(trianglePos),
+                borderRadius: AnnotatorHandler.getBubbleBorderRadius(
+                  widget.trianglePos,
+                ),
               ),
               child: Column(
                 children: [
                   SizedBox(
                     height: 34,
                     child: TextField(
+                      controller: txtCtrl,
+                      onChanged: (String annotation) {
+                        if (element == null) {
+                          elemProv.addElement(
+                            key: widget.elemId,
+                            annotation: annotation,
+                          );
+                        } else {
+                          element.updateAnnotation(annotation);
+                          elemProv.updateElement(element);
+                          if (element.isEmpty) elemProv.removeElement(element);
+                        }
+
+                        atlasCacheProv.updateAnnotColor(
+                          widget.pgIndex,
+                          widget.atlasIndex,
+                          isDarkMode,
+                          element,
+                        );
+                      },
                       textAlign: .center,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         contentPadding: .only(bottom: 10),
                       ),
                     ),
                   ),
                   const Divider(thickness: 0, height: 0),
                   Row(
-                    children: .generate(annotateLabels.length, (i) {
+                    children: List.generate(annotateLabels.length, (i) {
+                      final buttonHighlight = highlightTypes[i];
+                      final isSelected = element == null
+                          ? HighlightType.unknown == buttonHighlight
+                          : element.highlight == buttonHighlight;
+
                       return AnnotationButton(
                         label: annotateLabels[i],
-                        color: colors[i],
-                        selectedColor: selectedColors[i],
+                        color: colors![i],
+                        selectedColor: selectedColors![i],
                         selectedTextColor: selectedTextColor,
-                        isSelected: highlight == highlightTypes[i],
-                        onTap: onTaps[i],
+                        isSelected: isSelected,
+                        onTap: () {
+                          if (isSelected) return;
+
+                          if (element == null) {
+                            elemProv.addElement(
+                              key: widget.elemId,
+                              highlight: buttonHighlight,
+                            );
+                          } else {
+                            element.updateHighlight(buttonHighlight);
+                            elemProv.updateElement(element);
+                            if (element.isEmpty) {
+                              elemProv.removeElement(element);
+                            }
+                          }
+
+                          atlasCacheProv.updateHighlightColor(
+                            widget.pgIndex,
+                            widget.atlasIndex,
+                            isDarkMode,
+                            element,
+                          );
+                        },
                       );
                     }),
                   ),

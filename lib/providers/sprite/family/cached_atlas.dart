@@ -2,8 +2,11 @@ import 'dart:typed_data';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/atlas_models/cache.dart';
 import 'package:mushaf_mistake_marker/constants.dart';
+import 'package:mushaf_mistake_marker/enums.dart';
+import 'package:mushaf_mistake_marker/objectbox/entities/element_mark_data.dart';
 import 'package:mushaf_mistake_marker/providers/buttons/theme.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/ele_mark_data_map.dart';
+import 'package:mushaf_mistake_marker/providers/sprite/family/page/rebuild.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/sprite.dart';
 
 final cachedAtlasProvider =
@@ -15,7 +18,7 @@ class CachedAtlasNotifier extends AutoDisposeFamilyNotifier<AtlasCache, int> {
   @override
   AtlasCache build(int index) {
     final sprites = ref.read(spriteProvider)[index].sprMnfst;
-    final elemDataMap = ref.read(sprEleDataMapProvider(index));
+    final elemDataMap = ref.read(sprElemDataMapProvider(index));
     final isDarkMode = ref.watch(themeProvider);
 
     final floatListLength = sprites.length * 4;
@@ -58,7 +61,7 @@ class CachedAtlasNotifier extends AutoDisposeFamilyNotifier<AtlasCache, int> {
 
       final elem = elemDataMap[id];
 
-      colorList[i] = elem?.annotation == null ? defaultMarkColor : blueInt;
+      colorList[i] = elem?.annotation == null ? defaultMarkColor : greyInt;
 
       highlightColorList[i] = switch (elem?.highlight) {
         .doubt => activeHighlightColors[0],
@@ -77,4 +80,74 @@ class CachedAtlasNotifier extends AutoDisposeFamilyNotifier<AtlasCache, int> {
       highlighColorList: highlightColorList,
     );
   }
+
+  void updateHighlightColor(
+    int pgIndex,
+    int atlasIndex,
+    bool isDarkMode,
+    ElementMarkData? element,
+  ) {
+    final pageRebuildProv = ref.read(pageRebuildProvider(pgIndex).notifier);
+
+    late final int highlightColor;
+
+    if (element == null) {
+      highlightColor = transparentColor;
+    } else {
+      highlightColor = getHighlightColor(
+        element.highlightColorIndex,
+        isDarkMode,
+      );
+    }
+
+    state.highlighColorList[atlasIndex] = highlightColor;
+
+    pageRebuildProv.update();
+  }
+
+  void updateAnnotColor(
+    int pgIndex,
+    int atlasIndex,
+    bool isDarkMode,
+    ElementMarkData? element,
+  ) {
+    final defaultColor = isDarkMode ? whiteInt : blackInt;
+
+    if (element == null) {
+      state.elemColorList[atlasIndex] = defaultColor;
+    } else {
+      final noAnnotation =
+          element.annotation == null || element.annotation == '';
+
+      state.elemColorList[atlasIndex] = noAnnotation ? defaultColor : blueInt;
+    }
+
+    ref.read(pageRebuildProvider(pgIndex).notifier).update();
+  }
+
+  void updateColor({
+    required int atlasIndex,
+    required int pgIndex,
+    required ElementMarkData? element,
+    required bool isDarkMode,
+  }) {
+    if (element == null) return;
+
+    final highlightColor = getHighlightColor(
+      element.highlightColorIndex,
+      isDarkMode,
+    );
+    state.highlighColorList[atlasIndex] = highlightColor;
+
+    final defaultAnnotateColor = isDarkMode ? whiteInt : blackInt;
+    state.elemColorList[atlasIndex] = element.annotation == null
+        ? defaultAnnotateColor
+        : greyInt;
+
+    ref.read(pageRebuildProvider(pgIndex).notifier).update();
+  }
+
+  int getHighlightColor(int colorIndex, bool isDarkMode) => isDarkMode
+      ? highlightDarkColors[colorIndex]
+      : highlightColors[colorIndex];
 }
