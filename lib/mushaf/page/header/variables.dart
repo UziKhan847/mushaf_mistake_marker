@@ -1,4 +1,4 @@
-final Map<int, int> surahStartPage = {
+const Map<int, int> surahStartPage = {
   1: 1,
   2: 2,
   3: 50,
@@ -115,7 +115,7 @@ final Map<int, int> surahStartPage = {
   114: 604,
 };
 
-final Map<int, int> juzStartPage = {
+const Map<int, int> juzStartPage = {
   1: 1,
   2: 22,
   3: 42,

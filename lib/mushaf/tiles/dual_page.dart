@@ -31,15 +31,17 @@ class MushafDualPageTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final (pageOneIndex, pageTwoIndex) = (
-      dualPageIndex.first,
-      dualPageIndex.last,
-    );
+    final pageOneIndex = dualPageIndex.first;
+    final pageTwoIndex = dualPageIndex.last;
 
-    final (pageOne, pageTwo) = (
-      {'w': pageData.first.pSize!.first, 'h': pageData.first.pSize!.last},
-      {'w': pageData.last.pSize!.first, 'h': pageData.last.pSize!.last},
-    );
+    final pageOne = {
+      'w': pageData.first.pSize!.first,
+      'h': pageData.first.pSize!.last,
+    };
+    final pageTwo = {
+      'w': pageData.last.pSize!.first,
+      'h': pageData.last.pSize!.last,
+    };
 
     final (p1w, p1h) = getWH(pageOne['w'] as double, pageOne['h'] as double);
     final (p2w, p2h) = getWH(pageTwo['w'] as double, pageTwo['h'] as double);
@@ -52,23 +54,19 @@ class MushafDualPageTile extends StatelessWidget {
           minWidth: constraints.maxWidth,
         ),
         child: Row(
-          mainAxisAlignment: .spaceEvenly,
+          mainAxisAlignment: .center,
           children: [
-            Column(
-              children: [
-                SurahNumberHeader(currentPgIndex: pageTwoIndex),
-                PageNumberHeader(
-                  currentPgIndex: pageTwoIndex,
-                  pageSide: .leftSide,
-                ),
-              ],
-            ),
             MushafPageScreen(
               w: p2w,
               h: p2h,
               pageW: pageTwo['w'] as double,
               pageH: pageTwo['h'] as double,
               index: dualPageIndex.last,
+            ),
+            SizedBox(
+              width: 1,
+              height: constraints.maxHeight,
+              child: ColoredBox(color: Colors.grey),
             ),
             MushafPageScreen(
               w: p1w,
@@ -77,15 +75,15 @@ class MushafDualPageTile extends StatelessWidget {
               pageH: pageOne['h'] as double,
               index: dualPageIndex.first,
             ),
-            Column(
-              children: [
-                SurahNumberHeader(currentPgIndex: pageOneIndex),
-                PageNumberHeader(
-                  currentPgIndex: pageOneIndex,
-                  pageSide: .rightSide,
-                ),
-              ],
-            ),
+            // Column(
+            //   children: [
+            //     SurahNumberHeader(currentPgIndex: pageOneIndex),
+            //     PageNumberHeader(
+            //       currentPgIndex: pageOneIndex,
+            //       pageSide: .rightSide,
+            //     ),
+            //   ],
+            // ),
           ],
         ),
       ),
