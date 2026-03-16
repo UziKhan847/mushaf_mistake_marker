@@ -34,17 +34,11 @@ class MushafDualPageTile extends StatelessWidget {
     final pageOneIndex = dualPageIndex.first;
     final pageTwoIndex = dualPageIndex.last;
 
-    final pageOne = {
-      'w': pageData.first.pSize!.first,
-      'h': pageData.first.pSize!.last,
-    };
-    final pageTwo = {
-      'w': pageData.last.pSize!.first,
-      'h': pageData.last.pSize!.last,
-    };
-
-    final (p1w, p1h) = getWH(pageOne['w'] as double, pageOne['h'] as double);
-    final (p2w, p2h) = getWH(pageTwo['w'] as double, pageTwo['h'] as double);
+    final (p1w, p1h) = getWH(
+      pageData.first.pSize![0],
+      pageData.first.pSize![1],
+    );
+    final (p2w, p2h) = getWH(pageData.last.pSize![0], pageData.last.pSize![1]);
 
     return SingleChildScrollView(
       scrollDirection: .vertical,
@@ -54,14 +48,19 @@ class MushafDualPageTile extends StatelessWidget {
           minWidth: constraints.maxWidth,
         ),
         child: Row(
-          mainAxisAlignment: .center,
+          mainAxisAlignment: .spaceEvenly,
           children: [
+            SizedBox(
+              width: 20,
+              height: constraints.maxHeight,
+              child: ColoredBox(color: Colors.grey),
+            ),
             MushafPageScreen(
               w: p2w,
               h: p2h,
-              pageW: pageTwo['w'] as double,
-              pageH: pageTwo['h'] as double,
-              index: dualPageIndex.last,
+              pageW: pageData[1].pSize![0],
+              pageH: pageData[1].pSize![1],
+              index: dualPageIndex[1],
             ),
             SizedBox(
               width: 1,
@@ -71,19 +70,15 @@ class MushafDualPageTile extends StatelessWidget {
             MushafPageScreen(
               w: p1w,
               h: p1h,
-              pageW: pageOne['w'] as double,
-              pageH: pageOne['h'] as double,
-              index: dualPageIndex.first,
+              pageW: pageData[0].pSize![0],
+              pageH: pageData[0].pSize![1],
+              index: dualPageIndex[0],
             ),
-            // Column(
-            //   children: [
-            //     SurahNumberHeader(currentPgIndex: pageOneIndex),
-            //     PageNumberHeader(
-            //       currentPgIndex: pageOneIndex,
-            //       pageSide: .rightSide,
-            //     ),
-            //   ],
-            // ),
+            SizedBox(
+              width: 20,
+              height: constraints.maxHeight,
+              child: ColoredBox(color: Colors.grey),
+            ),
           ],
         ),
       ),

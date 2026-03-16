@@ -10,28 +10,12 @@ class MushafSinglePageTile extends StatelessWidget {
     super.key,
     required this.pageData,
     required this.constraints,
-    // required this.isPortrait,
     required this.index,
   });
 
   final int index;
   final PageData pageData;
   final BoxConstraints constraints;
-  // final bool isPortrait;
-
-  bool elemBounds({
-    required double top,
-    required double bottom,
-    required double left,
-    required double right,
-    required double scaledX,
-    required double scaledY,
-  }) {
-    return scaledX >= left &&
-        scaledY >= top &&
-        scaledX <= right &&
-        scaledY <= bottom;
-  }
 
   (double, double) getWH(double pageW, double pageH, bool isPortrait) {
     double w = constraints.maxWidth * 0.9;
@@ -48,10 +32,10 @@ class MushafSinglePageTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isPortrait =
-        MediaQuery.of(context).orientation == Orientation.portrait;
+    final isPortrait = MediaQuery.of(context).orientation == .portrait;
 
-    final (pageW, pageH) = (pageData.pSize!.first, pageData.pSize!.last);
+    final pageW = pageData.pSize![0];
+    final pageH = pageData.pSize![1];
 
     final (w, h) = getWH(pageW, pageH, isPortrait);
 
