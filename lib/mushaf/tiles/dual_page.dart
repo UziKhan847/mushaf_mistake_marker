@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mushaf_mistake_marker/mushaf/page/header/page_number.dart';
-import 'package:mushaf_mistake_marker/mushaf/page/header/surah_number.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/screen.dart';
 import 'package:mushaf_mistake_marker/page_data/page_data.dart';
 
@@ -31,8 +29,8 @@ class MushafDualPageTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pageOneIndex = dualPageIndex.first;
-    final pageTwoIndex = dualPageIndex.last;
+    // final pageOneIndex = dualPageIndex[0];
+    // final pageTwoIndex = dualPageIndex[1];
 
     final (p1w, p1h) = getWH(
       pageData.first.pSize![0],
