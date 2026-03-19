@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/screen.dart';
 import 'package:mushaf_mistake_marker/page_data/page_data.dart';
+import 'package:mushaf_mistake_marker/widgets/margin_lantern.dart';
 
 class MushafDualPageTile extends StatelessWidget {
   const MushafDualPageTile({
@@ -48,11 +49,7 @@ class MushafDualPageTile extends StatelessWidget {
         child: Row(
           mainAxisAlignment: .spaceEvenly,
           children: [
-            SizedBox(
-              width: 20,
-              height: constraints.maxHeight,
-              child: ColoredBox(color: Colors.grey),
-            ),
+            MarginLantern(),
             MushafPageScreen(
               w: p2w,
               h: p2h,
@@ -72,11 +69,7 @@ class MushafDualPageTile extends StatelessWidget {
               pageH: pageData[0].pSize![1],
               index: dualPageIndex[0],
             ),
-            SizedBox(
-              width: 20,
-              height: constraints.maxHeight,
-              child: ColoredBox(color: Colors.grey),
-            ),
+            MarginLantern(),
           ],
         ),
       ),

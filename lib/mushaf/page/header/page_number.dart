@@ -147,8 +147,8 @@ class PageNumberHeader extends ConsumerWidget {
                             '$itemPgNum',
                             style: TextStyle(
                               fontWeight: isSelected
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
+                                  ? .bold
+                                  : .normal,
                             ),
                           ),
                         ),
@@ -163,8 +163,8 @@ class PageNumberHeader extends ConsumerWidget {
         child: Text(
           '${currentPgIndex + 1}',
           style: const TextStyle(
-            decoration: TextDecoration.underline,
-            decorationStyle: TextDecorationStyle.dashed,
+            decoration: .underline,
+            decorationStyle: .dashed,
           ),
         ),
       ),

@@ -120,9 +120,7 @@ class JuzNumberHeader extends ConsumerWidget {
                           child: Text(
                             'Juz ${index + 1}',
                             style: TextStyle(
-                              fontWeight: isSelected
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
+                              fontWeight: isSelected ? .bold : .normal,
                             ),
                           ),
                         ),
@@ -137,8 +135,8 @@ class JuzNumberHeader extends ConsumerWidget {
         child: Text(
           'Juz $currentJuzNum',
           style: const TextStyle(
-            decoration: TextDecoration.underline,
-            decorationStyle: TextDecorationStyle.dashed,
+            decoration: .underline,
+            decorationStyle: .dashed,
           ),
         ),
       ),

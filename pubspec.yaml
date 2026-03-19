@@ -46,7 +46,8 @@ flutter:
     - assets/sprite_manifests/
     - assets/sprite_sheets_webp/
     - assets/icons/
-    - assets/images/dome.png
+    - assets/images/margin_lantern.png
+    - assets/images/margin_lantern_2.png
 
   fonts:
     - family: ScheherazadeNew

@@ -57,31 +57,6 @@ class _MushafPagerState extends ConsumerState<MushafPageViewBuilder>
       },
       itemCount: dualPgMode ? 302 : 604,
       itemBuilder: (_, index) {
-        // return SingleChildScrollView(
-        //   scrollDirection: .vertical,
-        //   child: Builder(
-        //     builder: (context) {
-        //       if (dualPgMode) {
-        //         final rightPage = index * 2;
-        //         final leftPage = rightPage + 1;
-
-        //         return MushafDualPageTile(
-        //           constraints: widget.constraints,
-        //           pageData: [
-        //             pages.pagesData[rightPage],
-        //             pages.pagesData[leftPage],
-        //           ],
-        //           dualPageIndex: [rightPage, leftPage],
-        //         );
-        //       }
-        //       return MushafSinglePageTile(
-        //         constraints: widget.constraints,
-        //         pageData: pages.pagesData[index],
-        //         index: index,
-        //       );
-        //     },
-        //   ),
-        // );
         if (dualPgMode) {
           final rightPage = index * 2;
           final leftPage = rightPage + 1;

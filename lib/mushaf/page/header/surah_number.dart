@@ -140,8 +140,8 @@ class SurahNumberHeader extends ConsumerWidget {
                             surahName,
                             style: TextStyle(
                               fontWeight: isSelected
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
+                                  ? .bold
+                                  : .normal,
                             ),
                           ),
                         ),
@@ -156,8 +156,8 @@ class SurahNumberHeader extends ConsumerWidget {
         child: Text(
           surahsNameList.first,
           style: const TextStyle(
-            decoration: TextDecoration.underline,
-            decorationStyle: TextDecorationStyle.dashed,
+            decoration: .underline,
+            decorationStyle: .dashed,
           ),
         ),
       ),
