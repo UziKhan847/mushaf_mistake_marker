@@ -2,7 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:mushaf_mistake_marker/extensions/string_extension.dart';
 
 class MarginLantern extends StatelessWidget {
-  const MarginLantern({super.key});
+  const MarginLantern({
+    super.key,
+    required this.pNum,
+     this.jNum = 0,
+     this.sNum = 0,
+  });
+
+  final int pNum;
+  final int jNum;
+  final int sNum;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +25,7 @@ class MarginLantern extends StatelessWidget {
       spacing: 5,
       children: [
         Text(
-          'J25'.verticalText,
+          'J$jNum'.verticalText,
           textAlign: .center,
           style: TextStyle(fontWeight: .w500, height: 1.0, fontSize: 12),
         ),
@@ -27,7 +36,7 @@ class MarginLantern extends StatelessWidget {
             alignment: .center,
             children: [
               Image.asset(
-                'assets/images/margin_lantern_2.png',
+                'assets/images/margin_lantern.png',
                 color: cs.outline.withAlpha(170),
                 width: squareW,
                 height: imgH,
@@ -37,7 +46,7 @@ class MarginLantern extends StatelessWidget {
                 child: FittedBox(
                   fit: .scaleDown,
                   child: Text(
-                    '555',
+                    '$pNum',
                     textAlign: .center,
                     style: TextStyle(fontWeight: .w500),
                   ),
@@ -47,7 +56,7 @@ class MarginLantern extends StatelessWidget {
           ),
         ),
         Text(
-          'S113'.verticalText,
+          'S$sNum'.verticalText,
           textAlign: .center,
           style: TextStyle(fontWeight: .w500, height: 1.0, fontSize: 12),
         ),

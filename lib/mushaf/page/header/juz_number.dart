@@ -6,9 +6,9 @@ import 'package:mushaf_mistake_marker/mushaf/page/header/variables.dart';
 import 'package:mushaf_mistake_marker/overlay/overlay_type/page_header_overlay.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf/page_controller.dart';
 import 'package:mushaf_mistake_marker/providers/page_mode.dart';
-import 'package:mushaf_mistake_marker/providers/sprite/family/sprite_ids.dart';
+import 'package:mushaf_mistake_marker/providers/sprite/family/page/juz.dart';
 
-class JuzNumberHeader extends ConsumerWidget {
+class JuzNumberHeader extends ConsumerStatefulWidget {
   const JuzNumberHeader({
     super.key,
     required this.currentPgIndex,
@@ -17,21 +17,15 @@ class JuzNumberHeader extends ConsumerWidget {
 
   final int currentPgIndex;
   final PageSide pageSide;
-  static const double itemHeight = 50.0;
-  static final RegExp _surahRegExp = RegExp(r'j(\d{1,2})');
+  static const itemHeight = 50.0;
 
-  static Set<int> getJuzNums({required List<String> pEleIds}) {
-    final juzNums = <int>{};
+  @override
+  ConsumerState<JuzNumberHeader> createState() => _JuzNumberHeaderState();
+}
 
-    for (final e in pEleIds) {
-      final match = _surahRegExp.firstMatch(e);
-      if (match != null) {
-        juzNums.add(int.parse(match.group(1)!));
-      }
-    }
-
-    return juzNums;
-  }
+class _JuzNumberHeaderState extends ConsumerState<JuzNumberHeader> {
+  final LayerLink link = LayerLink();
+  final GlobalKey widgetKey = GlobalKey();
 
   bool isOnJuzStartPage(int currentPg, int clickedIndex, Set<int> juzNums) {
     final clickedJuzNum = juzNums.firstWhere(
@@ -47,20 +41,14 @@ class JuzNumberHeader extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final mushafPgCtrlProv = ref.read(mushafPgCtrlProvider.notifier);
     final dualPageMode = ref.watch(pageModeProvider);
-    final pageElementIds = ref.watch(spriteIdsProvider(currentPgIndex));
+    final juzNums = ref.watch(juzProvider(widget.currentPgIndex));
 
-    if (pageElementIds == null) return const SizedBox.shrink();
-
-    final juzNums = getJuzNums(pEleIds: pageElementIds);
-    if (juzNums.isEmpty) return const SizedBox.shrink();
+    if (juzNums == null || juzNums.isEmpty) return const SizedBox.shrink();
 
     final currentJuzNum = juzNums.last;
-
-    final link = LayerLink();
-    final widgetKey = GlobalKey();
 
     return CompositedTransformTarget(
       link: link,
@@ -81,7 +69,7 @@ class JuzNumberHeader extends ConsumerWidget {
                 link: link,
                 initialIndex: juzNums.last - 1,
                 widgetKey: widgetKey,
-                itemHeight: itemHeight,
+                itemHeight: JuzNumberHeader.itemHeight,
                 itemCount: 30,
                 itemBuilder: (context, index) {
                   final isSelected = currentJuzNum == index + 1;
@@ -96,7 +84,7 @@ class JuzNumberHeader extends ConsumerWidget {
                         overlay = null;
 
                         final isOnStrtPg = isOnJuzStartPage(
-                          currentPgIndex + 1,
+                          widget.currentPgIndex + 1,
                           index,
                           juzNums,
                         );
@@ -115,7 +103,7 @@ class JuzNumberHeader extends ConsumerWidget {
                         );
                       },
                       child: SizedBox(
-                        height: itemHeight,
+                        height: JuzNumberHeader.itemHeight,
                         child: Center(
                           child: Text(
                             'Juz ${index + 1}',

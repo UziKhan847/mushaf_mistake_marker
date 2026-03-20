@@ -6,11 +6,10 @@ import 'package:mushaf_mistake_marker/mushaf/page/header/variables.dart';
 import 'package:mushaf_mistake_marker/overlay/overlay_type/page_header_overlay.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf/page_controller.dart';
 import 'package:mushaf_mistake_marker/providers/page_mode.dart';
-import 'package:mushaf_mistake_marker/providers/sprite/family/sprite_ids.dart';
-import 'package:mushaf_mistake_marker/surah/surah.dart';
+import 'package:mushaf_mistake_marker/providers/sprite/family/page/surahs.dart';
 import 'package:mushaf_mistake_marker/surah/surah_names_data.dart';
 
-class SurahNumberHeader extends ConsumerWidget {
+class SurahNumberHeader extends ConsumerStatefulWidget {
   const SurahNumberHeader({
     super.key,
     required this.currentPgIndex,
@@ -19,25 +18,16 @@ class SurahNumberHeader extends ConsumerWidget {
 
   final int currentPgIndex;
   final PageSide pageSide;
-  static const double itemHeight = 50.0;
-  static final RegExp _surahRegExp = RegExp(r's(\d{1,3})');
+  static const itemHeight = 50.0;
+  static final surahRegExp = RegExp(r's(\d{1,3})');
 
-  Set<int> getSurahNums({required List<String> pEleIds}) {
-    final surahNums = <int>{};
+  @override
+  ConsumerState<SurahNumberHeader> createState() => _SurahNumberHeaderState();
+}
 
-    for (final e in pEleIds) {
-      final match = _surahRegExp.matchAsPrefix(e);
-      if (match != null) {
-        surahNums.add(int.parse(match.group(1)!));
-      }
-    }
-
-    return surahNums;
-  }
-
-  List<Surah> getSurahs(Set<int> surahNums) {
-    return surahNums.map((n) => Surah.fromJson(surahsData[n - 1])).toList();
-  }
+class _SurahNumberHeaderState extends ConsumerState<SurahNumberHeader> {
+  final LayerLink link = LayerLink();
+  final GlobalKey widgetKey = GlobalKey();
 
   bool isOnSurahStartPage(int currentPg, int clickedIndex, Set<int> surahNums) {
     final clickedSurahNum = surahNums.firstWhere(
@@ -53,31 +43,23 @@ class SurahNumberHeader extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final mushafPgCtrlProv = ref.read(mushafPgCtrlProvider.notifier);
     final dualPageMode = ref.watch(pageModeProvider);
-    final pageElementIds = ref.watch(spriteIdsProvider(currentPgIndex));
+    final surahs = ref.watch(pageSurahsProvider(widget.currentPgIndex));
 
-    if (pageElementIds == null) return const SizedBox.shrink();
-
-    final surahNums = getSurahNums(pEleIds: pageElementIds);
-    if (surahNums.isEmpty) return const SizedBox.shrink();
-
-    final surahs = getSurahs(surahNums);
-    if (surahs.isEmpty) return const SizedBox.shrink();
+    if (surahs == null || surahs.isEmpty) return const SizedBox.shrink();
 
     final surahsListLength = surahs.length;
     final surahsNameList = <String>{};
+    final surahNums = <int>{};
 
     for (int i = 0; i < surahsListLength; i++) {
       final surah = surahs[i];
 
       surahsNameList.add(surah.name);
+      surahNums.add(surah.number);
     }
-
-
-    final link = LayerLink();
-    final widgetKey = GlobalKey();
 
     return CompositedTransformTarget(
       link: link,
@@ -98,7 +80,7 @@ class SurahNumberHeader extends ConsumerWidget {
                 link: link,
                 initialIndex: surahNums.first - 1,
                 widgetKey: widgetKey,
-                itemHeight: itemHeight,
+                itemHeight: SurahNumberHeader.itemHeight,
                 itemCount: 114,
                 itemBuilder: (context, index) {
                   final surahName = surahsData[index]['name'] as String;
@@ -114,7 +96,7 @@ class SurahNumberHeader extends ConsumerWidget {
                         overlay = null;
 
                         final isOnStrtPg = isOnSurahStartPage(
-                          currentPgIndex + 1,
+                          widget.currentPgIndex + 1,
                           index,
                           surahNums,
                         );
@@ -134,14 +116,12 @@ class SurahNumberHeader extends ConsumerWidget {
                         );
                       },
                       child: SizedBox(
-                        height: itemHeight,
+                        height: SurahNumberHeader.itemHeight,
                         child: Center(
                           child: Text(
                             surahName,
                             style: TextStyle(
-                              fontWeight: isSelected
-                                  ? .bold
-                                  : .normal,
+                              fontWeight: isSelected ? .bold : .normal,
                             ),
                           ),
                         ),

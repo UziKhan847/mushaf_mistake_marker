@@ -7,11 +7,11 @@ import 'package:mushaf_mistake_marker/providers/mushaf/page_controller.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/entities/settings.dart';
 import 'package:mushaf_mistake_marker/providers/page_mode.dart';
 
-class PageNumberHeader extends ConsumerWidget {
+class PageNumberHeader extends ConsumerStatefulWidget {
   const PageNumberHeader({
     super.key,
     required this.currentPgIndex,
-    this.pageSide = PageSide.none,
+    this.pageSide = .none,
   });
 
   final int currentPgIndex;
@@ -20,6 +20,14 @@ class PageNumberHeader extends ConsumerWidget {
   static const double itemHeight = 50.0;
   static const int singlePageItemCount = 604;
   static const int dualPageItemCount = 302;
+
+  @override
+  ConsumerState<PageNumberHeader> createState() => _PageNumberHeaderState();
+}
+
+class _PageNumberHeaderState extends ConsumerState<PageNumberHeader> {
+  final LayerLink link = LayerLink();
+  final GlobalKey widgetKey = GlobalKey();
 
   int getItemPgNumFromIndex({
     required int itemIndex,
@@ -63,13 +71,10 @@ class PageNumberHeader extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final mushafPgCtrlProv = ref.read(mushafPgCtrlProvider.notifier);
     final userInitPage = ref.read(userSettingsProvider)!.initPage;
     final dualPageMode = ref.watch(pageModeProvider);
-
-    final link = LayerLink();
-    final widgetKey = GlobalKey();
 
     return CompositedTransformTarget(
       link: link,
@@ -79,7 +84,7 @@ class PageNumberHeader extends ConsumerWidget {
           OverlayEntry? overlay;
 
           final initialIndex = initialIndexFromPage(
-            currentPgIndex: currentPgIndex,
+            currentPgIndex: widget.currentPgIndex,
             dualPageMode: dualPageMode,
           );
 
@@ -93,24 +98,24 @@ class PageNumberHeader extends ConsumerWidget {
             children: [
               PageHeaderOverlay(
                 link: link,
-                itemHeight: itemHeight,
+                itemHeight: PageNumberHeader.itemHeight,
                 initialIndex: initialIndex,
                 widgetKey: widgetKey,
                 itemCount: dualPageMode
-                    ? dualPageItemCount
-                    : singlePageItemCount,
+                    ? PageNumberHeader.dualPageItemCount
+                    : PageNumberHeader.singlePageItemCount,
                 itemBuilder: (context, itemIndex) {
                   final itemPgNum = getItemPgNumFromIndex(
                     itemIndex: itemIndex,
                     dualPageMode: dualPageMode,
-                    pageSide: pageSide,
+                    pageSide: widget.pageSide,
                   );
 
                   final isSelected = isSelectedFromPage(
                     itemIndex: itemIndex,
-                    currentPgIndex: currentPgIndex,
+                    currentPgIndex: widget.currentPgIndex,
                     dualPageMode: dualPageMode,
-                    pageSide: pageSide,
+                    pageSide: widget.pageSide,
                   );
 
                   return Material(
@@ -141,14 +146,12 @@ class PageNumberHeader extends ConsumerWidget {
                         );
                       },
                       child: SizedBox(
-                        height: itemHeight,
+                        height: PageNumberHeader.itemHeight,
                         child: Center(
                           child: Text(
                             '$itemPgNum',
                             style: TextStyle(
-                              fontWeight: isSelected
-                                  ? .bold
-                                  : .normal,
+                              fontWeight: isSelected ? .bold : .normal,
                             ),
                           ),
                         ),
@@ -161,7 +164,7 @@ class PageNumberHeader extends ConsumerWidget {
           );
         },
         child: Text(
-          '${currentPgIndex + 1}',
+          '${widget.currentPgIndex + 1}',
           style: const TextStyle(
             decoration: .underline,
             decorationStyle: .dashed,

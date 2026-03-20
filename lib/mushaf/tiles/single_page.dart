@@ -18,8 +18,8 @@ class MushafSinglePageTile extends StatelessWidget {
   final BoxConstraints constraints;
 
   (double, double) getWH(double pageW, double pageH, bool isPortrait) {
-    double w = constraints.maxWidth * 0.9;
-    double h = constraints.maxHeight * 0.875;
+    var w = constraints.maxWidth * 0.9;
+    var h = constraints.maxHeight * 0.875;
 
     if (isPortrait && (h * (pageW / pageH) < w)) {
       w = h * (pageW / pageH);

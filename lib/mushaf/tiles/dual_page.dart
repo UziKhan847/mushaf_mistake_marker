@@ -16,8 +16,8 @@ class MushafDualPageTile extends StatelessWidget {
   final BoxConstraints constraints;
 
   (double, double) getWH(double pageW, double pageH) {
-    double w = constraints.maxWidth * 0.39;
-    double h = constraints.maxHeight * 0.95;
+    var w = constraints.maxWidth * 0.39;
+    var h = constraints.maxHeight * 0.95;
 
     if (h * (pageW / pageH) > w) {
       h = w * (pageH / pageW);
@@ -30,8 +30,8 @@ class MushafDualPageTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final pageOneIndex = dualPageIndex[0];
-    // final pageTwoIndex = dualPageIndex[1];
+    final pageOneIndex = dualPageIndex[0];
+    final pageTwoIndex = dualPageIndex[1];
 
     final (p1w, p1h) = getWH(
       pageData.first.pSize![0],
@@ -49,7 +49,7 @@ class MushafDualPageTile extends StatelessWidget {
         child: Row(
           mainAxisAlignment: .spaceEvenly,
           children: [
-            MarginLantern(),
+            MarginLantern(pNum: pageTwoIndex + 1),
             MushafPageScreen(
               w: p2w,
               h: p2h,
@@ -69,7 +69,7 @@ class MushafDualPageTile extends StatelessWidget {
               pageH: pageData[0].pSize![1],
               index: dualPageIndex[0],
             ),
-            MarginLantern(),
+            MarginLantern(pNum: pageOneIndex + 1),
           ],
         ),
       ),
