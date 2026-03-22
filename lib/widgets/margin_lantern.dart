@@ -14,7 +14,7 @@ class MarginLantern extends ConsumerWidget {
     final surahs = ref.watch(pageSurahsProvider(pIndex));
     final juzNums = ref.watch(juzProvider(pIndex));
     final cs = Theme.of(context).colorScheme;
-    final isDarkMode = Theme.of(context).brightness == .dark;
+    final isDarkMode = Theme.brightnessOf(context) == .dark;
     const squareW = 30.0;
     const imgH = squareW * 3;
 

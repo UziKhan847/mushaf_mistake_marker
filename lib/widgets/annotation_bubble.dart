@@ -61,7 +61,7 @@ class _AnnotationBubbleState extends ConsumerState<AnnotationBubble> {
   @override
   Widget build(BuildContext context) {
     final element = ref.watch(elementProvider(widget.elemId));
-    final isDarkMode = Theme.of(context).brightness == .dark;
+    final isDarkMode = Theme.brightnessOf(context) == .dark;
 
     final colors = isDarkMode
         ? annotateDarkColors['unselected']

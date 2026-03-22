@@ -13,7 +13,7 @@ class AppThemeItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final appThemeProv = ref.read(appThemeProvider.notifier);
     final theme = ref.watch(appThemeProvider);
-    final isDarkMode = Theme.of(context).brightness == .dark;
+    final isDarkMode = Theme.brightnessOf(context) == .dark;
     final iconColor = isDarkMode ? theme.darkSeed : theme.lightSeed;
 
     return NavBarItem(

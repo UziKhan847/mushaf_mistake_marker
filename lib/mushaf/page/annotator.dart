@@ -37,7 +37,7 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
   @override
   Widget build(BuildContext context) {
     final atlasCache = ref.read(cachedAtlasProvider(widget.index));
-    final isDarkMode = Theme.of(context).brightness == .dark;
+    final isDarkMode = Theme.brightnessOf(context) == .dark;
     final pageRebuild = ref.watch(pageRebuildProvider(widget.index));
 
     return GestureDetector(
