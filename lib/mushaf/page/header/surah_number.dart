@@ -26,7 +26,6 @@ class SurahNumberHeader extends ConsumerStatefulWidget {
 }
 
 class _SurahNumberHeaderState extends ConsumerState<SurahNumberHeader> {
-  final LayerLink link = LayerLink();
   final GlobalKey widgetKey = GlobalKey();
 
   bool isOnSurahStartPage(int currentPg, int clickedIndex, Set<int> surahNums) {
@@ -61,84 +60,80 @@ class _SurahNumberHeaderState extends ConsumerState<SurahNumberHeader> {
       surahNums.add(surah.number);
     }
 
-    return CompositedTransformTarget(
-      link: link,
-      child: TextButton(
-        key: widgetKey,
-        onPressed: () {
-          OverlayEntry? overlay;
-
-          overlay = context.insertAnimatedOverlay(
-            backdropOn: true,
-            modalBarrierOn: true,
-            onTapOutside: () {
-              overlay?.remove();
-              overlay = null;
-            },
-            children: [
-              PageHeaderOverlay(
-                link: link,
-                initialIndex: surahNums.first - 1,
-                widgetKey: widgetKey,
-                itemHeight: SurahNumberHeader.itemHeight,
-                itemCount: 114,
-                itemBuilder: (context, index) {
-                  final surahName = surahsData[index]['name'] as String;
-                  final isSelected = surahsNameList.contains(surahName);
-
-                  return Material(
-                    color: isSelected
-                        ? Theme.of(context).colorScheme.primary.withAlpha(38)
-                        : Colors.transparent,
-                    child: InkWell(
-                      onTap: () {
-                        overlay?.remove();
-                        overlay = null;
-
-                        final isOnStrtPg = isOnSurahStartPage(
-                          widget.currentPgIndex + 1,
-                          index,
-                          surahNums,
-                        );
-
-                        if (isOnStrtPg) return;
-
-                        final targetUserPage = surahStartPage[index + 1]! - 1;
-
-                        final targetIndex = dualPageMode
-                            ? targetUserPage ~/ 2
-                            : targetUserPage;
-
-                        mushafPgCtrlProv.navigateToPage(
-                          targetUserPage: targetUserPage,
-                          targetIndex: targetIndex,
-                          isSwipe: false,
-                        );
-                      },
-                      child: SizedBox(
-                        height: SurahNumberHeader.itemHeight,
-                        child: Center(
-                          child: Text(
-                            surahName,
-                            style: TextStyle(
-                              fontWeight: isSelected ? .bold : .normal,
-                            ),
+    return TextButton(
+      key: widgetKey,
+      onPressed: () {
+        OverlayEntry? overlay;
+    
+        overlay = context.insertAnimatedOverlay(
+          backdropOn: true,
+          modalBarrierOn: true,
+          onTapOutside: () {
+            overlay?.remove();
+            overlay = null;
+          },
+          children: [
+            PageHeaderOverlay(
+              initialIndex: surahNums.first - 1,
+              widgetKey: widgetKey,
+              itemHeight: SurahNumberHeader.itemHeight,
+              itemCount: 114,
+              itemBuilder: (context, index) {
+                final surahName = surahsData[index]['name'] as String;
+                final isSelected = surahsNameList.contains(surahName);
+    
+                return Material(
+                  color: isSelected
+                      ? Theme.of(context).colorScheme.primary.withAlpha(38)
+                      : Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      overlay?.remove();
+                      overlay = null;
+    
+                      final isOnStrtPg = isOnSurahStartPage(
+                        widget.currentPgIndex + 1,
+                        index,
+                        surahNums,
+                      );
+    
+                      if (isOnStrtPg) return;
+    
+                      final targetUserPage = surahStartPage[index + 1]! - 1;
+    
+                      final targetIndex = dualPageMode
+                          ? targetUserPage ~/ 2
+                          : targetUserPage;
+    
+                      mushafPgCtrlProv.navigateToPage(
+                        targetUserPage: targetUserPage,
+                        targetIndex: targetIndex,
+                        isSwipe: false,
+                      );
+                    },
+                    child: SizedBox(
+                      height: SurahNumberHeader.itemHeight,
+                      child: Center(
+                        child: Text(
+                          surahName,
+                          style: TextStyle(
+                            fontWeight: isSelected ? .bold : .normal,
                           ),
                         ),
                       ),
                     ),
-                  );
-                },
-              ),
-            ],
-          );
-        },
-        child: Text(
-          surahsNameList.first,
-          style: const TextStyle(
-            decoration: .underline,
-            decorationStyle: .dashed,
-          ),
+                  ),
+                );
+              },
+            ),
+          ],
+        );
+      },
+      child: Text(
+        surahsNameList.first,
+        style: const TextStyle(
+          decoration: .underline,
+          decorationStyle: .dashed,
         ),
       ),
     );

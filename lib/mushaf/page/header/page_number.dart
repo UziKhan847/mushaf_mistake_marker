@@ -26,7 +26,6 @@ class PageNumberHeader extends ConsumerStatefulWidget {
 }
 
 class _PageNumberHeaderState extends ConsumerState<PageNumberHeader> {
-  final LayerLink link = LayerLink();
   final GlobalKey widgetKey = GlobalKey();
 
   int getItemPgNumFromIndex({
@@ -76,99 +75,95 @@ class _PageNumberHeaderState extends ConsumerState<PageNumberHeader> {
     final userInitPage = ref.read(userSettingsProvider)!.initPage;
     final dualPageMode = ref.watch(pageModeProvider);
 
-    return CompositedTransformTarget(
-      link: link,
-      child: TextButton(
-        key: widgetKey,
-        onPressed: () {
-          OverlayEntry? overlay;
-
-          final initialIndex = initialIndexFromPage(
-            currentPgIndex: widget.currentPgIndex,
-            dualPageMode: dualPageMode,
-          );
-
-          overlay = context.insertAnimatedOverlay(
-            backdropOn: true,
-            modalBarrierOn: true,
-            onTapOutside: () {
-              overlay?.remove();
-              overlay = null;
-            },
-            children: [
-              PageHeaderOverlay(
-                link: link,
-                itemHeight: PageNumberHeader.itemHeight,
-                initialIndex: initialIndex,
-                widgetKey: widgetKey,
-                itemCount: dualPageMode
-                    ? PageNumberHeader.dualPageItemCount
-                    : PageNumberHeader.singlePageItemCount,
-                itemBuilder: (context, itemIndex) {
-                  final itemPgNum = getItemPgNumFromIndex(
-                    itemIndex: itemIndex,
-                    dualPageMode: dualPageMode,
-                    pageSide: widget.pageSide,
-                  );
-
-                  final isSelected = isSelectedFromPage(
-                    itemIndex: itemIndex,
-                    currentPgIndex: widget.currentPgIndex,
-                    dualPageMode: dualPageMode,
-                    pageSide: widget.pageSide,
-                  );
-
-                  return Material(
-                    color: isSelected
-                        ? Theme.of(context).colorScheme.primary.withAlpha(38)
-                        : Colors.transparent,
-                    child: InkWell(
-                      onTap: () {
-                        overlay?.remove();
-                        overlay = null;
-
-                        if (isSelected) return;
-
-                        final targetUserPage = dualPageMode
-                            ? itemIndex * 2
-                            : itemIndex;
-
-                        final swipe = isSwipeFromPage(
-                          targetUserPage: targetUserPage,
-                          userInitPage: userInitPage,
-                          dualPageMode: dualPageMode,
-                        );
-
-                        mushafPgCtrlProv.navigateToPage(
-                          targetUserPage: targetUserPage,
-                          targetIndex: itemIndex,
-                          isSwipe: swipe,
-                        );
-                      },
-                      child: SizedBox(
-                        height: PageNumberHeader.itemHeight,
-                        child: Center(
-                          child: Text(
-                            '$itemPgNum',
-                            style: TextStyle(
-                              fontWeight: isSelected ? .bold : .normal,
-                            ),
+    return TextButton(
+      key: widgetKey,
+      onPressed: () {
+        OverlayEntry? overlay;
+    
+        final initialIndex = initialIndexFromPage(
+          currentPgIndex: widget.currentPgIndex,
+          dualPageMode: dualPageMode,
+        );
+    
+        overlay = context.insertAnimatedOverlay(
+          backdropOn: true,
+          modalBarrierOn: true,
+          onTapOutside: () {
+            overlay?.remove();
+            overlay = null;
+          },
+          children: [
+            PageHeaderOverlay(
+              itemHeight: PageNumberHeader.itemHeight,
+              initialIndex: initialIndex,
+              widgetKey: widgetKey,
+              itemCount: dualPageMode
+                  ? PageNumberHeader.dualPageItemCount
+                  : PageNumberHeader.singlePageItemCount,
+              itemBuilder: (context, itemIndex) {
+                final itemPgNum = getItemPgNumFromIndex(
+                  itemIndex: itemIndex,
+                  dualPageMode: dualPageMode,
+                  pageSide: widget.pageSide,
+                );
+    
+                final isSelected = isSelectedFromPage(
+                  itemIndex: itemIndex,
+                  currentPgIndex: widget.currentPgIndex,
+                  dualPageMode: dualPageMode,
+                  pageSide: widget.pageSide,
+                );
+    
+                return Material(
+                  color: isSelected
+                      ? Theme.of(context).colorScheme.primary.withAlpha(38)
+                      : Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      overlay?.remove();
+                      overlay = null;
+    
+                      if (isSelected) return;
+    
+                      final targetUserPage = dualPageMode
+                          ? itemIndex * 2
+                          : itemIndex;
+    
+                      final swipe = isSwipeFromPage(
+                        targetUserPage: targetUserPage,
+                        userInitPage: userInitPage,
+                        dualPageMode: dualPageMode,
+                      );
+    
+                      mushafPgCtrlProv.navigateToPage(
+                        targetUserPage: targetUserPage,
+                        targetIndex: itemIndex,
+                        isSwipe: swipe,
+                      );
+                    },
+                    child: SizedBox(
+                      height: PageNumberHeader.itemHeight,
+                      child: Center(
+                        child: Text(
+                          '$itemPgNum',
+                          style: TextStyle(
+                            fontWeight: isSelected ? .bold : .normal,
                           ),
                         ),
                       ),
                     ),
-                  );
-                },
-              ),
-            ],
-          );
-        },
-        child: Text(
-          '${widget.currentPgIndex + 1}',
-          style: const TextStyle(
-            decoration: .underline,
-            decorationStyle: .dashed,
-          ),
+                  ),
+                );
+              },
+            ),
+          ],
+        );
+      },
+      child: Text(
+        '${widget.currentPgIndex + 1}',
+        style: const TextStyle(
+          decoration: .underline,
+          decorationStyle: .dashed,
         ),
       ),
     );

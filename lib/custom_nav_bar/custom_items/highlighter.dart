@@ -9,10 +9,8 @@ class HighlighterItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (annotateModeProv, annotateMode) = (
-      ref.read(annotateModeProvider.notifier),
-      ref.watch(annotateModeProvider),
-    );
+    final annotateModeProv = ref.read(annotateModeProvider.notifier);
+    final annotateMode = ref.watch(annotateModeProvider);
 
     return NavBarItem(
       iconLabel: 'Highlight',
@@ -21,7 +19,7 @@ class HighlighterItem extends ConsumerWidget {
         annotateModeProv.switchMode(true);
       },
       selectedAsset: MyFlutterApp.highlighter,
-      unselectedAsset: MyFlutterApp.highlighter,
+      unselectedAsset: MyFlutterApp.highlighter_outlined,
     );
   }
 }

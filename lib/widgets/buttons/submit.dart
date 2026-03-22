@@ -16,7 +16,7 @@ class SubmitButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final phase = ref.read(addUserPhaseProvider);
+    final phase = ref.watch(addUserPhaseProvider);
 
     return ElevatedButton(
       onPressed: onSubmit,

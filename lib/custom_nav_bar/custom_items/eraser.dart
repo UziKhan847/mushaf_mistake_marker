@@ -9,10 +9,8 @@ class EraserItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (annotateModeProv, annotateMode) = (
-      ref.read(annotateModeProvider.notifier),
-      ref.watch(annotateModeProvider),
-    );
+    final annotateModeProv = ref.read(annotateModeProvider.notifier);
+    final annotateMode = ref.watch(annotateModeProvider);
 
     return NavBarItem(
       iconLabel: 'Eraser',
@@ -21,7 +19,7 @@ class EraserItem extends ConsumerWidget {
         annotateModeProv.switchMode(false);
       },
       selectedAsset: MyFlutterApp.eraser,
-      unselectedAsset: MyFlutterApp.eraser,
+      unselectedAsset: MyFlutterApp.eraser_outlined,
     );
   }
 }

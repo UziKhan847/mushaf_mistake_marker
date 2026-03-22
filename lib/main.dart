@@ -5,18 +5,19 @@ import 'package:mushaf_mistake_marker/app_scroll_behaviour.dart';
 import 'package:mushaf_mistake_marker/my_themes.dart';
 import 'package:mushaf_mistake_marker/objectbox/object_box.dart';
 import 'package:mushaf_mistake_marker/orientation_sync.dart';
-import 'package:mushaf_mistake_marker/providers/shared_prefs.dart';
 import 'package:mushaf_mistake_marker/providers/buttons/theme.dart';
+import 'package:mushaf_mistake_marker/providers/shared_prefs.dart';
+import 'package:mushaf_mistake_marker/providers/buttons/dark_mode.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setEnabledSystemUIMode(.immersiveSticky);
-
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   final prefs = await SharedPreferencesWithCache.create(
     cacheOptions: SharedPreferencesWithCacheOptions(
       allowList: {
         'isDarkMode',
+        'appThemeIndex',
         'dualPageToggleOn',
         'initPage',
         'userId',
@@ -28,13 +29,11 @@ Future<void> main() async {
       },
     ),
   );
-
   objectbox = await ObjectBox.create();
-
   runApp(
     ProviderScope(
       overrides: [sharedPrefsProv.overrideWithValue(prefs)],
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
@@ -44,18 +43,18 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isDarkMode = ref.watch(themeProvider);
+    final isDarkMode = ref.watch(darkModeProvider);
+    final appTheme = ref.watch(appThemeProvider);
 
     return MaterialApp(
       scrollBehavior: AppScrollBehaviour(),
-      //showPerformanceOverlay: true,
-      themeMode: isDarkMode ? .dark : .light,
-      theme: MyThemes.lightTheme,
-      darkTheme: MyThemes.darkTheme,
+      themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
+      theme: MyThemes.lightTheme(appTheme),
+      darkTheme: MyThemes.darkTheme(appTheme),
       home: Scaffold(
         resizeToAvoidBottomInset: false,
         body: OrientationSync(),
-        backgroundColor: isDarkMode ? null : Color(0xFFFFF2EB),
+        backgroundColor: isDarkMode ? null : const Color(0xFFFFF2EB),
       ),
       debugShowCheckedModeBanner: false,
     );

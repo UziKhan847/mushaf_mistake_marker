@@ -32,7 +32,7 @@ class MushafSinglePageTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isPortrait = MediaQuery.of(context).orientation == .portrait;
+    final isPortrait = MediaQuery.orientationOf(context) == .portrait;
 
     final pageW = pageData.pSize![0];
     final pageH = pageData.pSize![1];

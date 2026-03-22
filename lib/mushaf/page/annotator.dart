@@ -34,7 +34,7 @@ class MushafPageAnnotator extends ConsumerStatefulWidget {
 }
 
 class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
-   @override
+  @override
   Widget build(BuildContext context) {
     final atlasCache = ref.read(cachedAtlasProvider(widget.index));
     final isDarkMode = Theme.of(context).brightness == .dark;
@@ -71,7 +71,7 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
 
           final atlasCache = ref.read(cachedAtlasProvider(widget.index));
 
-          final scrnSize = MediaQuery.of(context).size;
+          final scrnSize = MediaQuery.sizeOf(context);
           final gp = details.globalPosition;
 
           final renderbox = context.findRenderObject() as RenderBox;

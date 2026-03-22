@@ -24,7 +24,6 @@ class JuzNumberHeader extends ConsumerStatefulWidget {
 }
 
 class _JuzNumberHeaderState extends ConsumerState<JuzNumberHeader> {
-  final LayerLink link = LayerLink();
   final GlobalKey widgetKey = GlobalKey();
 
   bool isOnJuzStartPage(int currentPg, int clickedIndex, Set<int> juzNums) {
@@ -50,82 +49,78 @@ class _JuzNumberHeaderState extends ConsumerState<JuzNumberHeader> {
 
     final currentJuzNum = juzNums.last;
 
-    return CompositedTransformTarget(
-      link: link,
-      child: TextButton(
-        key: widgetKey,
-        onPressed: () {
-          OverlayEntry? overlay;
+    return TextButton(
+      key: widgetKey,
+      onPressed: () {
+        OverlayEntry? overlay;
 
-          overlay = context.insertAnimatedOverlay(
-            backdropOn: true,
-            modalBarrierOn: true,
-            onTapOutside: () {
-              overlay?.remove();
-              overlay = null;
-            },
-            children: [
-              PageHeaderOverlay(
-                link: link,
-                initialIndex: juzNums.last - 1,
-                widgetKey: widgetKey,
-                itemHeight: JuzNumberHeader.itemHeight,
-                itemCount: 30,
-                itemBuilder: (context, index) {
-                  final isSelected = currentJuzNum == index + 1;
+        overlay = context.insertAnimatedOverlay(
+          backdropOn: true,
+          modalBarrierOn: true,
+          onTapOutside: () {
+            overlay?.remove();
+            overlay = null;
+          },
+          children: [
+            PageHeaderOverlay(
+              initialIndex: juzNums.last - 1,
+              widgetKey: widgetKey,
+              itemHeight: JuzNumberHeader.itemHeight,
+              itemCount: 30,
+              itemBuilder: (context, index) {
+                final isSelected = currentJuzNum == index + 1;
 
-                  return Material(
-                    color: isSelected
-                        ? Theme.of(context).colorScheme.primary.withAlpha(38)
-                        : Colors.transparent,
-                    child: InkWell(
-                      onTap: () {
-                        overlay?.remove();
-                        overlay = null;
+                return Material(
+                  color: isSelected
+                      ? Theme.of(context).colorScheme.primary.withAlpha(38)
+                      : Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      overlay?.remove();
+                      overlay = null;
 
-                        final isOnStrtPg = isOnJuzStartPage(
-                          widget.currentPgIndex + 1,
-                          index,
-                          juzNums,
-                        );
+                      final isOnStrtPg = isOnJuzStartPage(
+                        widget.currentPgIndex + 1,
+                        index,
+                        juzNums,
+                      );
 
-                        if (isOnStrtPg) return;
+                      if (isOnStrtPg) return;
 
-                        final targetUserPage = juzStartPage[index + 1]! - 1;
-                        final targetIndex = dualPageMode
-                            ? targetUserPage ~/ 2
-                            : targetUserPage;
+                      final targetUserPage = juzStartPage[index + 1]! - 1;
+                      final targetIndex = dualPageMode
+                          ? targetUserPage ~/ 2
+                          : targetUserPage;
 
-                        mushafPgCtrlProv.navigateToPage(
-                          targetUserPage: targetUserPage,
-                          targetIndex: targetIndex,
-                          isSwipe: false,
-                        );
-                      },
-                      child: SizedBox(
-                        height: JuzNumberHeader.itemHeight,
-                        child: Center(
-                          child: Text(
-                            'Juz ${index + 1}',
-                            style: TextStyle(
-                              fontWeight: isSelected ? .bold : .normal,
-                            ),
+                      mushafPgCtrlProv.navigateToPage(
+                        targetUserPage: targetUserPage,
+                        targetIndex: targetIndex,
+                        isSwipe: false,
+                      );
+                    },
+                    child: SizedBox(
+                      height: JuzNumberHeader.itemHeight,
+                      child: Center(
+                        child: Text(
+                          'Juz ${index + 1}',
+                          style: TextStyle(
+                            fontWeight: isSelected ? .bold : .normal,
                           ),
                         ),
                       ),
                     ),
-                  );
-                },
-              ),
-            ],
-          );
-        },
-        child: Text(
-          'Juz $currentJuzNum',
-          style: const TextStyle(
-            decoration: .underline,
-            decorationStyle: .dashed,
-          ),
+                  ),
+                );
+              },
+            ),
+          ],
+        );
+      },
+      child: Text(
+        'Juz $currentJuzNum',
+        style: const TextStyle(
+          decoration: .underline,
+          decorationStyle: .dashed,
         ),
       ),
     );

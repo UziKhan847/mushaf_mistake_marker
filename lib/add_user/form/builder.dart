@@ -10,7 +10,6 @@ class AddUserFormBuilder extends StatelessWidget {
     super.key,
     required this.colorScheme,
     required this.textTheme,
-    //required this.formKey,
     required this.textCtrl,
     required this.phase,
     this.onCancel,
@@ -21,7 +20,6 @@ class AddUserFormBuilder extends StatelessWidget {
   final TextTheme textTheme;
   final VoidCallback? onCancel;
   final VoidCallback? onSubmit;
-  //final GlobalKey<FormState> formKey;
   final TextEditingController textCtrl;
   final Phase phase;
 
@@ -38,40 +36,29 @@ class AddUserFormBuilder extends StatelessWidget {
             textTheme: textTheme,
             onCancel: onCancel,
           ),
-
           const SizedBox(height: 6),
-
           Text(
             'Enter a username to add a new account. You can update additional details later.',
             style: textTheme.bodyMedium?.copyWith(
               color: colorScheme.onSurfaceVariant,
             ),
           ),
-
           const SizedBox(height: 16),
-
           AddUserTextField(
-            //formKey: formKey,
             colorScheme: colorScheme,
             textTheme: textTheme,
             textCtrl: textCtrl,
           ),
-
           const SizedBox(height: 12),
-
           if (phase == .error) AddUserError(colorScheme: colorScheme),
-
           const SizedBox(height: 6),
-
           AddUserButtons(
             colorScheme: colorScheme,
             textTheme: textTheme,
             onCancel: onCancel,
             onSubmit: onSubmit,
           ),
-
           const SizedBox(height: 8),
-
           Text(
             'Only username is required for now.',
             style: textTheme.bodySmall?.copyWith(

@@ -10,7 +10,7 @@ import 'package:mushaf_mistake_marker/providers/objectbox/entities/mushaf_data.d
 import 'package:mushaf_mistake_marker/providers/sprite/family/cached_atlas.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/element.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/page/rebuild.dart';
-import 'package:mushaf_mistake_marker/widgets/annotation_button.dart';
+import 'package:mushaf_mistake_marker/widgets/buttons/annotation.dart';
 
 class AnnotationBubble extends ConsumerStatefulWidget {
   const AnnotationBubble({

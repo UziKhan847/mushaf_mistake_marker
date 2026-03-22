@@ -9,10 +9,8 @@ class DualPageItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (dualPgTglProv, isDualPgTglOn) = (
-      ref.read(dualPageToggleProvider.notifier),
-      ref.watch(dualPageToggleProvider),
-    );
+    final dualPgTglProv = ref.read(dualPageToggleProvider.notifier);
+    final isDualPgTglOn = ref.watch(dualPageToggleProvider);
 
     return NavBarItem(
       iconLabel: 'Dual Page',

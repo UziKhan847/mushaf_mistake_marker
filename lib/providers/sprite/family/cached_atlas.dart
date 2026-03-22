@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/atlas_models/cache.dart';
 import 'package:mushaf_mistake_marker/constants.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/element_mark_data.dart';
-import 'package:mushaf_mistake_marker/providers/buttons/theme.dart';
+import 'package:mushaf_mistake_marker/providers/buttons/dark_mode.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/ele_mark_data_map.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/page/rebuild.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/sprite.dart';
@@ -18,7 +18,7 @@ class CachedAtlasNotifier extends AutoDisposeFamilyNotifier<AtlasCache, int> {
   AtlasCache build(int index) {
     final sprites = ref.read(spriteProvider)[index].sprMnfst;
     final elemDataMap = ref.read(sprElemDataMapProvider(index));
-    final isDarkMode = ref.watch(themeProvider);
+    final isDarkMode = ref.watch(darkModeProvider);
 
     final floatListLength = sprites.length * 4;
 

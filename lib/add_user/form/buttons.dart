@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mushaf_mistake_marker/widgets/cancel_button.dart';
-import 'package:mushaf_mistake_marker/widgets/submit_button.dart';
+import 'package:mushaf_mistake_marker/widgets/buttons/cancel.dart';
+import 'package:mushaf_mistake_marker/widgets/buttons/submit.dart';
 
 class AddUserButtons extends StatelessWidget {
   const AddUserButtons({

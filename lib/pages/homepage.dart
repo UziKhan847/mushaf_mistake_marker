@@ -7,10 +7,10 @@ class Homepage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final orientation = MediaQuery.of(context).orientation;
+    final isPortrait = MediaQuery.orientationOf(context) == .portrait;
 
     return Flex(
-      direction: orientation == .portrait ? .vertical : .horizontal,
+      direction: isPortrait ? .vertical : .horizontal,
       children: [
         Expanded(
           child: LayoutBuilder(

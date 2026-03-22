@@ -26,9 +26,8 @@ class BottomSideSheetOverlay extends ConsumerWidget {
     final userId = ref.watch(userProvider).id;
     final users = ref.read(userBoxProvider).getAll();
     final radius = Radius.circular(20);
-    final mediaQ = MediaQuery.of(context);
-    final scrSize = mediaQ.size;
-    final isPortrait = mediaQ.orientation == .portrait;
+    final scrSize = MediaQuery.sizeOf(context);
+    final isPortrait = MediaQuery.orientationOf(context) == .portrait;
 
     return Positioned(
       right: isPortrait ? null : 0,

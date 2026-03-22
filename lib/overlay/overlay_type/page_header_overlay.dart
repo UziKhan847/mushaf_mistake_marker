@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class PageHeaderOverlay extends ConsumerWidget {
+class PageHeaderOverlay extends ConsumerStatefulWidget {
   const PageHeaderOverlay({
     super.key,
-    required this.link,
     required this.widgetKey,
     required this.itemCount,
     required this.itemBuilder,
@@ -15,7 +14,6 @@ class PageHeaderOverlay extends ConsumerWidget {
     this.borderRadius,
   });
 
-  final LayerLink link;
   final GlobalKey widgetKey;
   final double verticalOffset;
   final double elevation;
@@ -26,45 +24,59 @@ class PageHeaderOverlay extends ConsumerWidget {
   final BorderRadius? borderRadius;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final renderObject = widgetKey.currentContext?.findRenderObject();
-    if (renderObject == null || renderObject is! RenderBox) {
-      throw Exception(
-        'WidgetKey is not mounted or does not point to a RenderBox.',
-      );
-    }
+  ConsumerState<PageHeaderOverlay> createState() => PageHeaderOverlayState();
+}
 
-    final renderBox = renderObject;
-    final btnW = renderBox.size.width;
-    final buttonOffset = renderBox.localToGlobal(Offset.zero).dy;
-    final scrH = MediaQuery.of(context).size.height;
+class PageHeaderOverlayState extends ConsumerState<PageHeaderOverlay> {
+  late final ScrollController scrollController;
 
-    final availableHeight = scrH - buttonOffset - 20;
+  @override
+  void initState() {
+    super.initState();
+    scrollController = ScrollController(
+      initialScrollOffset: widget.initialIndex * widget.itemHeight,
+    );
+  }
 
-    return CompositedTransformFollower(
-      link: link,
-      showWhenUnlinked: false,
-      //offset: Offset(0, 0),
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final renderObject = widget.widgetKey.currentContext?.findRenderObject();
+    if (renderObject is! RenderBox) return const SizedBox.shrink();
+
+    final btnW = renderObject.size.width;
+    final globalOffset = renderObject.localToGlobal(Offset.zero);
+    final left = globalOffset.dx;
+    final top =
+        globalOffset.dy + renderObject.size.height + widget.verticalOffset;
+    final scrH = MediaQuery.sizeOf(context).height;
+    final availableHeight = scrH - top - 20;
+
+    return Positioned(
+      left: left,
+      top: top,
       child: Material(
-        clipBehavior: .hardEdge,
-        elevation: elevation,
-        borderRadius: borderRadius ?? .circular(4),
+        clipBehavior: Clip.hardEdge,
+        elevation: widget.elevation,
+        borderRadius: widget.borderRadius ?? BorderRadius.circular(4),
         color: Theme.of(context).colorScheme.surface,
         child: ConstrainedBox(
           constraints: BoxConstraints(
             maxWidth: btnW,
             maxHeight: availableHeight,
-            minHeight: itemHeight,
+            minHeight: widget.itemHeight,
           ),
           child: ListView.builder(
-            controller: ScrollController(
-              initialScrollOffset: initialIndex * itemHeight,
-            ),
-            padding: .zero,
-            shrinkWrap: true,
-            itemCount: itemCount,
-            itemExtent: itemHeight,
-            itemBuilder: itemBuilder,
+            controller: scrollController,
+            padding: EdgeInsets.zero,
+            itemCount: widget.itemCount,
+            itemExtent: widget.itemHeight,
+            itemBuilder: widget.itemBuilder,
           ),
         ),
       ),

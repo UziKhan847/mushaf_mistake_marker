@@ -8,12 +8,14 @@ class NavBarItem extends StatelessWidget {
     required this.selectedAsset,
     required this.unselectedAsset,
     required this.iconLabel,
+    this.customIconColor,
   });
 
   final bool isSelected;
   final IconData selectedAsset;
   final IconData unselectedAsset;
   final String iconLabel;
+  final Color? customIconColor;
   final VoidCallback onTap;
 
   @override
@@ -22,8 +24,6 @@ class NavBarItem extends StatelessWidget {
     final selectedColor = colorScheme.primary;
     final unselectedColor = colorScheme.onSurfaceVariant;
     final iconColor = isSelected ? selectedColor : unselectedColor;
-
-    final circleColor = isSelected ? selectedColor.withAlpha(30) : null;
 
     return Semantics(
       button: true,
@@ -36,15 +36,12 @@ class NavBarItem extends StatelessWidget {
           child: Ink(
             width: 34,
             height: 34,
-            decoration: circleColor != null
-                ? BoxDecoration(shape: .circle, color: circleColor)
-                : null,
             child: InkWell(
               onTap: onTap,
               customBorder: const CircleBorder(),
               child: Icon(
                 isSelected ? selectedAsset : unselectedAsset,
-                color: iconColor,
+                color: customIconColor ?? iconColor,
               ),
             ),
           ),

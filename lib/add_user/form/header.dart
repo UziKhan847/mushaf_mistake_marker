@@ -31,7 +31,6 @@ class AddUserHeader extends StatelessWidget {
             style: textTheme.titleLarge?.copyWith(fontWeight: .w700),
           ),
         ),
-
         IconButton(
           onPressed: onCancel,
           tooltip: 'Close',
