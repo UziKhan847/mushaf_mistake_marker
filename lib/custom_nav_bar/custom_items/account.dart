@@ -18,10 +18,8 @@ class _AccountItemState extends ConsumerState<AccountItem> {
 
   @override
   Widget build(BuildContext context) {
-    final (accNavBarProv, isAccBtnSelected) = (
-      ref.read(accountNavBtnProvider.notifier),
-      ref.watch(accountNavBtnProvider),
-    );
+    final accNavBarProv = ref.read(accountNavBtnProvider.notifier);
+    final isAccBtnSelected = ref.watch(accountNavBtnProvider);
 
     return NavBarItem(
       isSelected: isAccBtnSelected,

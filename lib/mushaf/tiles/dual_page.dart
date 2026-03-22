@@ -49,7 +49,7 @@ class MushafDualPageTile extends StatelessWidget {
         child: Row(
           mainAxisAlignment: .spaceEvenly,
           children: [
-            MarginLantern(pNum: pageTwoIndex + 1),
+            MarginLantern(pIndex: pageTwoIndex),
             MushafPageScreen(
               w: p2w,
               h: p2h,
@@ -69,7 +69,7 @@ class MushafDualPageTile extends StatelessWidget {
               pageH: pageData[0].pSize![1],
               index: dualPageIndex[0],
             ),
-            MarginLantern(pNum: pageOneIndex + 1),
+            MarginLantern(pIndex: pageOneIndex),
           ],
         ),
       ),

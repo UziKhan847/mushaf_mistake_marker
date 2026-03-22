@@ -5,14 +5,7 @@ import 'package:mushaf_mistake_marker/extensions/context_extensions.dart';
 import 'package:mushaf_mistake_marker/providers/add_user/phase.dart';
 
 class AddUserBtmSheetTile extends ConsumerStatefulWidget {
-  const AddUserBtmSheetTile({
-    super.key,
-    required this.colorScheme,
-    required this.textTheme,
-  });
-
-  final ColorScheme colorScheme;
-  final TextTheme textTheme;
+  const AddUserBtmSheetTile({super.key});
 
   @override
   ConsumerState<AddUserBtmSheetTile> createState() =>
@@ -24,16 +17,18 @@ class _AddUserBtmSheetTileState extends ConsumerState<AddUserBtmSheetTile> {
 
   void onCancel() {
     context.removeOverlayEntry(overlay);
-    // ref.read(addUserPhaseProvider.notifier).setPhase(.initial);
   }
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return Column(
       children: [
         Divider(),
         Material(
-          color: widget.colorScheme.surface,
+          color: colorScheme.surface,
           child: InkWell(
             onTap: () {
               ref.read(addUserPhaseProvider.notifier).setPhase(.initial);
@@ -45,8 +40,6 @@ class _AddUserBtmSheetTileState extends ConsumerState<AddUserBtmSheetTile> {
                 },
                 children: [
                   AddUserCard(
-                    colorScheme: widget.colorScheme,
-                    textTheme: widget.textTheme,
                     onCancel: onCancel,
                   ),
                 ],
@@ -58,11 +51,11 @@ class _AddUserBtmSheetTileState extends ConsumerState<AddUserBtmSheetTile> {
                 children: [
                   CircleAvatar(
                     radius: 20,
-                    backgroundColor: widget.colorScheme.primaryContainer,
+                    backgroundColor: colorScheme.primaryContainer,
                     child: Icon(
                       Icons.add,
                       size: 20,
-                      color: widget.colorScheme.onPrimaryContainer,
+                      color: colorScheme.onPrimaryContainer,
                     ),
                   ),
 
@@ -75,15 +68,15 @@ class _AddUserBtmSheetTileState extends ConsumerState<AddUserBtmSheetTile> {
                       children: [
                         Text(
                           'Add account',
-                          style: widget.textTheme.titleMedium?.copyWith(
+                          style: textTheme.titleMedium?.copyWith(
                             fontWeight: .w600,
                           ),
                         ),
                         const SizedBox(height: 2),
                         Text(
                           'Sign in or create another account',
-                          style: widget.textTheme.bodySmall?.copyWith(
-                            color: widget.colorScheme.onSurfaceVariant,
+                          style: textTheme.bodySmall?.copyWith(
+                            color: colorScheme.onSurfaceVariant,
                           ),
                         ),
                       ],
@@ -92,7 +85,7 @@ class _AddUserBtmSheetTileState extends ConsumerState<AddUserBtmSheetTile> {
 
                   Icon(
                     Icons.chevron_right,
-                    color: widget.colorScheme.onSurfaceVariant,
+                    color: colorScheme.onSurfaceVariant,
                   ),
                 ],
               ),

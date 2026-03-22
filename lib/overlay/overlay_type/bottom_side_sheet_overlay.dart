@@ -15,28 +15,25 @@ class BottomSideSheetOverlay extends ConsumerWidget {
   final double elevation;
   final BorderRadiusGeometry? borderRadius;
 
-  double getTop(Size scrSize) => (scrSize.height - (scrSize.height - 50)) / 2;
-
-  BorderRadiusGeometry getBorderRadius(bool isPortrait, Radius radius) =>
-      isPortrait
-      ? BorderRadius.only(topLeft: radius, topRight: radius)
-      : .only(topLeft: radius, bottomLeft: radius);
+  BorderRadiusGeometry getBorderRadius(bool isPortrait, Radius radius) => .only(
+    topLeft: radius,
+    topRight: isPortrait ? radius : .zero,
+    bottomLeft: isPortrait ? .zero : radius,
+  );
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userId = ref.watch(userProvider).id;
     final users = ref.read(userBoxProvider).getAll();
-
     final radius = Radius.circular(20);
     final mediaQ = MediaQuery.of(context);
-
     final scrSize = mediaQ.size;
     final isPortrait = mediaQ.orientation == .portrait;
 
     return Positioned(
       right: isPortrait ? null : 0,
       bottom: isPortrait ? 0 : null,
-      top: isPortrait ? null : getTop(scrSize),
+      top: isPortrait ? null : (scrSize.height - (scrSize.height - 50)) / 2,
       child: Material(
         clipBehavior: .hardEdge,
         elevation: elevation,
@@ -49,9 +46,6 @@ class BottomSideSheetOverlay extends ConsumerWidget {
             padding: .zero,
             itemCount: users.length + 1,
             itemBuilder: (context, index) {
-              final colorScheme = Theme.of(context).colorScheme;
-              final textTheme = Theme.of(context).textTheme;
-
               if (index < users.length) {
                 final user = users[index];
                 final id = user.id;
@@ -62,8 +56,6 @@ class BottomSideSheetOverlay extends ConsumerWidget {
                     Divider(height: 4),
                     UserAccountTile(
                       isSelected: id == userId,
-                      colorScheme: colorScheme,
-                      textTheme: textTheme,
                       user: user,
                       userSettings: settings,
                     ),
@@ -71,10 +63,7 @@ class BottomSideSheetOverlay extends ConsumerWidget {
                 );
               }
 
-              return AddUserBtmSheetTile(
-                colorScheme: colorScheme,
-                textTheme: textTheme,
-              );
+              return AddUserBtmSheetTile();
             },
           ),
         ),

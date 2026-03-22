@@ -10,15 +10,8 @@ import 'package:mushaf_mistake_marker/providers/objectbox/box/user.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/entities/user.dart';
 
 class AddUserCard extends ConsumerStatefulWidget {
-  const AddUserCard({
-    super.key,
-    required this.colorScheme,
-    required this.textTheme,
-    this.onCancel,
-  });
+  const AddUserCard({super.key, this.onCancel});
 
-  final ColorScheme colorScheme;
-  final TextTheme textTheme;
   final VoidCallback? onCancel;
 
   @override
@@ -36,6 +29,8 @@ class _AddUserCardState extends ConsumerState<AddUserCard> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
     final phase = ref.watch(addUserPhaseProvider);
     final phaseProv = ref.read(addUserPhaseProvider.notifier);
     final errMsgProv = ref.read(addUserErrorMsgProvider.notifier);
@@ -50,12 +45,12 @@ class _AddUserCardState extends ConsumerState<AddUserCard> {
         curve: Curves.decelerate,
         child: phase == .success
             ? AddUserSuccessBuilder(
-                colorScheme: widget.colorScheme,
-                textTheme: widget.textTheme,
+                colorScheme: colorScheme,
+                textTheme: textTheme,
               )
             : AddUserFormBuilder(
-                colorScheme: widget.colorScheme,
-                textTheme: widget.textTheme,
+                colorScheme: colorScheme,
+                textTheme: textTheme,
                 textCtrl: textCtrl,
                 phase: phase,
                 onCancel: widget.onCancel,
