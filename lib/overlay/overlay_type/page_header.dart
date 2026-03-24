@@ -11,7 +11,6 @@ class PageHeaderOverlay extends ConsumerStatefulWidget {
     this.itemHeight = 40,
     this.elevation = 4.0,
     this.verticalOffset = 8.0,
-    this.borderRadius,
   });
 
   final GlobalKey widgetKey;
@@ -21,7 +20,6 @@ class PageHeaderOverlay extends ConsumerStatefulWidget {
   final int initialIndex;
   final double itemHeight;
   final IndexedWidgetBuilder itemBuilder;
-  final BorderRadius? borderRadius;
 
   @override
   ConsumerState<PageHeaderOverlay> createState() => PageHeaderOverlayState();
@@ -50,20 +48,17 @@ class PageHeaderOverlayState extends ConsumerState<PageHeaderOverlay> {
     if (renderObject is! RenderBox) return const SizedBox.shrink();
 
     final btnW = renderObject.size.width;
-    final globalOffset = renderObject.localToGlobal(Offset.zero);
-    final left = globalOffset.dx;
-    final top =
-        globalOffset.dy + renderObject.size.height + widget.verticalOffset;
+    final btnGlobalOffset = renderObject.localToGlobal(.zero);
     final scrH = MediaQuery.sizeOf(context).height;
-    final availableHeight = scrH - top - 20;
+    final availableHeight = scrH - btnGlobalOffset.dy - 20;
 
     return Positioned(
-      left: left,
-      top: top,
+      left: btnGlobalOffset.dx,
+      top: btnGlobalOffset.dy,
       child: Material(
-        clipBehavior: Clip.hardEdge,
+        clipBehavior: .hardEdge,
         elevation: widget.elevation,
-        borderRadius: widget.borderRadius ?? BorderRadius.circular(4),
+        borderRadius: .circular(4),
         color: Theme.of(context).colorScheme.surface,
         child: ConstrainedBox(
           constraints: BoxConstraints(
@@ -73,7 +68,7 @@ class PageHeaderOverlayState extends ConsumerState<PageHeaderOverlay> {
           ),
           child: ListView.builder(
             controller: scrollController,
-            padding: EdgeInsets.zero,
+            padding: .zero,
             itemCount: widget.itemCount,
             itemExtent: widget.itemHeight,
             itemBuilder: widget.itemBuilder,

@@ -11,6 +11,8 @@ class IndexItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final cs = Theme.of(context).colorScheme;
+
     return NavBarItem(
       iconLabel: 'Index',
       isSelected: false,
@@ -23,8 +25,7 @@ class IndexItem extends ConsumerWidget {
         settingsBox.removeAll();
         userBox.removeAll();
       },
-      selectedAsset: MyFlutterApp.index,
-      unselectedAsset: MyFlutterApp.index_outlined,
+      child: Icon(MyFlutterApp.index, color: cs.onSurfaceVariant),
     );
   }
 }

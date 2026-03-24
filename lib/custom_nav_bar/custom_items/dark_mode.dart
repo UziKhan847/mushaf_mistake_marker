@@ -11,6 +11,7 @@ class DarkModeItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final darkModeProv = ref.read(darkModeProvider.notifier);
     final isDarkMode = ref.watch(darkModeProvider);
+    final cs = Theme.of(context).colorScheme;
 
     return NavBarItem(
       iconLabel: 'Dark Mode',
@@ -18,8 +19,10 @@ class DarkModeItem extends ConsumerWidget {
       onTap: () {
         darkModeProv.switchTheme();
       },
-      selectedAsset: MyFlutterApp.night_mode,
-      unselectedAsset: MyFlutterApp.night_mode_outlined,
+      child: Icon(
+        isDarkMode ? MyFlutterApp.night_mode : MyFlutterApp.night_mode_outlined,
+        color: isDarkMode ? cs.primary : cs.onSurfaceVariant,
+      ),
     );
   }
 }

@@ -11,6 +11,7 @@ class DualPageItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final dualPgTglProv = ref.read(dualPageToggleProvider.notifier);
     final isDualPgTglOn = ref.watch(dualPageToggleProvider);
+    final cs = Theme.of(context).colorScheme;
 
     return NavBarItem(
       iconLabel: 'Dual Page',
@@ -18,8 +19,12 @@ class DualPageItem extends ConsumerWidget {
       onTap: () {
         dualPgTglProv.switchToggle();
       },
-      selectedAsset: MyFlutterApp.dual_page,
-      unselectedAsset: MyFlutterApp.dual_page_outlined,
+      child: Icon(
+        isDualPgTglOn
+            ? MyFlutterApp.dual_page
+            : MyFlutterApp.dual_page_outlined,
+        color: isDualPgTglOn ? cs.primary : cs.onSurfaceVariant,
+      ),
     );
   }
 }

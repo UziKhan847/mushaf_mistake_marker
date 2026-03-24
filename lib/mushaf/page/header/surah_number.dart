@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/extensions/context_extensions.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/header/variables.dart';
-import 'package:mushaf_mistake_marker/overlay/overlay_type/page_header_overlay.dart';
+import 'package:mushaf_mistake_marker/overlay/overlay_type/page_header.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf/page_controller.dart';
 import 'package:mushaf_mistake_marker/providers/page_mode.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/page/surahs.dart';
@@ -35,9 +35,7 @@ class _SurahNumberHeaderState extends ConsumerState<SurahNumberHeader> {
     );
 
     if (clickedSurahNum == 0) return false;
-
     final surahStrtPg = surahStartPage[clickedSurahNum];
-
     return surahStrtPg == currentPg;
   }
 
@@ -64,7 +62,7 @@ class _SurahNumberHeaderState extends ConsumerState<SurahNumberHeader> {
       key: widgetKey,
       onPressed: () {
         OverlayEntry? overlay;
-    
+
         overlay = context.insertAnimatedOverlay(
           backdropOn: true,
           modalBarrierOn: true,
@@ -81,7 +79,7 @@ class _SurahNumberHeaderState extends ConsumerState<SurahNumberHeader> {
               itemBuilder: (context, index) {
                 final surahName = surahsData[index]['name'] as String;
                 final isSelected = surahsNameList.contains(surahName);
-    
+
                 return Material(
                   color: isSelected
                       ? Theme.of(context).colorScheme.primary.withAlpha(38)
@@ -90,21 +88,21 @@ class _SurahNumberHeaderState extends ConsumerState<SurahNumberHeader> {
                     onTap: () {
                       overlay?.remove();
                       overlay = null;
-    
+
                       final isOnStrtPg = isOnSurahStartPage(
                         widget.currentPgIndex + 1,
                         index,
                         surahNums,
                       );
-    
+
                       if (isOnStrtPg) return;
-    
+
                       final targetUserPage = surahStartPage[index + 1]! - 1;
-    
+
                       final targetIndex = dualPageMode
                           ? targetUserPage ~/ 2
                           : targetUserPage;
-    
+
                       mushafPgCtrlProv.navigateToPage(
                         targetUserPage: targetUserPage,
                         targetIndex: targetIndex,
@@ -116,8 +114,10 @@ class _SurahNumberHeaderState extends ConsumerState<SurahNumberHeader> {
                       child: Center(
                         child: Text(
                           surahName,
+                          textAlign: .center,
                           style: TextStyle(
                             fontWeight: isSelected ? .bold : .normal,
+                            fontSize: 12,
                           ),
                         ),
                       ),

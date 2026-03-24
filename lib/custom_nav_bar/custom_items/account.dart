@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/custom_nav_bar/item.dart';
 import 'package:mushaf_mistake_marker/extensions/context_extensions.dart';
 import 'package:mushaf_mistake_marker/icons/my_flutter_app_icons.dart';
-import 'package:mushaf_mistake_marker/overlay/overlay_type/bottom_side_sheet_overlay.dart';
+import 'package:mushaf_mistake_marker/overlay/overlay_type/bottom_side_sheet.dart';
 import 'package:mushaf_mistake_marker/providers/buttons/account_nav.dart';
 
 class AccountItem extends ConsumerStatefulWidget {
@@ -19,10 +19,11 @@ class _AccountItemState extends ConsumerState<AccountItem> {
   @override
   Widget build(BuildContext context) {
     final accNavBarProv = ref.read(accountNavBtnProvider.notifier);
-    final isAccBtnSelected = ref.watch(accountNavBtnProvider);
+    final isSelected = ref.watch(accountNavBtnProvider);
+    final cs = Theme.of(context).colorScheme;
 
     return NavBarItem(
-      isSelected: isAccBtnSelected,
+      isSelected: isSelected,
       onTap: () {
         overlay = context.insertAnimatedOverlay(
           backdropOn: true,
@@ -34,9 +35,11 @@ class _AccountItemState extends ConsumerState<AccountItem> {
           children: [BottomSideSheetOverlay()],
         );
       },
-      selectedAsset: MyFlutterApp.account,
-      unselectedAsset: MyFlutterApp.account_outlined,
       iconLabel: 'Account',
+      child: Icon(
+        isSelected ? MyFlutterApp.account : MyFlutterApp.account_outlined,
+        color: isSelected ? cs.primary : cs.onSurfaceVariant,
+      ),
     );
   }
 }

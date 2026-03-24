@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/extensions/context_extensions.dart';
-import 'package:mushaf_mistake_marker/overlay/overlay_type/page_header_overlay.dart';
+import 'package:mushaf_mistake_marker/overlay/overlay_type/page_header.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf/page_controller.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/entities/settings.dart';
 import 'package:mushaf_mistake_marker/providers/page_mode.dart';
