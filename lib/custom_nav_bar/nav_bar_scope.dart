@@ -5,8 +5,8 @@ class NavBarScope extends InheritedWidget {
 
   final GlobalKey widgetKey;
 
-  RenderBox get renderBox =>
-      widgetKey.currentContext?.findRenderObject() as RenderBox;
+  RenderBox? get renderBox =>
+      widgetKey.currentContext?.findRenderObject() as RenderBox?;
 
   static NavBarScope? of(BuildContext context) =>
       context.getInheritedWidgetOfExactType<NavBarScope>();

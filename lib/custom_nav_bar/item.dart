@@ -6,7 +6,7 @@ class NavBarItem extends StatelessWidget {
     required this.isSelected,
     required this.onTap,
     required this.iconLabel,
-    required this.child
+    required this.child,
   });
 
   final bool isSelected;

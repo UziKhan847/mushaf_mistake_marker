@@ -8,7 +8,7 @@ class NavBarItemOverlay extends ConsumerWidget {
     required this.navBarSize,
     required this.itemCount,
     required this.itemBuilder,
-    this.itemHeight = 40,
+    this.itemHeight = 50,
     this.elevation = 4.0,
   });
 
@@ -24,16 +24,23 @@ class NavBarItemOverlay extends ConsumerWidget {
     final renderObject = widgetKey.currentContext?.findRenderObject();
     if (renderObject is! RenderBox) return const SizedBox.shrink();
 
+    print('MADE IT PASSED!');
+    print('RenderBox Size: ${renderObject.size}');
+    print('RenderBox Offset Start: ${renderObject.localToGlobal(.zero)}');
+
+    final btnW = renderObject.size.width;
     final isPortrait = MediaQuery.orientationOf(context) == .portrait;
     final btnGlobalOffset = renderObject.localToGlobal(.zero);
     final max = itemHeight * 5.5;
 
     return Positioned(
-      left: isPortrait ? btnGlobalOffset.dx : navBarSize.height + max,
-      top: isPortrait ? navBarSize.height + max : btnGlobalOffset.dy,
+      left: isPortrait ? btnGlobalOffset.dx : null,
+      right: isPortrait ? null : navBarSize.width,
+      top: isPortrait ? null : btnGlobalOffset.dy,
+      bottom: isPortrait ? navBarSize.height : null,
       child: Material(
         clipBehavior: .hardEdge,
-        borderRadius: BorderRadius.only(
+        borderRadius: .only(
           topLeft: .circular(4.0),
           topRight: isPortrait ? .circular(4.0) : .zero,
           bottomLeft: isPortrait ? .zero : .circular(4.0),
@@ -41,12 +48,13 @@ class NavBarItemOverlay extends ConsumerWidget {
         color: Theme.of(context).colorScheme.surface,
         child: ConstrainedBox(
           constraints: BoxConstraints(
-            maxWidth: isPortrait ? .infinity : max,
-            maxHeight: isPortrait ? max : .infinity,
+            maxWidth: isPortrait ? btnW : max,
+            maxHeight: isPortrait ? max : btnW,
             minHeight: isPortrait ? itemHeight : 0.0,
             minWidth: isPortrait ? 0.0 : itemHeight,
           ),
           child: ListView.builder(
+            //shrinkWrap: true,
             padding: .zero,
             itemCount: itemCount,
             itemExtent: itemHeight,
