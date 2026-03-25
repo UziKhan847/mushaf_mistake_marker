@@ -106,48 +106,69 @@ class AnnotatorHandler {
 
   static (double, TrianglePosition) getBubbleLeftAndTriPos(
     double scrnW,
-    double sprW,
-    double scaleX,
-    double elemGlobalLeft,
+    double elemMiddle,
+    bool isBubbleTop,
+  ) { static (double, TrianglePosition) getBubbleLeftAndTriPos(
+    double scrnW,
+    double elemMiddle,
     bool isBubbleTop,
   ) {
-    double bubbleLeft;
-    TrianglePosition triPos;
-    final elemMiddle = elemGlobalLeft + ((sprW * scaleX) / 2);
-    final annotBubbleHalfW = annotateBubbleWidth / 2;
+    final bubbleHalfW = annotateBubbleWidth / 2;
+    var left = elemMiddle - bubbleHalfW;
+    var edgeCorrection = 0.0;
+    TrianglePosition triPos = isBubbleTop ? .bottomCenter : .topCenter;
 
-    if (scrnW > annotateBubbleWidth) {
-      final halfScrnW = scrnW / 2;
-      if (elemMiddle < halfScrnW) {
-        if (elemMiddle < annotBubbleHalfW) {
-          bubbleLeft = elemGlobalLeft + (sprW * scaleX / 2);
-          triPos = isBubbleTop ? .bottomLeft : .topLeft;
-
-          final spaceLeft = scrnW - bubbleLeft;
-
-          if (spaceLeft < annotateBubbleWidth) {
-            final transformLeft = annotateBubbleWidth - spaceLeft;
-            bubbleLeft = bubbleLeft - transformLeft;
-          }
-
-          return (bubbleLeft, triPos);
-        }
-      }
-      if (elemMiddle > halfScrnW) {
-        if (elemMiddle > scrnW - annotBubbleHalfW) {
-          bubbleLeft = elemGlobalLeft - annotateBubbleWidth + sprW * scaleX / 2;
-          triPos = isBubbleTop ? .bottomRight : .topRight;
-
-          if (bubbleLeft < 0) {
-            bubbleLeft -= bubbleLeft;
-          }
-
-          return (bubbleLeft, triPos);
-        }
-      }
+    if (scrnW < annotateBubbleWidth ||
+        (elemMiddle >= bubbleHalfW && scrnW - elemMiddle >= bubbleHalfW)) {
+      return (left, triPos);
     }
-    bubbleLeft = elemGlobalLeft - ((annotateBubbleWidth - sprW * scaleX) / 2);
-    triPos = isBubbleTop ? .bottomCenter : .topCenter;
-    return (bubbleLeft, triPos);
+
+    if (elemMiddle < bubbleHalfW) {
+      final spaceToRight = scrnW - elemMiddle;
+      if (spaceToRight <= annotateBubbleWidth) {
+        edgeCorrection = spaceToRight - annotateBubbleWidth - bubbleEdgePadding;
+      }
+      left = elemMiddle;
+      triPos = isBubbleTop ? .bottomLeft : .topLeft;
+    } else if (scrnW - elemMiddle < bubbleHalfW) {
+      if (elemMiddle <= annotateBubbleWidth) {
+        edgeCorrection = annotateBubbleWidth - elemMiddle + bubbleEdgePadding;
+      }
+      left = elemMiddle - annotateBubbleWidth;
+      triPos = isBubbleTop ? .bottomRight : .topRight;
+    }
+
+    left += edgeCorrection;
+
+    return (left, triPos);
+  }
+    final bubbleHalfW = annotateBubbleWidth / 2;
+    var left = elemMiddle - bubbleHalfW;
+    var edgeCorrection = 0.0;
+    TrianglePosition triPos = isBubbleTop ? .bottomCenter : .topCenter;
+
+    if (scrnW < annotateBubbleWidth ||
+        (elemMiddle >= bubbleHalfW && scrnW - elemMiddle >= bubbleHalfW)) {
+      return (left, triPos);
+    }
+
+    if (elemMiddle < bubbleHalfW) {
+      final spaceToRight = scrnW - elemMiddle;
+      if (spaceToRight <= annotateBubbleWidth) {
+        edgeCorrection = spaceToRight - annotateBubbleWidth - bubbleEdgePadding;
+      }
+      left = elemMiddle;
+      triPos = isBubbleTop ? .bottomLeft : .topLeft;
+    } else if (scrnW - elemMiddle < bubbleHalfW) {
+      if (elemMiddle <= annotateBubbleWidth) {
+        edgeCorrection = annotateBubbleWidth - elemMiddle + bubbleEdgePadding;
+      }
+      left = elemMiddle - annotateBubbleWidth;
+      triPos = isBubbleTop ? .bottomRight : .topRight;
+    }
+
+    left += edgeCorrection;
+
+    return (left, triPos);
   }
 }
