@@ -22,9 +22,8 @@ class _AppThemeItemState extends ConsumerState<AppThemeItem> {
   @override
   Widget build(BuildContext context) {
     final appThemeProv = ref.read(appThemeProvider.notifier);
-    final theme = ref.watch(appThemeProvider);
     final isDarkMode = Theme.brightnessOf(context) == .dark;
-    final iconColor = isDarkMode ? theme.darkSeed : theme.lightSeed;
+    //final iconColor = isDarkMode ? theme.darkSeed : theme.lightSeed;
 
     return NavBarItem(
       key: widgetKey,
@@ -60,7 +59,6 @@ class _AppThemeItemState extends ConsumerState<AppThemeItem> {
                       appThemeProv.setTheme(itemTheme);
                     },
                     child: SizedBox(
-                      height: 50,
                       child: ThemeItemSwatch(
                         color: itemColor,
                         borderColor: itemColor,
@@ -73,7 +71,7 @@ class _AppThemeItemState extends ConsumerState<AppThemeItem> {
           ],
         );
       },
-      child: ThemeItemSwatch(color: iconColor),
+      child: ThemeItemSwatch(),
     );
   }
 }

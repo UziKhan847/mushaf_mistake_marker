@@ -39,9 +39,7 @@ enum AppTheme {
   red(2),
   green(3),
   purple(4),
-  grey(5),
-  monochrome(6),
-  ios(7);
+  ios(5);
 
   const AppTheme(this.themeIndex);
   final int themeIndex;
@@ -57,9 +55,7 @@ enum AppTheme {
     .red => const Color(0xFFFF3B30),
     .green => const Color(0xFF34C759),
     .purple => const Color(0xFFAF52DE),
-    .grey => const Color(0xFF8E8E93),
-    .monochrome => const Color(0xFF000000),
-    .ios => const Color(0xFF007AFF),
+    .ios => const Color(0xFF1C5288),
   };
 
   Color get darkSeed => switch (this) {
@@ -68,8 +64,6 @@ enum AppTheme {
     .red => const Color(0xFFFF453A),
     .green => const Color(0xFF30D158),
     .purple => const Color(0xFFBF5AF2),
-    .grey => const Color(0xFF636366),
-    .monochrome => const Color(0xFFFFFFFF),
-    .ios => const Color(0xFF0A84FF),
+    .ios => const Color(0xFF4896EA),
   };
 }
