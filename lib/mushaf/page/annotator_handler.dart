@@ -108,40 +108,7 @@ class AnnotatorHandler {
     double scrnW,
     double elemMiddle,
     bool isBubbleTop,
-  ) { static (double, TrianglePosition) getBubbleLeftAndTriPos(
-    double scrnW,
-    double elemMiddle,
-    bool isBubbleTop,
   ) {
-    final bubbleHalfW = annotateBubbleWidth / 2;
-    var left = elemMiddle - bubbleHalfW;
-    var edgeCorrection = 0.0;
-    TrianglePosition triPos = isBubbleTop ? .bottomCenter : .topCenter;
-
-    if (scrnW < annotateBubbleWidth ||
-        (elemMiddle >= bubbleHalfW && scrnW - elemMiddle >= bubbleHalfW)) {
-      return (left, triPos);
-    }
-
-    if (elemMiddle < bubbleHalfW) {
-      final spaceToRight = scrnW - elemMiddle;
-      if (spaceToRight <= annotateBubbleWidth) {
-        edgeCorrection = spaceToRight - annotateBubbleWidth - bubbleEdgePadding;
-      }
-      left = elemMiddle;
-      triPos = isBubbleTop ? .bottomLeft : .topLeft;
-    } else if (scrnW - elemMiddle < bubbleHalfW) {
-      if (elemMiddle <= annotateBubbleWidth) {
-        edgeCorrection = annotateBubbleWidth - elemMiddle + bubbleEdgePadding;
-      }
-      left = elemMiddle - annotateBubbleWidth;
-      triPos = isBubbleTop ? .bottomRight : .topRight;
-    }
-
-    left += edgeCorrection;
-
-    return (left, triPos);
-  }
     final bubbleHalfW = annotateBubbleWidth / 2;
     var left = elemMiddle - bubbleHalfW;
     var edgeCorrection = 0.0;
