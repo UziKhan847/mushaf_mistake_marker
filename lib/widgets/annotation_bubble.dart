@@ -79,7 +79,7 @@ class _AnnotationBubbleState extends ConsumerState<AnnotationBubble> {
           isDarkMode: isDarkMode,
         ),
         child: SizedBox(
-          width: 250,
+          width: annotateBubbleWidth,
           child: Padding(
             padding: .only(
               bottom: widget.isBubbleTop ? 15.0 : 0.0,

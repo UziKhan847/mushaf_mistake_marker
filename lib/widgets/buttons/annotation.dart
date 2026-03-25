@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mushaf_mistake_marker/constants.dart';
 
 class AnnotationButton extends StatelessWidget {
   const AnnotationButton({
@@ -24,7 +25,7 @@ class AnnotationButton extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: Duration(milliseconds: 150),
-        width: 50,
+        width: annotateBtnWidth,
         height: 32,
         color: Color(isSelected ? selectedColor : color),
         alignment: .center,

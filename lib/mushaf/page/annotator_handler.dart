@@ -81,7 +81,7 @@ class AnnotatorHandler {
     required double scaleY,
     required double screenWidth,
   }) {
-    final isBubbleTop = globalPos.dy >= 250;
+    final isBubbleTop = globalPos.dy >= annotateBubbleWidth;
 
     final double top = isBubbleTop
         ? elemGlobalLT.dy - 96
@@ -94,10 +94,10 @@ class AnnotatorHandler {
       left = elemGlobalLT.dx + (elemW * scaleY / 2);
       triPos = isBubbleTop ? .bottomLeft : .topLeft;
     } else if (globalPos.dx > screenWidth - 300) {
-      left = elemGlobalLT.dx - 250 + elemW * scaleY / 2;
+      left = elemGlobalLT.dx - annotateBubbleWidth + elemW * scaleY / 2;
       triPos = isBubbleTop ? .bottomRight : .topRight;
     } else {
-      left = elemGlobalLT.dx - ((250 - elemW * scaleY) / 2);
+      left = elemGlobalLT.dx - ((annotateBubbleWidth - elemW * scaleY) / 2);
       triPos = isBubbleTop ? .bottomCenter : .topCenter;
     }
 
@@ -111,29 +111,43 @@ class AnnotatorHandler {
     double elemGlobalLeft,
     bool isBubbleTop,
   ) {
-    final elemMiddle = elemGlobalLeft + (sprW * scaleX / 2);
+    double bubbleLeft;
+    TrianglePosition triPos;
+    final elemMiddle = elemGlobalLeft + ((sprW * scaleX) / 2);
+    final annotBubbleHalfW = annotateBubbleWidth / 2;
 
-    if (scrnW > 250) {
+    if (scrnW > annotateBubbleWidth) {
       final halfScrnW = scrnW / 2;
+      if (elemMiddle < halfScrnW) {
+        if (elemMiddle < annotBubbleHalfW) {
+          bubbleLeft = elemGlobalLeft + (sprW * scaleX / 2);
+          triPos = isBubbleTop ? .bottomLeft : .topLeft;
 
-      if (elemMiddle < halfScrnW && elemMiddle < 125) {
-        return (
-          elemGlobalLeft + (sprW * scaleX / 2),
-          isBubbleTop ? .bottomLeft : .topLeft,
-        );
+          final spaceLeft = scrnW - bubbleLeft;
+
+          if (spaceLeft < annotateBubbleWidth) {
+            final transformLeft = annotateBubbleWidth - spaceLeft;
+            bubbleLeft = bubbleLeft - transformLeft;
+          }
+
+          return (bubbleLeft, triPos);
+        }
       }
+      if (elemMiddle > halfScrnW) {
+        if (elemMiddle > scrnW - annotBubbleHalfW) {
+          bubbleLeft = elemGlobalLeft - annotateBubbleWidth + sprW * scaleX / 2;
+          triPos = isBubbleTop ? .bottomRight : .topRight;
 
-      if (elemMiddle > halfScrnW && elemMiddle > scrnW - 125) {
-        return (
-          elemGlobalLeft - 250 + (sprW * scaleX / 2),
-          isBubbleTop ? .bottomRight : .topRight,
-        );
+          if (bubbleLeft < 0) {
+            bubbleLeft -= bubbleLeft;
+          }
+
+          return (bubbleLeft, triPos);
+        }
       }
     }
-
-    return (
-      elemGlobalLeft - ((250 - sprW * scaleX) / 2),
-      isBubbleTop ? .bottomCenter : .topCenter,
-    );
+    bubbleLeft = elemGlobalLeft - ((annotateBubbleWidth - sprW * scaleX) / 2);
+    triPos = isBubbleTop ? .bottomCenter : .topCenter;
+    return (bubbleLeft, triPos);
   }
 }

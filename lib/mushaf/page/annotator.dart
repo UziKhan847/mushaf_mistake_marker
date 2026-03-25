@@ -1,6 +1,7 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mushaf_mistake_marker/constants.dart';
 import 'package:mushaf_mistake_marker/extensions/context_extensions.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/annotator_handler.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/painters/mushaf_page.dart';
@@ -79,7 +80,7 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
             Offset(left * scaleX, top * scaleY),
           );
 
-          final bool isBubbleTop = gp.dy < 250 ? false : true;
+          final bool isBubbleTop = gp.dy < annotateBubbleWidth ? false : true;
           final double bubbleTop = isBubbleTop
               ? elemGlobalLT.dy - 86
               : elemGlobalLT.dy + sprite.eLTWH[3] * scaleY;
