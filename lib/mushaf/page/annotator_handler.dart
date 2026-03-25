@@ -105,27 +105,35 @@ class AnnotatorHandler {
   }
 
   static (double, TrianglePosition) getBubbleLeftAndTriPos(
-    double scrnGLeft,
     double scrnW,
     double sprW,
     double scaleX,
-    double elemGLeft,
+    double elemGlobalLeft,
     bool isBubbleTop,
   ) {
-    late final double bubbleLeft;
-    late final TrianglePosition triPos;
+    final elemMiddle = elemGlobalLeft + (sprW * scaleX / 2);
 
-    if (scrnGLeft < 300) {
-      bubbleLeft = elemGLeft + (sprW * scaleX / 2);
-      triPos = isBubbleTop ? .bottomLeft : .topLeft;
-    } else if (scrnGLeft > scrnW - 300) {
-      bubbleLeft = elemGLeft - 250 + sprW * scaleX / 2;
-      triPos = isBubbleTop ? .bottomRight : .topRight;
-    } else {
-      bubbleLeft = elemGLeft - ((250 - sprW * scaleX) / 2);
-      triPos = isBubbleTop ? .bottomCenter : .topCenter;
+    if (scrnW > 250) {
+      final halfScrnW = scrnW / 2;
+
+      if (elemMiddle < halfScrnW && elemMiddle < 125) {
+        return (
+          elemGlobalLeft + (sprW * scaleX / 2),
+          isBubbleTop ? .bottomLeft : .topLeft,
+        );
+      }
+
+      if (elemMiddle > halfScrnW && elemMiddle > scrnW - 125) {
+        return (
+          elemGlobalLeft - 250 + (sprW * scaleX / 2),
+          isBubbleTop ? .bottomRight : .topRight,
+        );
+      }
     }
 
-    return (bubbleLeft, triPos);
+    return (
+      elemGlobalLeft - ((250 - sprW * scaleX) / 2),
+      isBubbleTop ? .bottomCenter : .topCenter,
+    );
   }
 }

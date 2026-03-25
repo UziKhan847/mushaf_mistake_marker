@@ -85,7 +85,6 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
               : elemGlobalLT.dy + sprite.eLTWH[3] * scaleY;
 
           final (bubbleLeft, triPos) = AnnotatorHandler.getBubbleLeftAndTriPos(
-            gp.dx,
             scrnSize.width,
             sprite.eLTWH[2],
             scaleX,
