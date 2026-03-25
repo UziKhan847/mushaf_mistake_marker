@@ -61,7 +61,10 @@ class _AppThemeItemState extends ConsumerState<AppThemeItem> {
                     },
                     child: SizedBox(
                       height: 50,
-                      child: ThemeItemSwatch(color: itemColor),
+                      child: ThemeItemSwatch(
+                        color: itemColor,
+                        borderColor: itemColor,
+                      ),
                     ),
                   ),
                 );
