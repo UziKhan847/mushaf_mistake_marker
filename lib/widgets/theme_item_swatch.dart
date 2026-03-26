@@ -29,7 +29,7 @@ class ThemeItemSwatch extends StatelessWidget {
             borderRadius: BorderRadius.circular(borderRadius),
             border: Border.all(
               width: borderWidth,
-              color: borderColor ?? cs.onSurfaceVariant,
+              color: borderColor ?? cs.primary,
             ),
             color: color ?? cs.primary,
           ),

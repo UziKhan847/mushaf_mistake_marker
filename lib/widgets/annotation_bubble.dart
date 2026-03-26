@@ -110,7 +110,7 @@ class _AnnotationBubbleState extends ConsumerState<AnnotationBubble> {
                           if (element.isEmpty) elemProv.removeElement(element);
                         }
 
-                        atlasCacheProv.updateAnnotColor(
+                        atlasCacheProv.updateElementColor(
                           widget.pgIndex,
                           widget.atlasIndex,
                           isDarkMode,
@@ -153,12 +153,13 @@ class _AnnotationBubbleState extends ConsumerState<AnnotationBubble> {
                             }
                           }
 
-                          atlasCacheProv.updateHighlightColor(
+                          atlasCacheProv.updateElementColor(
                             widget.pgIndex,
                             widget.atlasIndex,
                             isDarkMode,
                             element,
                           );
+
                         },
                       );
                     }),

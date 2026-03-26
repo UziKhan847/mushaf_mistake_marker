@@ -48,7 +48,8 @@ class ElementNotifier
     state = element;
   }
 
-  void removeElement(ElementMarkData element) {
+  void removeElement(ElementMarkData? element) {
+    if (element == null) return;
     final elemBox = ref.read(elementMarkDataBoxProvider);
     elemBox.remove(element.id);
     state = null;

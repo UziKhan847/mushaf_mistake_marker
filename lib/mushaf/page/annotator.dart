@@ -5,6 +5,8 @@ import 'package:mushaf_mistake_marker/constants.dart';
 import 'package:mushaf_mistake_marker/extensions/context_extensions.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/annotator_handler.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/painters/mushaf_page.dart';
+import 'package:mushaf_mistake_marker/providers/buttons/annotate_mode.dart';
+import 'package:mushaf_mistake_marker/providers/sprite/family/element.dart';
 import 'package:mushaf_mistake_marker/widgets/annotation_bubble.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/cached_atlas.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/page/rebuild.dart';
@@ -70,7 +72,16 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
 
           if (!isClicked) continue;
 
-          final atlasCache = ref.read(cachedAtlasProvider(widget.index));
+          final atlasIndex = atlasCache.idToIndex[id]!;
+
+          if (!ref.read(annotateModeProvider)) {
+            final element = ref.read(elementProvider(id));
+            ref.read(elementProvider(id).notifier).removeElement(element);
+            ref
+                .read(cachedAtlasProvider(widget.index).notifier)
+                .updateElementColor(widget.index, atlasIndex, isDarkMode, null);
+            return;
+          }
 
           final scrnSize = MediaQuery.sizeOf(context);
           final gp = details.globalPosition;
@@ -90,8 +101,6 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
             elemGlobalLT.dx + ((sprite.eLTWH[2] * scaleX) / 2),
             isBubbleTop,
           );
-
-          final atlasIndex = atlasCache.idToIndex[id]!;
 
           OverlayEntry? overlay;
 

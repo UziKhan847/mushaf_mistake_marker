@@ -39,7 +39,7 @@ enum AppTheme {
   red(2),
   green(3),
   purple(4),
-  ios(5);
+  monochrome(5);
 
   const AppTheme(this.themeIndex);
   final int themeIndex;
@@ -50,20 +50,20 @@ enum AppTheme {
   );
 
   Color get lightSeed => switch (this) {
-    .gold => const Color(0xFFAE8B4F),
-    .blue => const Color(0xFF007AFF),
-    .red => const Color(0xFFFF3B30),
-    .green => const Color(0xFF34C759),
-    .purple => const Color(0xFFAF52DE),
-    .ios => const Color(0xFF1C5288),
+    .gold => const Color(0xFF7b580c),
+    .blue => const Color(0xFF35618e),
+    .red => const Color(0xFF904a45),
+    .green => const Color(0xFF34693f),
+    .purple => const Color(0xFF735187),
+    .monochrome => const Color(0xFF3A3A3C),
   };
 
   Color get darkSeed => switch (this) {
-    .gold => const Color(0xFFAE8B4F),
-    .blue => const Color(0xFF0A84FF),
-    .red => const Color(0xFFFF453A),
-    .green => const Color(0xFF30D158),
-    .purple => const Color(0xFFBF5AF2),
-    .ios => const Color(0xFF4896EA),
+    .gold => const Color(0xFFeebf6d),
+    .blue => const Color(0xFFa0cafd),
+    .red => const Color(0xFFffb3b0),
+    .green => const Color(0xFF9ad4a1),
+    .purple => const Color(0xFFe2b7f4),
+    .monochrome => const Color(0xFFAEAEB2),
   };
 }

@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:mushaf_mistake_marker/enums.dart';
 
 const purpleInt = 0xFF800080;

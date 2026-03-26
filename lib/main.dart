@@ -48,7 +48,7 @@ class MyApp extends ConsumerWidget {
 
     return MaterialApp(
       scrollBehavior: AppScrollBehaviour(),
-      themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
+      themeMode: isDarkMode ? .dark : .light,
       theme: MyThemes.lightTheme(appTheme),
       darkTheme: MyThemes.darkTheme(appTheme),
       home: Scaffold(
