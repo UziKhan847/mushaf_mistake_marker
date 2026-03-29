@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/custom_nav_bar/item.dart';
+import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/icons/my_flutter_app_icons.dart';
 import 'package:mushaf_mistake_marker/providers/buttons/annotate_mode.dart';
 
@@ -10,18 +11,19 @@ class EraserItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final annotateModeProv = ref.read(annotateModeProvider.notifier);
-    final eraserMode = !ref.watch(annotateModeProvider);
+    final annotateMode = ref.watch(annotateModeProvider);
     final cs = Theme.of(context).colorScheme;
+    final isSelected = annotateMode == .earser;
 
     return NavBarItem(
       iconLabel: 'Eraser',
-      isSelected: eraserMode,
+      isSelected: isSelected,
       onTap: () {
-        annotateModeProv.switchMode(false);
+        annotateModeProv.setMode(.earser);
       },
       child: Icon(
-        eraserMode ? MyFlutterApp.eraser : MyFlutterApp.eraser_outlined,
-        color: eraserMode ? cs.primary : cs.onSurfaceVariant,
+        isSelected ? MyFlutterApp.eraser : MyFlutterApp.eraser_outlined,
+        color: isSelected ? cs.primary : cs.onSurfaceVariant,
       ),
     );
   }

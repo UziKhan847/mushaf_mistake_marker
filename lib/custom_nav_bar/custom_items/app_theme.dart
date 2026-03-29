@@ -34,8 +34,6 @@ class _AppThemeItemState extends ConsumerState<AppThemeItem> {
         if (navBarRenderBox == null) return;
         final navBarSize = navBarRenderBox.size;
 
-        print('NavBarSize: $navBarSize');
-
         overlay = context.insertAnimatedOverlay(
           modalBarrierOn: true,
           onTapOutside: () {

@@ -6,22 +6,18 @@ import 'package:mushaf_mistake_marker/providers/objectbox/box/mushaf_data.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/box/settings.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/box/user.dart';
 
-class IndexItem extends ConsumerWidget {
-  const IndexItem({super.key});
+class SearchItem extends ConsumerWidget {
+  const SearchItem({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final cs = Theme.of(context).colorScheme;
 
     return NavBarItem(
-      iconLabel: 'Index',
+      iconLabel: 'Search',
       isSelected: false,
-      onTap: () {
-        ref.read(mushafDataBoxProvider).removeAll();
-        ref.read(settingsBoxProvider).removeAll();
-        ref.read(userBoxProvider).removeAll();
-      },
-      child: Icon(MyFlutterApp.index, color: cs.onSurfaceVariant),
+      onTap: () {},
+      child: Icon(MyFlutterApp.search, color: cs.onSurfaceVariant),
     );
   }
 }

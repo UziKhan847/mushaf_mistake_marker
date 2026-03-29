@@ -2,7 +2,6 @@ import 'dart:typed_data';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/atlas_models/cache.dart';
 import 'package:mushaf_mistake_marker/constants.dart';
-import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/element_mark_data.dart';
 import 'package:mushaf_mistake_marker/providers/buttons/dark_mode.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/ele_mark_data_map.dart';

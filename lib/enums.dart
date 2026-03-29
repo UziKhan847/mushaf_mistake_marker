@@ -14,6 +14,18 @@ enum HighlightType {
       .values.firstWhere((e) => e.id == id, orElse: () => .unknown);
 }
 
+enum AnnotationMode {
+  highlight(0),
+  earser(1),
+  audio(2);
+
+  const AnnotationMode(this.id);
+  final int id;
+
+  static AnnotationMode fromId(int? id) =>
+      .values.firstWhere((e) => e.id == id, orElse: () => .highlight);
+}
+
 enum Phase { initial, submitting, success, error }
 
 enum PageLayout { singlePage, dualPage }
@@ -41,13 +53,11 @@ enum AppTheme {
   purple(4),
   monochrome(5);
 
-  const AppTheme(this.themeIndex);
-  final int themeIndex;
+  const AppTheme(this.id);
+  final int id;
 
-  static AppTheme fromThemeIndex(int themeIndex) => .values.firstWhere(
-    (e) => e.themeIndex == themeIndex,
-    orElse: () => .gold,
-  );
+  static AppTheme fromThemeIndex(int id) =>
+      .values.firstWhere((e) => e.id == id, orElse: () => .gold);
 
   Color get lightSeed => switch (this) {
     .gold => const Color(0xFF7b580c),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mushaf_mistake_marker/custom_nav_bar/custom_items/app_theme.dart';
+import 'package:mushaf_mistake_marker/custom_nav_bar/custom_items/audio_mode.dart';
 import 'package:mushaf_mistake_marker/custom_nav_bar/custom_items/eraser.dart';
 import 'package:mushaf_mistake_marker/custom_nav_bar/custom_items/highlighter.dart';
 import 'package:mushaf_mistake_marker/custom_nav_bar/custom_items/index.dart';
@@ -58,6 +59,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
                         if (!isPortrait) DualPageItem(),
                         const HighlighterItem(),
                         const EraserItem(),
+                        const AudioModeItem(),
                         const AppThemeItem(),
                         const DarkModeItem(),
                       ],

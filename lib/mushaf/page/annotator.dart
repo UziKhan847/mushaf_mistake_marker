@@ -7,7 +7,7 @@ import 'package:mushaf_mistake_marker/mushaf/page/annotator_handler.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/painters/mushaf_page.dart';
 import 'package:mushaf_mistake_marker/providers/buttons/annotate_mode.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/element.dart';
-import 'package:mushaf_mistake_marker/widgets/annotation_bubble.dart';
+import 'package:mushaf_mistake_marker/overlay/widgets/annotation_bubble.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/cached_atlas.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/page/rebuild.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/sprite.dart';
@@ -74,56 +74,71 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
 
           final atlasIndex = atlasCache.idToIndex[id]!;
 
-          if (!ref.read(annotateModeProvider)) {
-            final element = ref.read(elementProvider(id));
-            ref.read(elementProvider(id).notifier).removeElement(element);
-            ref
-                .read(cachedAtlasProvider(widget.index).notifier)
-                .updateElementColor(widget.index, atlasIndex, isDarkMode, null);
-            return;
+          final annotationMode = ref.read(annotateModeProvider);
+
+          switch (annotationMode) {
+            case .earser:
+              final element = ref.read(elementProvider(id));
+              ref.read(elementProvider(id).notifier).removeElement(element);
+              ref
+                  .read(cachedAtlasProvider(widget.index).notifier)
+                  .updateElementColor(
+                    widget.index,
+                    atlasIndex,
+                    isDarkMode,
+                    null,
+                  );
+            case .audio:
+              print('Audio Mode');
+            // TODO: Implement word-by-word audio
+            case .highlight:
+              final scrnSize = MediaQuery.sizeOf(context);
+              final gp = details.globalPosition;
+
+              final renderbox = context.findRenderObject() as RenderBox;
+              final elemGlobalLT = renderbox.localToGlobal(
+                Offset(left * scaleX, top * scaleY),
+              );
+
+              final bool isBubbleTop = gp.dy < annotateBubbleWidth
+                  ? false
+                  : true;
+              final double bubbleTop = isBubbleTop
+                  ? elemGlobalLT.dy - 86
+                  : elemGlobalLT.dy + sprite.eLTWH[3] * scaleY;
+
+              final (
+                bubbleLeft,
+                triPos,
+              ) = AnnotatorHandler.getBubbleLeftAndTriPos(
+                scrnSize.width,
+                elemGlobalLT.dx + ((sprite.eLTWH[2] * scaleX) / 2),
+                isBubbleTop,
+              );
+
+              OverlayEntry? overlay;
+
+              overlay = context.insertAnimatedOverlay(
+                modalBarrierOn: true,
+                onTapOutside: () {
+                  overlay?.remove();
+                  overlay = null;
+                },
+                children: [
+                  Positioned(
+                    left: bubbleLeft,
+                    top: bubbleTop,
+                    child: AnnotationBubble(
+                      atlasIndex: atlasIndex,
+                      elemId: id,
+                      pgIndex: widget.index,
+                      trianglePos: triPos,
+                      isBubbleTop: isBubbleTop,
+                    ),
+                  ),
+                ],
+              );
           }
-
-          final scrnSize = MediaQuery.sizeOf(context);
-          final gp = details.globalPosition;
-
-          final renderbox = context.findRenderObject() as RenderBox;
-          final elemGlobalLT = renderbox.localToGlobal(
-            Offset(left * scaleX, top * scaleY),
-          );
-
-          final bool isBubbleTop = gp.dy < annotateBubbleWidth ? false : true;
-          final double bubbleTop = isBubbleTop
-              ? elemGlobalLT.dy - 86
-              : elemGlobalLT.dy + sprite.eLTWH[3] * scaleY;
-
-          final (bubbleLeft, triPos) = AnnotatorHandler.getBubbleLeftAndTriPos(
-            scrnSize.width,
-            elemGlobalLT.dx + ((sprite.eLTWH[2] * scaleX) / 2),
-            isBubbleTop,
-          );
-
-          OverlayEntry? overlay;
-
-          overlay = context.insertAnimatedOverlay(
-            modalBarrierOn: true,
-            onTapOutside: () {
-              overlay?.remove();
-              overlay = null;
-            },
-            children: [
-              Positioned(
-                left: bubbleLeft,
-                top: bubbleTop,
-                child: AnnotationBubble(
-                  atlasIndex: atlasIndex,
-                  elemId: id,
-                  pgIndex: widget.index,
-                  trianglePos: triPos,
-                  isBubbleTop: isBubbleTop,
-                ),
-              ),
-            ],
-          );
 
           return;
         }

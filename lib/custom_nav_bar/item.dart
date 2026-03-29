@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 class NavBarItem extends StatelessWidget {
   const NavBarItem({
     super.key,
-    required this.isSelected,
+    this.isSelected,
     required this.onTap,
     required this.iconLabel,
     required this.child,
   });
 
-  final bool isSelected;
+  final bool? isSelected;
   final String iconLabel;
   final VoidCallback onTap;
   final Widget child;

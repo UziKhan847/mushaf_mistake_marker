@@ -25,7 +25,7 @@ Future<void> main() async {
         'userSettingsId',
         'isLeftHand',
         'isHighlightMode',
-        'annotateMode',
+        'annotationMode',
       },
     ),
   );
