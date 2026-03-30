@@ -1,8 +1,10 @@
 import 'dart:ui' as ui;
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/constants.dart';
 import 'package:mushaf_mistake_marker/extensions/context_extensions.dart';
+import 'package:mushaf_mistake_marker/extensions/string_extension.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/annotator_handler.dart';
 import 'package:mushaf_mistake_marker/mushaf/page/painters/mushaf_page.dart';
 import 'package:mushaf_mistake_marker/providers/buttons/annotate_mode.dart';
@@ -37,6 +39,8 @@ class MushafPageAnnotator extends ConsumerStatefulWidget {
 }
 
 class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
+  late final player = AudioPlayer();
+
   @override
   Widget build(BuildContext context) {
     final atlasCache = ref.read(cachedAtlasProvider(widget.index));
@@ -44,7 +48,7 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
     final pageRebuild = ref.watch(pageRebuildProvider(widget.index));
 
     return GestureDetector(
-      onTapDown: (details) {
+      onTapDown: (details) async {
         final sprites = ref.read(spriteProvider)[widget.index].sprMnfst;
 
         final localP = details.localPosition;
@@ -89,8 +93,7 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
                     null,
                   );
             case .audio:
-              print('Audio Mode');
-            // TODO: Implement word-by-word audio
+              player.play(UrlSource(id.toQuranAudioUrl));
             case .highlight:
               final scrnSize = MediaQuery.sizeOf(context);
               final gp = details.globalPosition;
@@ -100,9 +103,7 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
                 Offset(left * scaleX, top * scaleY),
               );
 
-              final bool isBubbleTop = gp.dy < annotateBubbleWidth
-                  ? false
-                  : true;
+              final isBubbleTop = gp.dy > annotateBubbleWidth;
               final double bubbleTop = isBubbleTop
                   ? elemGlobalLT.dy - 86
                   : elemGlobalLT.dy + sprite.eLTWH[3] * scaleY;

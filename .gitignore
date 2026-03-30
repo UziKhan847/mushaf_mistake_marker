@@ -47,8 +47,6 @@ app.*.map.json
 /lib/page_data/pages.g.dart
 /lib/drawable_path/drawable_path.g.dart
 /lib/mushaf/mushaf_page_data.g.dart
-/lib/mushaf/back_up.dart
-/lib/mushaf/backup.dart
 /lib/sprite/orig_size.g.dart
 /lib/sprite/rect_offset.g.dart
 /lib/sprite/rst_offset.g.dart

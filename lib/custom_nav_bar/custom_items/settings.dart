@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mushaf_mistake_marker/icons/my_flutter_app_icons.dart';
+import 'package:mushaf_mistake_marker/icons/mushaf_app_icons_icons.dart';
 
 class SettingsItem extends StatelessWidget {
   const SettingsItem({super.key, required this.isPortrait});
@@ -27,7 +27,7 @@ class SettingsItem extends StatelessWidget {
           child: InkWell(
             customBorder: const CircleBorder(),
             onTap: () {},
-            child: const Icon(MyFlutterApp.settings_outlined),
+            child: const Icon(MushafAppIcons.settings_outlined),
           ),
         ),
       ),

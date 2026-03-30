@@ -26,6 +26,7 @@ dependencies:
   objectbox_flutter_libs: ^5.0.1
   objectbox_generator: ^5.0.1
   flutter_launcher_icons: ^0.14.4
+  audioplayers: ^6.6.0
 
 dev_dependencies:
   flutter_test:
@@ -58,9 +59,9 @@ flutter:
           weight: 600
         - asset: fonts/ScheherazadeNew-Bold.ttf
           weight: 700
-    - family: MyFlutterApp
+    - family: MushafAppIcons
       fonts:
-        - asset: fonts/MyFlutterApp.ttf
+        - asset: fonts/MushafAppIcons.ttf
 
 objectbox:
   output_dir: objectbox

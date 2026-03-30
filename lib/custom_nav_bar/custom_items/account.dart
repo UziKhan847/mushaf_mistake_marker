@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/custom_nav_bar/item.dart';
 import 'package:mushaf_mistake_marker/extensions/context_extensions.dart';
-import 'package:mushaf_mistake_marker/icons/my_flutter_app_icons.dart';
-import 'package:mushaf_mistake_marker/overlay/overlay_type/bottom_side_sheet.dart';
+import 'package:mushaf_mistake_marker/icons/mushaf_app_icons_icons.dart';
 import 'package:mushaf_mistake_marker/overlay/widgets/users_bottom_sheet.dart';
 import 'package:mushaf_mistake_marker/providers/buttons/account_nav.dart';
 
@@ -38,7 +37,7 @@ class _AccountItemState extends ConsumerState<AccountItem> {
       },
       iconLabel: 'Account',
       child: Icon(
-        isSelected ? MyFlutterApp.account : MyFlutterApp.account_outlined,
+        isSelected ? MushafAppIcons.account : MushafAppIcons.account_outlined,
         color: isSelected ? cs.primary : cs.onSurfaceVariant,
       ),
     );

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/custom_nav_bar/item.dart';
-import 'package:mushaf_mistake_marker/enums.dart';
-import 'package:mushaf_mistake_marker/icons/my_flutter_app_icons.dart';
+import 'package:mushaf_mistake_marker/icons/mushaf_app_icons_icons.dart';
 import 'package:mushaf_mistake_marker/providers/buttons/annotate_mode.dart';
 
 class AudioModeItem extends ConsumerWidget {
@@ -22,7 +21,7 @@ class AudioModeItem extends ConsumerWidget {
         annotateModeProv.setMode(.audio);
       },
       child: Icon(
-        isSelected ? MyFlutterApp.audio : MyFlutterApp.audio_outlined,
+        isSelected ? MushafAppIcons.audio : MushafAppIcons.audio_outlined,
         color: isSelected ? cs.primary : cs.onSurfaceVariant,
       ),
     );

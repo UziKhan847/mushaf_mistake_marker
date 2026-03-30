@@ -1,11 +1,11 @@
-// ignore_for_file: dangling_library_doc_comments, constant_identifier_names
+// ignore_for_file: constant_identifier_names
 
 import 'package:flutter/widgets.dart';
 
-class MyFlutterApp {
-  MyFlutterApp._();
+class MushafAppIcons {
+  MushafAppIcons._();
 
-  static const _kFontFam = 'MyFlutterApp';
+  static const _kFontFam = 'MushafAppIcons';
   static const String? _kFontPkg = null;
 
   static const account = IconData(
