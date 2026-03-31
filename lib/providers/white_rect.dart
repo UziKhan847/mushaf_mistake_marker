@@ -10,20 +10,14 @@ class WhiteRectNotifier extends Notifier<ui.Image?> {
   ui.Image? build() => null;
 
   Future<void> generateImg() async {
-    const size = 1.0;
-
     final recorder = ui.PictureRecorder();
     final canvas = ui.Canvas(recorder);
 
     canvas.drawRect(
-      const ui.Rect.fromLTWH(0, 0, size, size),
+      const ui.Rect.fromLTWH(0, 0, 1.0, 1.0),
       ui.Paint()..color = const ui.Color(0xFFFFFFFF),
     );
 
-    try {
-      state = await recorder.endRecording().toImage(size.toInt(), size.toInt());
-    } catch (e) {
-      throw Exception('Exception. Error message: $e');
-    }
+    state = await recorder.endRecording().toImage(1, 1);
   }
 }

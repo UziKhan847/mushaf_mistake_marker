@@ -26,7 +26,7 @@ class MushafPagePainter extends CustomPainter {
 
     canvas.scale(scaleX, scaleY);
 
-    final paint = Paint()..filterQuality = FilterQuality.high;
+    final paint = Paint()..filterQuality = .none;
 
     canvas.drawRawAtlas(
       whiteRect,
@@ -37,6 +37,8 @@ class MushafPagePainter extends CustomPainter {
       null,
       paint,
     );
+
+    paint.filterQuality = .medium;
 
     canvas.drawRawAtlas(
       image,
