@@ -16,25 +16,25 @@ class BottomSideSheetOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     final radius = const Radius.circular(20);
     final scrSize = MediaQuery.sizeOf(context);
-    final isPortrait = MediaQuery.orientationOf(context) == Orientation.portrait;
+    final isPortrait = MediaQuery.orientationOf(context) == .portrait;
 
     return Positioned(
       right: isPortrait ? null : 0,
       bottom: isPortrait ? 0 : null,
       top: isPortrait ? null : (scrSize.height - (scrSize.height - 50)) / 2,
       child: Material(
-        clipBehavior: Clip.hardEdge,
+        clipBehavior: .hardEdge,
         elevation: elevation,
         borderRadius:
             borderRadius ??
-            BorderRadius.only(
+            .only(
               topLeft: radius,
-              topRight: isPortrait ? radius : Radius.zero,
-              bottomLeft: isPortrait ? Radius.zero : radius,
+              topRight: isPortrait ? radius : .zero,
+              bottomLeft: isPortrait ? .zero : radius,
             ),
         color: Theme.of(context).colorScheme.surface,
         child: SizedBox(
-          width: isPortrait ? scrSize.width : scrSize.height,
+          width: isPortrait ? scrSize.width : (scrSize.width - 50) / 2,
           height: isPortrait ? (scrSize.height - 50) / 2 : scrSize.height - 50,
           child: child,
         ),

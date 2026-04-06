@@ -25,7 +25,7 @@ class UsersBottomSheet extends ConsumerWidget {
       elevation: elevation,
       borderRadius: borderRadius,
       child: ListView.builder(
-        padding: EdgeInsets.zero,
+        padding: .zero,
         itemCount: users.length + 1,
         itemBuilder: (context, index) {
           if (index < users.length) {

@@ -2,17 +2,15 @@ import 'dart:ui' as ui;
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final sprImgProvider =
-    AutoDisposeAsyncNotifierProviderFamily<
-      SprImgProvider,
-      ui.Image,
-      int
-    >(SprImgProvider.new);
+final sprImgProvider = AsyncNotifierProvider.autoDispose
+    .family<SprImgProvider, ui.Image, int>(SprImgProvider.new);
 
-class SprImgProvider
-    extends AutoDisposeFamilyAsyncNotifier<ui.Image, int> {
+class SprImgProvider extends AsyncNotifier<ui.Image> {
+  SprImgProvider(this.index);
+  final int index;
+
   @override
-  Future<ui.Image> build(int index) async {
+  Future<ui.Image> build() async {
     try {
       final pgNum = index + 1;
 

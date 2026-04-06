@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/sprite.dart';
 
-final spriteIdsProvider = AutoDisposeProviderFamily<List<String>?, int>((
+final spriteIdsProvider = Provider.autoDispose.family<List<String>?, int>((
   ref,
   userId,
 ) {

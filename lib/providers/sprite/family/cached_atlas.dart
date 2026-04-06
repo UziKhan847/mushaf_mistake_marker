@@ -8,14 +8,15 @@ import 'package:mushaf_mistake_marker/providers/sprite/family/ele_mark_data_map.
 import 'package:mushaf_mistake_marker/providers/sprite/family/page/rebuild.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/sprite.dart';
 
-final cachedAtlasProvider =
-    AutoDisposeNotifierProviderFamily<CachedAtlasNotifier, AtlasCache, int>(
-      CachedAtlasNotifier.new,
-    );
+final cachedAtlasProvider = NotifierProvider.autoDispose
+    .family<CachedAtlasNotifier, AtlasCache, int>(CachedAtlasNotifier.new);
 
-class CachedAtlasNotifier extends AutoDisposeFamilyNotifier<AtlasCache, int> {
+class CachedAtlasNotifier extends Notifier<AtlasCache> {
+  CachedAtlasNotifier(this.index);
+  final int index;
+
   @override
-  AtlasCache build(int index) {
+  AtlasCache build() {
     final sprites = ref.read(spriteProvider)[index].sprMnfst;
     final elemDataMap = ref.read(sprElemDataMapProvider(index));
     final isDarkMode = ref.watch(darkModeProvider);

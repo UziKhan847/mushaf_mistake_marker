@@ -4,17 +4,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/sprite_models/sprite_ele_data.dart';
 
-final sprPgDataProvider =
-    AutoDisposeAsyncNotifierProviderFamily<
-      SprPgDataNotifier,
-      List<SpriteEleData>,
-      int
-    >(SprPgDataNotifier.new);
+final sprPgDataProvider = AsyncNotifierProvider.autoDispose
+    .family<SprPgDataNotifier, List<SpriteEleData>, int>(SprPgDataNotifier.new);
 
-class SprPgDataNotifier
-    extends AutoDisposeFamilyAsyncNotifier<List<SpriteEleData>, int> {
+class SprPgDataNotifier extends AsyncNotifier<List<SpriteEleData>> {
+  SprPgDataNotifier(this.index);
+  final int index;
+
   @override
-  Future<List<SpriteEleData>> build(int index) async {
+  Future<List<SpriteEleData>> build() async {
     try {
       final pgNum = index + 1;
 

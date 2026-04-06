@@ -1,5 +1,5 @@
 import 'dart:ui' as ui;
-import 'package:audioplayers/audioplayers.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/constants.dart';
@@ -40,6 +40,12 @@ class MushafPageAnnotator extends ConsumerStatefulWidget {
 
 class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
   late final player = AudioPlayer();
+
+  @override
+  void dispose() {
+    player.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +99,16 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
                     null,
                   );
             case .audio:
-              player.play(UrlSource(id.toQuranAudioUrl));
+              try {
+                final duration = await player.setUrl(id.toQuranAudioUrl);
+                print('Duration: $duration');
+                if (duration != null) {
+                  await player.play();
+                }
+              } catch (e, st) {
+                throw Exception('Error: $e.\nStack Trace: $st');
+              }
+
             case .highlight:
               final scrnSize = MediaQuery.sizeOf(context);
               final gp = details.globalPosition;

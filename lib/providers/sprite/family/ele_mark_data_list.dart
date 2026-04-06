@@ -5,8 +5,8 @@ import 'package:mushaf_mistake_marker/providers/objectbox/box/element_mark_data.
 import 'package:mushaf_mistake_marker/providers/objectbox/entities/mushaf_data.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/sprite.dart';
 
-final sprEleDataListProvider =
-    AutoDisposeProviderFamily<List<ElementMarkData>, int>((ref, index) {
+final sprEleDataListProvider = Provider.autoDispose
+    .family<List<ElementMarkData>, int>((ref, index) {
       final sprites = ref.read(spriteProvider)[index].sprMnfst;
 
       final sprEleIds = sprites.map((e) => e.id).toList();
@@ -38,14 +38,14 @@ final sprEleDataListProvider =
     });
 
 // final sprEleDataListProvider =
-//     AutoDisposeNotifierProviderFamily<
+//     NotifierProvider.autoDispose.family<
 //       SprEleDataListNotifier,
 //       List<ElementMarkData>,
 //       int
 //     >(SprEleDataListNotifier.new);
 
 // class SprEleDataListNotifier
-//     extends AutoDisposeFamilyNotifier<List<ElementMarkData>, int> {
+//     extends Notifier<List<ElementMarkData>, int> {
 //   @override
 //   List<ElementMarkData> build(int index) {
 //     final sprites = ref.read(spriteProvider)[index].sprMnfst;

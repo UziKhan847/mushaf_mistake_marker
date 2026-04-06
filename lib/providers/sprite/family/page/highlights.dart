@@ -2,17 +2,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/ele_mark_data_list.dart';
 
-final pageHighlightsProvider =
-    AutoDisposeNotifierProviderFamily<
-      PageHighlightsNotifier,
-      Map<String, HighlightType>,
-      int
-    >(PageHighlightsNotifier.new);
+final pageHighlightsProvider = NotifierProvider.autoDispose
+    .family<PageHighlightsNotifier, Map<String, HighlightType>, int>(
+      PageHighlightsNotifier.new,
+    );
 
-class PageHighlightsNotifier
-    extends AutoDisposeFamilyNotifier<Map<String, HighlightType>, int> {
+class PageHighlightsNotifier extends Notifier<Map<String, HighlightType>> {
+  PageHighlightsNotifier(this.index);
+  final int index;
+
   @override
-  Map<String, HighlightType> build(int index) {
+  Map<String, HighlightType> build() {
     final eleMarkData = ref.read(sprEleDataListProvider(index));
 
     if (eleMarkData.isEmpty) return {};

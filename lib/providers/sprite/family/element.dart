@@ -6,17 +6,15 @@ import 'package:mushaf_mistake_marker/providers/objectbox/box/element_mark_data.
 import 'package:mushaf_mistake_marker/providers/objectbox/box/mushaf_data.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/entities/mushaf_data.dart';
 
-final elementProvider =
-    AutoDisposeNotifierProviderFamily<
-      ElementNotifier,
-      ElementMarkData?,
-      String
-    >(ElementNotifier.new);
+final elementProvider = NotifierProvider.autoDispose
+    .family<ElementNotifier, ElementMarkData?, String>(ElementNotifier.new);
 
-class ElementNotifier
-    extends AutoDisposeFamilyNotifier<ElementMarkData?, String> {
+class ElementNotifier extends Notifier<ElementMarkData?> {
+  ElementNotifier(this.key);
+  final String key;
+
   @override
-  ElementMarkData? build(String key) {
+  ElementMarkData? build() {
     final elemBox = ref.read(elementMarkDataBoxProvider);
     final query = elemBox.query(ElementMarkData_.key.equals(key)).build();
     final element = query.findFirst();
