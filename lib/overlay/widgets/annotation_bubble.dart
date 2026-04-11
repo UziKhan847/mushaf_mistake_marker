@@ -101,7 +101,7 @@ class _AnnotationBubbleState extends ConsumerState<AnnotationBubble> {
                       onChanged: (String annotation) {
                         if (element == null) {
                           elemProv.addElement(
-                            key: widget.elemId,
+                            //key: widget.elemId,
                             annotation: annotation,
                           );
                         } else {
@@ -142,7 +142,7 @@ class _AnnotationBubbleState extends ConsumerState<AnnotationBubble> {
 
                           if (element == null) {
                             elemProv.addElement(
-                              key: widget.elemId,
+                              //key: widget.elemId,
                               highlight: buttonHighlight,
                             );
                           } else {
@@ -159,7 +159,6 @@ class _AnnotationBubbleState extends ConsumerState<AnnotationBubble> {
                             isDarkMode,
                             element,
                           );
-
                         },
                       );
                     }),

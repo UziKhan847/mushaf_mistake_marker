@@ -101,7 +101,6 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
             case .audio:
               try {
                 final duration = await player.setUrl(id.toQuranAudioUrl);
-                print('Duration: $duration');
                 if (duration != null) {
                   await player.play();
                 }

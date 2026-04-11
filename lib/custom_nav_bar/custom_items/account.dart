@@ -24,6 +24,7 @@ class _AccountItemState extends ConsumerState<AccountItem> {
 
     return NavBarItem(
       isSelected: isSelected,
+      iconLabel: 'Account',
       onTap: () {
         overlay = context.insertAnimatedOverlay(
           backdropOn: true,
@@ -35,7 +36,6 @@ class _AccountItemState extends ConsumerState<AccountItem> {
           children: [UsersBottomSheet()],
         );
       },
-      iconLabel: 'Account',
       child: Icon(
         isSelected ? MushafAppIcons.account : MushafAppIcons.account_outlined,
         color: isSelected ? cs.primary : cs.onSurfaceVariant,

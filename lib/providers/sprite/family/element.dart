@@ -23,7 +23,7 @@ class ElementNotifier extends Notifier<ElementMarkData?> {
   }
 
   void addElement({
-    required String key,
+    //required String key,
     HighlightType? highlight,
     String? annotation,
   }) {
