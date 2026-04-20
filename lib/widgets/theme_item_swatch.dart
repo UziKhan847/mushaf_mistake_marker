@@ -26,8 +26,8 @@ class ThemeItemSwatch extends StatelessWidget {
         width: size.width,
         child: DecoratedBox(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(borderRadius),
-            border: Border.all(
+            borderRadius: .circular(borderRadius),
+            border: .all(
               width: borderWidth,
               color: borderColor ?? cs.primary,
             ),

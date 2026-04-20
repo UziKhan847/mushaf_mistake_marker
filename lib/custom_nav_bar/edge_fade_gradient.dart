@@ -51,7 +51,6 @@ class EdgeFadeGradient extends StatelessWidget {
       width: isPortrait ? 20.0 : null,
       height: isPortrait ? null : 20.0,
       child: IgnorePointer(
-        ignoring: true,
         child: DecoratedBox(
           decoration: BoxDecoration(
             gradient: LinearGradient(

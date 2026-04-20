@@ -104,3 +104,4 @@ const List<HighlightType> highlightTypes = [
 const annotateBubbleWidth = 250.0;
 const annotateBtnWidth = annotateBubbleWidth / 5;
 const bubbleEdgePadding = 2.0;
+const bottomSideSheetHeaderSize = 28.0;

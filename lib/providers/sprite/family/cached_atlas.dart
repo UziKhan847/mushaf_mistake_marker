@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mushaf_mistake_marker/atlas_models/cache.dart';
+import 'package:mushaf_mistake_marker/models/atlas/cache.dart';
 import 'package:mushaf_mistake_marker/constants.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/element_mark_data.dart';
 import 'package:mushaf_mistake_marker/providers/buttons/dark_mode.dart';
@@ -8,8 +8,8 @@ import 'package:mushaf_mistake_marker/providers/sprite/family/ele_mark_data_map.
 import 'package:mushaf_mistake_marker/providers/sprite/family/page/rebuild.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/sprite.dart';
 
-final cachedAtlasProvider = NotifierProvider.autoDispose
-    .family<CachedAtlasNotifier, AtlasCache, int>(CachedAtlasNotifier.new);
+final cachedAtlasProvider = NotifierProvider.family
+    .autoDispose<CachedAtlasNotifier, AtlasCache, int>(CachedAtlasNotifier.new);
 
 class CachedAtlasNotifier extends Notifier<AtlasCache> {
   CachedAtlasNotifier(this.index);

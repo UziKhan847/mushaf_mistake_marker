@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mushaf_mistake_marker/mushaf/tiles/dual_page.dart';
-import 'package:mushaf_mistake_marker/mushaf/tiles/single_page.dart';
-import 'package:mushaf_mistake_marker/mushaf/page/changed_handler.dart';
+import 'package:mushaf_mistake_marker/tiles/mushaf/dual_page.dart';
+import 'package:mushaf_mistake_marker/tiles/mushaf/single_page.dart';
+import 'package:mushaf_mistake_marker/mushaf/changed_handler.dart';
 import 'package:mushaf_mistake_marker/providers/page_mode.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf/page_controller.dart';
 import 'package:mushaf_mistake_marker/providers/pages_provider.dart';

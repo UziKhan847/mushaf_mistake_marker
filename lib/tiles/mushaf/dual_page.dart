@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mushaf_mistake_marker/mushaf/page/screen.dart';
+import 'package:mushaf_mistake_marker/mushaf/screen.dart';
 import 'package:mushaf_mistake_marker/page_data/page_data.dart';
 import 'package:mushaf_mistake_marker/widgets/margin_lantern.dart';
 

@@ -5,11 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/constants.dart';
 import 'package:mushaf_mistake_marker/extensions/context_extensions.dart';
 import 'package:mushaf_mistake_marker/extensions/string_extension.dart';
-import 'package:mushaf_mistake_marker/mushaf/page/annotator_handler.dart';
-import 'package:mushaf_mistake_marker/mushaf/page/painters/mushaf_page.dart';
+import 'package:mushaf_mistake_marker/mushaf/annotator_handler.dart';
+import 'package:mushaf_mistake_marker/mushaf/painters/mushaf_page.dart';
 import 'package:mushaf_mistake_marker/providers/buttons/annotate_mode.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/element.dart';
-import 'package:mushaf_mistake_marker/overlay/widgets/annotation_bubble.dart';
+import 'package:mushaf_mistake_marker/widgets/overlay/annotation_bubble.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/cached_atlas.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/page/rebuild.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/sprite.dart';
@@ -49,9 +49,9 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
 
   @override
   Widget build(BuildContext context) {
-    final atlasCache = ref.read(cachedAtlasProvider(widget.index));
-    final isDarkMode = Theme.brightnessOf(context) == .dark;
+    final atlasCache = ref.watch(cachedAtlasProvider(widget.index));
     final pageRebuild = ref.watch(pageRebuildProvider(widget.index));
+    final isDarkMode = Theme.brightnessOf(context) == .dark;
 
     return GestureDetector(
       onTapDown: (details) async {

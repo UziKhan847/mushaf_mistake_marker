@@ -15,6 +15,6 @@ class AppThemeNotifier extends Notifier<AppTheme> {
 
   void setTheme(AppTheme theme) {
     state = theme;
-    ref.read(sharedPrefsProv).setInt('appThemeIndex', theme.id);
+    ref.read(sharedPrefsProv).setInt('appThemeIndex', theme.index);
   }
 }

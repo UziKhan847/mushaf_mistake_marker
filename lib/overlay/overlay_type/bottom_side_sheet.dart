@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mushaf_mistake_marker/constants.dart';
 
 class BottomSideSheetOverlay extends StatelessWidget {
   const BottomSideSheetOverlay({
@@ -22,8 +23,14 @@ class BottomSideSheetOverlay extends StatelessWidget {
     }
 
     return isPortrait
-        ? Size(scrSize.width, (scrSize.height - 50) / 2)
-        : Size((scrSize.width - 50) / 2, scrSize.height - 25);
+        ? Size(
+            scrSize.width,
+            (scrSize.height - 50) / 2 + bottomSideSheetHeaderSize,
+          )
+        : Size(
+            (scrSize.width - 50) / 2 + bottomSideSheetHeaderSize,
+            scrSize.height - 25,
+          );
   }
 
   @override

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mushaf_mistake_marker/overlay/widgets/animated_backdrop_filter.dart';
+import 'package:mushaf_mistake_marker/widgets/overlay/animated_backdrop_filter.dart';
 
 extension ContextOverlayExtension on BuildContext {
   OverlayEntry insertAnimatedOverlay({

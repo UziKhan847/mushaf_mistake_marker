@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mushaf_mistake_marker/mushaf/page/annotator.dart';
+import 'package:mushaf_mistake_marker/mushaf/annotator.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/sprite.dart';
 
 class MushafPageScreen extends ConsumerStatefulWidget {

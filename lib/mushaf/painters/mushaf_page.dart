@@ -1,6 +1,6 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:mushaf_mistake_marker/atlas_models/cache.dart';
+import 'package:mushaf_mistake_marker/models/atlas/cache.dart';
 
 class MushafPagePainter extends CustomPainter {
   MushafPagePainter({

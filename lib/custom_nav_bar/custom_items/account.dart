@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/custom_nav_bar/item.dart';
 import 'package:mushaf_mistake_marker/extensions/context_extensions.dart';
 import 'package:mushaf_mistake_marker/icons/mushaf_app_icons_icons.dart';
-import 'package:mushaf_mistake_marker/overlay/widgets/users_bottom_sheet.dart';
+import 'package:mushaf_mistake_marker/widgets/sheets/accounts_sheet.dart';
 import 'package:mushaf_mistake_marker/providers/buttons/account_nav.dart';
 
 class AccountItem extends ConsumerStatefulWidget {
@@ -33,7 +33,7 @@ class _AccountItemState extends ConsumerState<AccountItem> {
             accNavBarProv.switchBtnState();
             context.removeOverlayEntry(overlay);
           },
-          children: [UsersBottomSheet()],
+          children: [AccountsSheet()],
         );
       },
       child: Icon(

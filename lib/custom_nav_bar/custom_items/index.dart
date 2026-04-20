@@ -5,6 +5,7 @@ import 'package:mushaf_mistake_marker/extensions/context_extensions.dart';
 import 'package:mushaf_mistake_marker/icons/mushaf_app_icons_icons.dart';
 import 'package:mushaf_mistake_marker/overlay/overlay_type/back_dismiss_button.dart';
 import 'package:mushaf_mistake_marker/overlay/overlay_type/bottom_side_sheet.dart';
+import 'package:mushaf_mistake_marker/widgets/sheets/index_sheet.dart';
 
 class IndexItem extends ConsumerStatefulWidget {
   const IndexItem({super.key});
@@ -38,7 +39,7 @@ class _IndexItemState extends ConsumerState<IndexItem> {
             ),
             BottomSideSheetOverlay(
               isFullScreen: true,
-              child: Center(child: Text('Hello')),
+              child: IndexSheet(),
             ),
           ],
         );

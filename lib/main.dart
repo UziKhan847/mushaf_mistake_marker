@@ -14,7 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   JustAudioMediaKit.ensureInitialized();
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  SystemChrome.setEnabledSystemUIMode(.immersiveSticky);
   final prefs = await SharedPreferencesWithCache.create(
     cacheOptions: SharedPreferencesWithCacheOptions(
       allowList: {
@@ -40,6 +40,8 @@ Future<void> main() async {
   );
 }
 
+late final ObjectBox objectbox;
+
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
@@ -62,5 +64,3 @@ class MyApp extends ConsumerWidget {
     );
   }
 }
-
-late final ObjectBox objectbox;

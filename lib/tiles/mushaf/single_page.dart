@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mushaf_mistake_marker/mushaf/page/header/juz_number.dart';
-import 'package:mushaf_mistake_marker/mushaf/page/header/page_number.dart';
-import 'package:mushaf_mistake_marker/mushaf/page/header/surah_number.dart';
-import 'package:mushaf_mistake_marker/mushaf/page/screen.dart';
+import 'package:mushaf_mistake_marker/mushaf/header/juz_number.dart';
+import 'package:mushaf_mistake_marker/mushaf/header/page_number.dart';
+import 'package:mushaf_mistake_marker/mushaf/header/surah_number.dart';
+import 'package:mushaf_mistake_marker/mushaf/screen.dart';
 import 'package:mushaf_mistake_marker/page_data/page_data.dart';
 
 class MushafSinglePageTile extends StatelessWidget {

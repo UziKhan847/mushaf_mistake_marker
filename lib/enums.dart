@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'package:flutter/material.dart';
 
 enum HighlightType {
   unknown(0),
@@ -46,34 +46,31 @@ enum TrianglePosition {
 }
 
 enum AppTheme {
-  gold(0),
-  blue(1),
-  red(2),
-  green(3),
-  purple(4),
-  monochrome(5);
+  gold(lightSeed: Color(0xFF7b580c), darkSeed: Color(0xFFeebf6d)),
+  blue(lightSeed: Color(0xFF35618e), darkSeed: Color(0xFFa0cafd)),
+  red(lightSeed: Color(0xFF904a45), darkSeed: Color(0xFFffb3b0)),
+  green(lightSeed: Color(0xFF34693f), darkSeed: Color(0xFF9ad4a1)),
+  purple(lightSeed: Color(0xFF735187), darkSeed: Color(0xFFe2b7f4)),
+  monochrome(lightSeed: Color(0xFF3A3A3C), darkSeed: Color(0xFFAEAEB2));
 
-  const AppTheme(this.id);
-  final int id;
+  const AppTheme({required this.lightSeed, required this.darkSeed});
 
-  static AppTheme fromThemeIndex(int id) =>
-      .values.firstWhere((e) => e.id == id, orElse: () => .gold);
+  final Color lightSeed;
+  final Color darkSeed;
 
-  Color get lightSeed => switch (this) {
-    .gold => const Color(0xFF7b580c),
-    .blue => const Color(0xFF35618e),
-    .red => const Color(0xFF904a45),
-    .green => const Color(0xFF34693f),
-    .purple => const Color(0xFF735187),
-    .monochrome => const Color(0xFF3A3A3C),
-  };
+  static AppTheme fromThemeIndex(int index) =>
+      .values.firstWhere((e) => e.index == index, orElse: () => .gold);
+}
 
-  Color get darkSeed => switch (this) {
-    .gold => const Color(0xFFeebf6d),
-    .blue => const Color(0xFFa0cafd),
-    .red => const Color(0xFFffb3b0),
-    .green => const Color(0xFF9ad4a1),
-    .purple => const Color(0xFFe2b7f4),
-    .monochrome => const Color(0xFFAEAEB2),
-  };
+enum IndexTab {
+  pages('Pages', Icons.auto_stories_outlined),
+  surahs('Surahs', Icons.format_list_numbered_outlined),
+  juz('Juz', Icons.segment_outlined),
+  hizb('Hizb', Icons.grid_view_outlined),
+  rubu('Rubʿ', Icons.grid_on_outlined),
+  sajdah('Sajdah', Icons.south_east_outlined);
+
+  final String label;
+  final IconData icon;
+  const IndexTab(this.label, this.icon);
 }
