@@ -16,7 +16,15 @@ class ElementNotifier extends Notifier<ElementMarkData?> {
   @override
   ElementMarkData? build() {
     final elemBox = ref.read(elementMarkDataBoxProvider);
-    final query = elemBox.query(ElementMarkData_.key.equals(key)).build();
+    final mushafDataId = ref.read(userMushafDataProvider)?.id;
+    if (mushafDataId == null) return null;
+
+    final query = elemBox
+        .query(
+          ElementMarkData_.key.equals(key) &
+              ElementMarkData_.mushafData.equals(mushafDataId),
+        )
+        .build();
     final element = query.findFirst();
     query.close();
     return element;
