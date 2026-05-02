@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mushaf_mistake_marker/models/index/stats.dart';
 import 'package:mushaf_mistake_marker/widgets/index/stat_cell.dart';
+import 'package:mushaf_mistake_marker/widgets/stats_v_divider.dart';
 
 class StatsPanel extends StatelessWidget {
   const StatsPanel({
@@ -14,16 +15,11 @@ class StatsPanel extends StatelessWidget {
   final ColorScheme cs;
   final TextTheme tt;
 
-  Widget get vDivider => const SizedBox(
-    height: 60,
-    child: VerticalDivider(width: 1, color: Colors.black12),
-  );
-
   double quality(IndexStats s) {
-    final weighted =
+    final totalMarks =
         s.mistakes + (s.oldMistakes * 0.5) + s.doubts + s.tajwidMistakes;
-    if (weighted == 0) return 1.0;
-    return (1 - (weighted / (weighted + s.revisions + 1))).clamp(0.0, 1.0);
+    if (totalMarks == 0) return 1.0;
+    return (1 - (totalMarks / (totalMarks + s.revisions + 1))).clamp(0.0, 1.0);
   }
 
   (String, Color) qualityLabelAndColor(double q) => switch (q) {
@@ -55,21 +51,21 @@ class StatsPanel extends StatelessWidget {
                 label: 'Mistakes',
                 value: stats.mistakes,
               ),
-              vDivider,
+              StatsVDivider(),
               StatCell(
                 icon: Icons.history_rounded,
                 color: Colors.lightBlue,
                 label: 'Old\nmistakes',
                 value: stats.oldMistakes,
               ),
-              vDivider,
+              StatsVDivider(),
               StatCell(
                 icon: Icons.help_outline_rounded,
                 color: Colors.purple,
                 label: 'Doubts',
                 value: stats.doubts,
               ),
-              vDivider,
+              StatsVDivider(),
               StatCell(
                 icon: Icons.record_voice_over_outlined,
                 color: Colors.green,
@@ -80,7 +76,7 @@ class StatsPanel extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Padding(
-            padding: const EdgeInsets.fromLTRB(14, 8, 14, 14),
+            padding: const .fromLTRB(14, 8, 14, 14),
             child: Column(
               crossAxisAlignment: .start,
               children: [
@@ -88,7 +84,7 @@ class StatsPanel extends StatelessWidget {
                   mainAxisAlignment: .spaceBetween,
                   children: [
                     Text(
-                      'Memorisation quality',
+                      'Memorization quality',
                       style: tt.labelSmall?.copyWith(
                         color: cs.onSurfaceVariant,
                       ),

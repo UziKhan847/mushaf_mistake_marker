@@ -5,59 +5,67 @@ import 'package:mushaf_mistake_marker/widgets/index/stats_panel.dart';
 
 class IndexTile extends StatefulWidget {
   const IndexTile({super.key, required this.entry, required this.onNavigate});
- 
+
   final IndexEntry entry;
   final VoidCallback onNavigate;
- 
+
   @override
   State<IndexTile> createState() => _IndexTileState();
 }
- 
-class _IndexTileState extends State<IndexTile> with SingleTickerProviderStateMixin {
-  bool _expanded = false;
-  late final AnimationController _anim;
-  late final Animation<double> _rotate;
-  late final Animation<double> _expand;
- 
+
+class _IndexTileState extends State<IndexTile>
+    with SingleTickerProviderStateMixin {
+  var expanded = false;
+
+  late final AnimationController animCtrl;
+  late final Animation<double> rotate, expand;
+
   @override
   void initState() {
     super.initState();
-    _anim = AnimationController(
-        duration: const Duration(milliseconds: 250), vsync: this);
-    _rotate = Tween<double>(begin: 0, end: 0.5)
-        .animate(CurvedAnimation(parent: _anim, curve: Curves.easeInOut));
-    _expand = CurvedAnimation(parent: _anim, curve: Curves.easeInOut);
+
+    animCtrl = AnimationController(
+      duration: const Duration(milliseconds: 250),
+      vsync: this,
+    );
+
+    rotate = Tween<double>(
+      begin: 0,
+      end: 0.5,
+    ).animate(CurvedAnimation(parent: animCtrl, curve: Curves.easeInOut));
+
+    expand = CurvedAnimation(parent: animCtrl, curve: Curves.easeInOut);
   }
- 
+
   @override
   void dispose() {
-    _anim.dispose();
+    animCtrl.dispose();
     super.dispose();
   }
- 
-  void _toggle() {
-    setState(() => _expanded = !_expanded);
-    if (_expanded) {
-      _anim.forward();
+
+  void toggle() {
+    setState(() => expanded = !expanded);
+
+    if (expanded) {
+      animCtrl.forward();
     } else {
-      _anim.reverse();
+      animCtrl.reverse();
     }
   }
- 
+
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
-    final e = widget.entry;
- 
+    final entry = widget.entry;
+
     return Column(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: .min,
       children: [
-        // ── Main row ──────────────────────────────────────────
         InkWell(
           onTap: widget.onNavigate,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 10, 8, 10),
+            padding: const .fromLTRB(16, 10, 8, 10),
             child: Row(
               children: [
                 // Page badge
@@ -66,47 +74,48 @@ class _IndexTileState extends State<IndexTile> with SingleTickerProviderStateMix
                   height: 44,
                   decoration: BoxDecoration(
                     color: cs.primaryContainer,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: .circular(12),
                   ),
-                  alignment: Alignment.center,
+                  alignment: .center,
                   child: Text(
-                    '${e.page}',
+                    '${entry.page}',
                     style: tt.labelLarge?.copyWith(
                       color: cs.onPrimaryContainer,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: .w700,
                     ),
                   ),
                 ),
- 
+
                 const SizedBox(width: 14),
- 
-                // Title + subtitle
+
                 Expanded(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: .start,
                     children: [
-                      Text(e.title,
-                          style: tt.bodyLarge
-                              ?.copyWith(fontWeight: FontWeight.w600)),
+                      Text(
+                        entry.title,
+                        style: tt.bodyLarge?.copyWith(fontWeight: .w600),
+                      ),
                       const SizedBox(height: 2),
-                      Text(e.subtitle,
-                          style: tt.bodySmall
-                              ?.copyWith(color: cs.onSurfaceVariant)),
+                      Text(
+                        entry.subtitle,
+                        style: tt.bodySmall?.copyWith(
+                          color: cs.onSurfaceVariant,
+                        ),
+                      ),
                     ],
                   ),
                 ),
- 
-                // Mini stat chips
-                MiniStatRow(stats: e.stats),
- 
-                // Expand chevron
+
+                MiniStatRow(stats: entry.stats),
+
                 RotationTransition(
-                  turns: _rotate,
+                  turns: rotate,
                   child: IconButton(
-                    visualDensity: VisualDensity.compact,
+                    visualDensity: .compact,
                     icon: const Icon(Icons.expand_more_rounded),
                     color: cs.onSurfaceVariant,
-                    onPressed: _toggle,
+                    onPressed: toggle,
                     tooltip: 'Details',
                   ),
                 ),
@@ -114,11 +123,11 @@ class _IndexTileState extends State<IndexTile> with SingleTickerProviderStateMix
             ),
           ),
         ),
- 
+
         // ── Expanded stats panel ───────────────────────────────
         SizeTransition(
-          sizeFactor: _expand,
-          child: StatsPanel(stats: e.stats, cs: cs, tt: tt),
+          sizeFactor: expand,
+          child: StatsPanel(stats: entry.stats, cs: cs, tt: tt),
         ),
       ],
     );

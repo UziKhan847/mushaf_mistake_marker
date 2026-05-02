@@ -8,7 +8,7 @@ class MiniStatRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Row(
-    mainAxisSize: MainAxisSize.min,
+    mainAxisSize: .min,
     children: [
       StatChip(color: Colors.red, n: stats.mistakes),
       StatChip(color: Colors.lightBlue, n: stats.oldMistakes),
