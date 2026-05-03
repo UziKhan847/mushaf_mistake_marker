@@ -68,9 +68,10 @@ enum IndexTab {
   juz('Juz', Icons.segment_outlined),
   hizb('Hizb', Icons.grid_view_outlined),
   rubu('Rubʿ', Icons.grid_on_outlined),
+  manzil('Manzil', Icons.bolt),
   sajdah('Sajdah', Icons.south_east_outlined);
 
+  const IndexTab(this.label, this.icon);
   final String label;
   final IconData icon;
-  const IndexTab(this.label, this.icon);
 }

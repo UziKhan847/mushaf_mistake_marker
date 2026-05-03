@@ -3,7 +3,7 @@ import 'package:mushaf_mistake_marker/models/index/entry.dart';
 import 'package:mushaf_mistake_marker/providers/index/lists.dart';
 
 final indexHizbListProvider =
-    AsyncNotifierProvider<IndexHizbListNotifier, List<IndexEntry>>(
+    AsyncNotifierProvider.autoDispose<IndexHizbListNotifier, List<IndexEntry>>(
       IndexHizbListNotifier.new,
     );
 

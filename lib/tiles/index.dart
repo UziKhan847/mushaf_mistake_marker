@@ -1,24 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/models/index/entry.dart';
+import 'package:mushaf_mistake_marker/models/index/stats.dart';
+import 'package:mushaf_mistake_marker/providers/index/stats/hizb.dart';
+import 'package:mushaf_mistake_marker/providers/index/stats/juz.dart';
+import 'package:mushaf_mistake_marker/providers/index/stats/manzil.dart';
+import 'package:mushaf_mistake_marker/providers/index/stats/page.dart';
+import 'package:mushaf_mistake_marker/providers/index/stats/rubu.dart';
+import 'package:mushaf_mistake_marker/providers/index/stats/surah.dart';
 import 'package:mushaf_mistake_marker/widgets/index/mini_stat_row.dart';
 import 'package:mushaf_mistake_marker/widgets/index/stats_panel.dart';
 
-class IndexTile extends StatefulWidget {
-  const IndexTile({super.key, required this.entry, required this.onNavigate});
+class IndexTile extends ConsumerStatefulWidget {
+  const IndexTile({
+    super.key,
+    required this.entry,
+    required this.tab,
+    required this.index,
+    required this.onNavigate,
+  });
 
   final IndexEntry entry;
+  final IndexTab tab;
+  final int index;
   final VoidCallback onNavigate;
 
   @override
-  State<IndexTile> createState() => _IndexTileState();
+  ConsumerState<IndexTile> createState() => _IndexTileState();
 }
 
-class _IndexTileState extends State<IndexTile>
+class _IndexTileState extends ConsumerState<IndexTile>
     with SingleTickerProviderStateMixin {
   var expanded = false;
 
   late final AnimationController animCtrl;
   late final Animation<double> rotate, expand;
+
+  IndexStats? getStats(WidgetRef ref, IndexTab tab, int index) => switch (tab) {
+    .surahs => ref.watch(indexSurahStatsProvider(index + 1)).value,
+    .juz => ref.watch(indexJuzStatsProvider(index + 1)).value,
+    .hizb => ref.watch(indexHizbStatsProvider(index + 1)).value,
+    .rubu => ref.watch(indexRubuStatsProvider(index + 1)).value,
+    .manzil => ref.watch(indexManzilStatsProvider(index + 1)).value,
+    _ => ref.watch(indexPageStatsProvider(index + 1)).value,
+  };
 
   @override
   void initState() {
@@ -58,6 +84,7 @@ class _IndexTileState extends State<IndexTile>
     final cs = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
     final entry = widget.entry;
+    final stats = getStats(ref, widget.tab, widget.index);
 
     return Column(
       mainAxisSize: .min,
@@ -107,7 +134,8 @@ class _IndexTileState extends State<IndexTile>
                   ),
                 ),
 
-                MiniStatRow(stats: entry.stats),
+                // Mini Stats Row on the Tile without Expanding
+                MiniStatRow(stats: stats ?? const IndexStats()),
 
                 RotationTransition(
                   turns: rotate,
@@ -124,10 +152,10 @@ class _IndexTileState extends State<IndexTile>
           ),
         ),
 
-        // ── Expanded stats panel ───────────────────────────────
+        // Expanded Stats
         SizeTransition(
           sizeFactor: expand,
-          child: StatsPanel(stats: entry.stats, cs: cs, tt: tt),
+          child: StatsPanel(stats: stats ?? const IndexStats(), cs: cs, tt: tt),
         ),
       ],
     );

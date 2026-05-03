@@ -3,7 +3,7 @@ import 'package:mushaf_mistake_marker/helpers/index.dart';
 import 'package:mushaf_mistake_marker/models/index/stats.dart';
 import 'package:mushaf_mistake_marker/providers/index/id_maps/hizb.dart';
 
-final indexHizbTileProvider =
+final indexHizbStatsProvider =
     AsyncNotifierProvider.family<IndexHizbStatsNotifier, IndexStats, int>(
       IndexHizbStatsNotifier.new,
     );

@@ -3,7 +3,7 @@ import 'package:mushaf_mistake_marker/models/index/entry.dart';
 import 'package:mushaf_mistake_marker/providers/index/lists.dart';
 
 final indexRubuListProvider =
-    AsyncNotifierProvider<IndexRubuListNotifier, List<IndexEntry>>(
+    AsyncNotifierProvider.autoDispose<IndexRubuListNotifier, List<IndexEntry>>(
   IndexRubuListNotifier.new,
 );
 

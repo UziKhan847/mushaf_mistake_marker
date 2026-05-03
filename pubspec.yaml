@@ -48,6 +48,7 @@ flutter:
     - assets/
     - assets/old_madani_pages_data.json
     - assets/sprite_manifests/
+    - assets/sprite_ids/
     - assets/sprite_sheets_webp/
     - assets/icons/
     - assets/images/margin_lantern.png

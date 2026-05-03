@@ -3,7 +3,7 @@ import 'package:mushaf_mistake_marker/models/index/entry.dart';
 import 'package:mushaf_mistake_marker/providers/index/lists.dart';
 
 final indexSajdahListProvider =
-    AsyncNotifierProvider<IndexSajdahListNotifier, List<IndexEntry>>(
+    AsyncNotifierProvider.autoDispose<IndexSajdahListNotifier, List<IndexEntry>>(
   IndexSajdahListNotifier.new,
 );
 

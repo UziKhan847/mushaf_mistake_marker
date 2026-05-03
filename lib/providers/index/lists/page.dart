@@ -3,7 +3,7 @@ import 'package:mushaf_mistake_marker/models/index/entry.dart';
 import 'package:mushaf_mistake_marker/providers/index/lists.dart';
 
 final indexPageListProvider =
-    AsyncNotifierProvider<IndexPageListNotifier, List<IndexEntry>>(
+    AsyncNotifierProvider.autoDispose<IndexPageListNotifier, List<IndexEntry>>(
       IndexPageListNotifier.new,
     );
 

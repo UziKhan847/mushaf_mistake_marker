@@ -79,3 +79,7 @@ Future<IndexStats> fetchStats(Ref ref, List<String> ids) async {
     tajwidMistakes: tajwid,
   );
 }
+
+const rubuQuarterIcons = ['◔', '◑', '◕', '●'];
+
+String rubuQuarterIcon(int rubuNum) => rubuQuarterIcons[(rubuNum - 1) % 4];

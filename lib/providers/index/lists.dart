@@ -1,29 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/helpers/index.dart';
 import 'package:mushaf_mistake_marker/models/index/entry.dart';
+import 'package:mushaf_mistake_marker/models/index/lists.dart';
 import 'package:mushaf_mistake_marker/providers/index/ids_maps.dart';
 import 'package:mushaf_mistake_marker/providers/pages_provider.dart';
 import 'package:mushaf_mistake_marker/surah/surah_names_data.dart';
-
-class IndexLists {
-  const IndexLists({
-    required this.pages,
-    required this.surahs,
-    required this.juz,
-    required this.hizb,
-    required this.rubu,
-    required this.manzil,
-    required this.sajdah,
-  });
-
-  final List<IndexEntry> pages;
-  final List<IndexEntry> surahs;
-  final List<IndexEntry> juz;
-  final List<IndexEntry> hizb;
-  final List<IndexEntry> rubu;
-  final List<IndexEntry> manzil;
-  final List<IndexEntry> sajdah;
-}
 
 final indexListsProvider =
     AsyncNotifierProvider<IndexListsNotifier, IndexLists>(
@@ -99,7 +80,7 @@ class IndexListsNotifier extends AsyncNotifier<IndexLists> {
       if (i <= 114) {
         surahEntries.add(
           IndexEntry(
-            title: surahName(i),
+            title: '$i. ${surahName(i)}',
             subtitle: '${surahVerseCount[i]} verses',
             page: surahFirstPage[i]!,
           ),
@@ -139,7 +120,7 @@ class IndexListsNotifier extends AsyncNotifier<IndexLists> {
       rubuEntries.add(
         IndexEntry(
           title: 'Rubʿ $i',
-          subtitle: 'Starts at ${surahName(sr)} $sr:$vr',
+          subtitle: '${rubuQuarterIcon(i)} Starts at ${surahName(sr)} $sr:$vr',
           page: rubuFirstPage[i]!,
         ),
       );

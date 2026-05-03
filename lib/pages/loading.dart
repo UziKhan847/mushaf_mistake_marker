@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/pages/homepage.dart';
-import 'package:mushaf_mistake_marker/providers/index_lists.dart';
+import 'package:mushaf_mistake_marker/providers/index/lists.dart';
 
 class LoadingPage extends ConsumerWidget {
   const LoadingPage({super.key});
@@ -11,7 +11,7 @@ class LoadingPage extends ConsumerWidget {
       .watch(indexListsProvider)
       .when(
         data: (_) => Homepage(),
-        error: (e, st) => Center(child: Text('Error: $e')),
+        error: (e, st) => Center(child: Text('Error: $e, Stacktrace: $st')),
         loading: () => Center(child: CircularProgressIndicator()),
       );
 }

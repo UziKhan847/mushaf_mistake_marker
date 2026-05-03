@@ -12,7 +12,8 @@ class PageIdsNotifier extends AsyncNotifier<List<String>> {
   final int index;
 
   @override
-  Future<List<String>> build() async =>
-      jsonDecode(await rootBundle.loadString('assets/sprite_ids/$index.json'))
-          as List<String>;
+  Future<List<String>> build() async => List<String>.from(
+    jsonDecode(await rootBundle.loadString('assets/sprite_ids/$index.json'))
+        as List,
+  );
 }

@@ -3,7 +3,7 @@ import 'package:mushaf_mistake_marker/helpers/index.dart';
 import 'package:mushaf_mistake_marker/models/index/stats.dart';
 import 'package:mushaf_mistake_marker/providers/index/id_maps/juz.dart';
 
-final indexJuzTileProvider =
+final indexJuzStatsProvider =
     AsyncNotifierProvider.family<IndexJuzStatsNotifier, IndexStats, int>(
       IndexJuzStatsNotifier.new,
     );
