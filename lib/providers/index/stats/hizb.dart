@@ -4,7 +4,7 @@ import 'package:mushaf_mistake_marker/models/index/stats.dart';
 import 'package:mushaf_mistake_marker/providers/index/id_maps/hizb.dart';
 
 final indexHizbStatsProvider =
-    AsyncNotifierProvider.family<IndexHizbStatsNotifier, IndexStats, int>(
+    AsyncNotifierProvider.family.autoDispose<IndexHizbStatsNotifier, IndexStats, int>(
       IndexHizbStatsNotifier.new,
     );
 

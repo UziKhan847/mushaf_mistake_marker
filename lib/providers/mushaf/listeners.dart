@@ -5,6 +5,8 @@ import 'package:mushaf_mistake_marker/providers/mushaf/page_controller.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/entities/settings.dart';
 
 final mushafListenersProvider = Provider<void>((ref) {
+  ref.read(mushafPgCtrlProvider);
+
   ref.listen<bool>(pageModeProvider, (prev, next) {
     if (prev == null || prev == next) return;
 

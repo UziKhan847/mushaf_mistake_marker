@@ -28,42 +28,39 @@ class _IndexSheetState extends State<IndexSheet>
 
   @override
   Widget build(BuildContext context) {
-    return BottomSideSheetOverlay(
-      isFullScreen: true,
-      child: Column(
-        children: [
-          TabBar(
-            controller: tabCtrl,
-            isScrollable: true,
-            tabAlignment: .start,
-            padding: const .symmetric(horizontal: 12),
-            tabs: IndexTab.values
-                .map(
-                  (tab) => Tab(
-                    child: Row(
-                      mainAxisSize: .min,
-                      children: [
-                        Icon(tab.icon, size: 16),
-                        const SizedBox(width: 6),
-                        Text(tab.label),
-                      ],
-                    ),
+    return Column(
+      children: [
+        TabBar(
+          controller: tabCtrl,
+          isScrollable: true,
+          tabAlignment: .start,
+          padding: const .symmetric(horizontal: 12),
+          tabs: IndexTab.values
+              .map(
+                (tab) => Tab(
+                  child: Row(
+                    mainAxisSize: .min,
+                    children: [
+                      Icon(tab.icon, size: 16),
+                      const SizedBox(width: 6),
+                      Text(tab.label),
+                    ],
                   ),
-                )
+                ),
+              )
+              .toList(),
+        ),
+        const SizedBox(height: 4),
+        const Divider(height: 1),
+        Expanded(
+          child: TabBarView(
+            controller: tabCtrl,
+            children: IndexTab.values
+                .map((tab) => IndexTabView(tab: tab))
                 .toList(),
           ),
-          const SizedBox(height: 4),
-          const Divider(height: 1),
-          Expanded(
-            child: TabBarView(
-              controller: tabCtrl,
-              children: IndexTab.values
-                  .map((tab) => IndexTabView(tab: tab))
-                  .toList(),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
