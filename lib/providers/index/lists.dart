@@ -37,13 +37,13 @@ class IndexListsNotifier extends AsyncNotifier<IndexLists> {
         manzilEntries = [];
 
     for (final p in pagesData) {
-      for (final sr in p.srNum) {
-        surahFirstPage.putIfAbsent(sr, () => p.pNum);
+      for (final sNum in p.srNum) {
+        surahFirstPage.putIfAbsent(sNum, () => p.pNum);
       }
-      for (final jz in p.jzNum) {
-        if (!juzFirstPage.containsKey(jz)) {
-          juzFirstPage[jz] = p.pNum;
-          juzStartVerse[jz] = firstVerseOnPage(p);
+      for (final jNum in p.jzNum) {
+        if (!juzFirstPage.containsKey(jNum)) {
+          juzFirstPage[jNum] = p.pNum;
+          juzStartVerse[jNum] = firstVerseOnPage(p);
         }
       }
       for (final hz in p.hzNum) {

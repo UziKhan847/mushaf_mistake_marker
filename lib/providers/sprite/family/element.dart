@@ -30,11 +30,7 @@ class ElementNotifier extends Notifier<ElementMarkData?> {
     return element;
   }
 
-  void addElement({
-    //required String key,
-    HighlightType? highlight,
-    String? annotation,
-  }) {
+  ElementMarkData addElement({HighlightType? highlight, String? annotation}) {
     final elemBox = ref.read(elementMarkDataBoxProvider);
     final mshfData = ref.read(userMushafDataProvider)!;
     final mshfDataBox = ref.read(mushafDataBoxProvider);
@@ -52,6 +48,7 @@ class ElementNotifier extends Notifier<ElementMarkData?> {
     mshfDataBox.put(mshfData);
 
     state = element;
+    return state!;
   }
 
   void removeElement(ElementMarkData? element) {

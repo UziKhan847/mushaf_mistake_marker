@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mushaf_mistake_marker/enums.dart';
-import 'package:mushaf_mistake_marker/overlay/overlay_type/bottom_side_sheet.dart';
 import 'package:mushaf_mistake_marker/widgets/index/tab_view.dart';
 
 class IndexSheet extends StatefulWidget {

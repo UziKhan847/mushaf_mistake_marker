@@ -34,14 +34,6 @@ class CachedAtlasNotifier extends Notifier<AtlasCache> {
 
     int byteIndex = 0;
 
-    final defaultElemColor = isDarkMode ? whiteInt : blackInt;
-    final defaultAnnotateColor = isDarkMode
-        ? lightGoldenBrown
-        : darkGoldenBrown;
-    final activeHighlightColors = isDarkMode
-        ? highlightDarkColors
-        : highlightColors;
-
     for (int i = 0; i < sprites.length; i++, byteIndex += 4) {
       final sprite = sprites[i];
       final id = sprite.id;
@@ -62,27 +54,24 @@ class CachedAtlasNotifier extends Notifier<AtlasCache> {
       transformList[byteIndex + 2] = sprite.eLTWH[0];
       transformList[byteIndex + 3] = sprite.eLTWH[1];
 
-      final elem = elemDataMap[id];
+      final element = elemDataMap[id];
+      final hasAnnotation = element?.annotation != null;
 
-      colorList[i] = elem?.annotation == null
-          ? defaultElemColor
-          : defaultAnnotateColor;
+      colorList[i] = getElemColor(element, hasAnnotation, isDarkMode);
 
-      highlightColorList[i] = switch (elem?.highlight) {
-        .doubt => activeHighlightColors[0],
-        .mistake => activeHighlightColors[1],
-        .oldMistake => activeHighlightColors[2],
-        .tajwid => activeHighlightColors[3],
-        _ => transparentColor,
-      };
+      highlightColorList[i] = getHighlightColor(
+        element,
+        hasAnnotation,
+        isDarkMode,
+      );
     }
 
     return AtlasCache(
       idToIndex: idToIndex,
       transformList: transformList,
       rectList: rectList,
-      elemColorList: colorList,
-      highlighColorList: highlightColorList,
+      colorList: colorList,
+      highlightColorList: highlightColorList,
     );
   }
 
@@ -92,28 +81,40 @@ class CachedAtlasNotifier extends Notifier<AtlasCache> {
     bool isDarkMode,
     ElementMarkData? element,
   ) {
-    final defaultElemColor = isDarkMode ? whiteInt : blackInt;
-    final defaultAnnotateColor = isDarkMode
-        ? lightGoldenBrown
-        : darkGoldenBrown;
+    final hasAnnotation = element?.annotation != null;
 
-    if (element == null) {
-      state.highlighColorList[atlasIndex] = transparentColor;
-      state.elemColorList[atlasIndex] = defaultElemColor;
-    } else {
-      state.highlighColorList[atlasIndex] = element.highlight == .unknown
-          ? transparentColor
-          : getHighlightColor(element.highlightColorIndex, isDarkMode);
-      state.elemColorList[atlasIndex] =
-          element.annotation == null || element.annotation == ''
-          ? defaultElemColor
-          : defaultAnnotateColor;
-    }
+    state.colorList[atlasIndex] = getElemColor(
+      element,
+      hasAnnotation,
+      isDarkMode,
+    );
+
+    state.highlightColorList[atlasIndex] = getHighlightColor(
+      element,
+      hasAnnotation,
+      isDarkMode,
+    );
 
     ref.read(pageRebuildProvider(pgIndex).notifier).update();
   }
 
-  int getHighlightColor(int colorIndex, bool isDarkMode) => isDarkMode
-      ? highlightDarkColors[colorIndex]
-      : highlightColors[colorIndex];
+  int getElemColor(
+    ElementMarkData? element,
+    bool hasAnnotation,
+    bool isDarkMode,
+  ) => hasAnnotation
+      ? (isDarkMode
+            ? element!.highlight.annotDarkColor ?? whiteInt
+            : element!.highlight.annotColor ?? blackInt)
+      : (isDarkMode ? whiteInt : blackInt);
+
+  int getHighlightColor(
+    ElementMarkData? element,
+    bool hasAnnotation,
+    bool isDarkMode,
+  ) => (hasAnnotation && element?.highlight == .unknown)
+      ? (isDarkMode ? annotateDefaultDark : annotateDefault)
+      : (isDarkMode
+            ? element?.highlight.darkColor ?? transparentColor
+            : element?.highlight.color ?? transparentColor);
 }

@@ -39,6 +39,15 @@ class ElementMarkData {
       this.highlight = highlight ?? this.highlight;
 
   @Transient()
+  void switchHighlight() => switch (highlight) {
+    .unknown => highlight = .doubt,
+    .doubt => highlight = .mistake,
+    .mistake => highlight = .oldMistake,
+    .oldMistake => highlight = .tajwid,
+    .tajwid => highlight = .unknown,
+  };
+
+  @Transient()
   void updateAnnotation(String? annotation) =>
       this.annotation = annotation == '' ? null : annotation;
 

@@ -6,13 +6,13 @@ class AtlasCache {
     required this.idToIndex,
     required this.rectList,
     required this.transformList,
-    required this.elemColorList,
-    required this.highlighColorList,
+    required this.colorList,
+    required this.highlightColorList,
   });
 
   final Float32List rectList;
   final Float32List transformList;
-  final Int32List elemColorList;
-  final Int32List highlighColorList;
+  final Int32List colorList;
+  final Int32List highlightColorList;
   final Map<String, int> idToIndex;
 }

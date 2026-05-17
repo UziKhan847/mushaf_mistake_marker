@@ -87,7 +87,40 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
           final annotationMode = ref.read(annotateModeProvider);
 
           switch (annotationMode) {
-            case .earser:
+            case .highlight:
+              final element = ref.read(elementProvider(id));
+              final elemProv = ref.read(elementProvider(id).notifier);
+
+              if (element == null) {
+                final newElem = elemProv.addElement(highlight: .doubt);
+
+                ref
+                    .read(cachedAtlasProvider(widget.index).notifier)
+                    .updateElementColor(
+                      widget.index,
+                      atlasIndex,
+                      isDarkMode,
+                      newElem,
+                    );
+              } else {
+                element.switchHighlight();
+
+                if (element.isEmpty) {
+                  ref.read(elementProvider(id).notifier).removeElement(element);
+                } else {
+                  elemProv.updateElement(element);
+                }
+
+                ref
+                    .read(cachedAtlasProvider(widget.index).notifier)
+                    .updateElementColor(
+                      widget.index,
+                      atlasIndex,
+                      isDarkMode,
+                      element,
+                    );
+              }
+            case .eraser:
               final element = ref.read(elementProvider(id));
               ref.read(elementProvider(id).notifier).removeElement(element);
               ref
@@ -107,8 +140,7 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
               } catch (e, st) {
                 throw Exception('Error: $e.\nStack Trace: $st');
               }
-
-            case .highlight:
+            case .annotate:
               final scrnSize = MediaQuery.sizeOf(context);
               final gp = details.globalPosition;
 
@@ -119,7 +151,7 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
 
               final isBubbleTop = gp.dy > annotateBubbleWidth;
               final double bubbleTop = isBubbleTop
-                  ? elemGlobalLT.dy - 86
+                  ? elemGlobalLT.dy - 66
                   : elemGlobalLT.dy + sprite.eLTWH[3] * scaleY;
 
               final (

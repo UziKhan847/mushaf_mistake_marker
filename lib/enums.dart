@@ -1,14 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:mushaf_mistake_marker/constants.dart';
 
 enum HighlightType {
-  unknown(0),
-  mistake(1),
-  oldMistake(2),
-  doubt(3),
-  tajwid(4);
+  unknown(0, null, null, null, null),
+  mistake(
+    1,
+    highlightRed,
+    highlightDarkRed,
+    annotateMistake,
+    annotateMistakeDark,
+  ),
+  oldMistake(
+    2,
+    highlightBlue,
+    highlightDarkBlue,
+    annotateOldMistake,
+    annotateOldMistakeDark,
+  ),
+  doubt(
+    3,
+    highlightPurple,
+    highlightDarkPurple,
+    annotateDoubt,
+    annotateDoubtDark,
+  ),
+  tajwid(
+    4,
+    highlightGreen,
+    highlightDarkGreen,
+    annotateTajwid,
+    annotateTajwidDark,
+  );
 
-  const HighlightType(this.id);
+  const HighlightType(
+    this.id,
+    this.color,
+    this.darkColor,
+    this.annotColor,
+    this.annotDarkColor,
+  );
   final int id;
+  final int? color;
+  final int? darkColor;
+  final int? annotColor;
+  final int? annotDarkColor;
 
   static HighlightType fromId(int? id) =>
       .values.firstWhere((e) => e.id == id, orElse: () => .unknown);
@@ -16,8 +51,9 @@ enum HighlightType {
 
 enum AnnotationMode {
   highlight(0),
-  earser(1),
-  audio(2);
+  eraser(1),
+  audio(2),
+  annotate(3);
 
   const AnnotationMode(this.id);
   final int id;
