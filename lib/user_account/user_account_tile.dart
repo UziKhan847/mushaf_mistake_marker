@@ -4,7 +4,6 @@ import 'package:mushaf_mistake_marker/objectbox/entities/user.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/settings.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf/page_controller.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/entities/user.dart';
-import 'package:mushaf_mistake_marker/providers/page_mode.dart';
 
 class UserAccountTile extends ConsumerWidget {
   const UserAccountTile({
