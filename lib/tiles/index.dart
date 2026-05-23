@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/enums.dart';
-import 'package:mushaf_mistake_marker/models/index/entry.dart';
 import 'package:mushaf_mistake_marker/models/index/stats.dart';
 import 'package:mushaf_mistake_marker/providers/index/stats/hizb.dart';
 import 'package:mushaf_mistake_marker/providers/index/stats/juz.dart';
@@ -21,7 +20,7 @@ class IndexTile extends ConsumerStatefulWidget {
     required this.onNavigate,
   });
 
-  final IndexEntry entry;
+  final Map<String, Object> entry;
   final IndexTab tab;
   final int index;
   final VoidCallback onNavigate;
@@ -105,7 +104,7 @@ class _IndexTileState extends ConsumerState<IndexTile>
                   ),
                   alignment: .center,
                   child: Text(
-                    '${entry.page}',
+                    '${entry['pNum'] as int}',
                     style: tt.labelLarge?.copyWith(
                       color: cs.onPrimaryContainer,
                       fontWeight: .w700,
@@ -120,12 +119,12 @@ class _IndexTileState extends ConsumerState<IndexTile>
                     crossAxisAlignment: .start,
                     children: [
                       Text(
-                        entry.title,
+                        entry['title'] as String,
                         style: tt.bodyLarge?.copyWith(fontWeight: .w600),
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        entry.subtitle,
+                        entry['subtitle'] as String,
                         style: tt.bodySmall?.copyWith(
                           color: cs.onSurfaceVariant,
                         ),

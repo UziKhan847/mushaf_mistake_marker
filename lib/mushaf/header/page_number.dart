@@ -4,7 +4,6 @@ import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/extensions/context_extensions.dart';
 import 'package:mushaf_mistake_marker/overlay/overlay_type/page_header.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf/page_controller.dart';
-import 'package:mushaf_mistake_marker/providers/objectbox/entities/settings.dart';
 import 'package:mushaf_mistake_marker/providers/page_mode.dart';
 
 class PageNumberHeader extends ConsumerStatefulWidget {
@@ -72,7 +71,7 @@ class _PageNumberHeaderState extends ConsumerState<PageNumberHeader> {
   @override
   Widget build(BuildContext context) {
     final mushafPgCtrlProv = ref.read(mushafPgCtrlProvider.notifier);
-    final userInitPage = ref.read(userSettingsProvider)!.initPage;
+  //  final userInitPage = ref.read(userSettingsProvider)!.initPage;
     final dualPageMode = ref.watch(pageModeProvider);
 
     return TextButton(
@@ -129,16 +128,16 @@ class _PageNumberHeaderState extends ConsumerState<PageNumberHeader> {
                           ? itemIndex * 2
                           : itemIndex;
     
-                      final swipe = isSwipeFromPage(
-                        targetUserPage: targetUserPage,
-                        userInitPage: userInitPage,
-                        dualPageMode: dualPageMode,
-                      );
+                      // final swipe = isSwipeFromPage(
+                      //   targetUserPage: targetUserPage,
+                      //   userInitPage: userInitPage,
+                      //   dualPageMode: dualPageMode,
+                      // );
     
                       mushafPgCtrlProv.navigateToPage(
                         targetUserPage: targetUserPage,
                         targetIndex: itemIndex,
-                        isSwipe: swipe,
+                       // isSwipe: swipe,
                       );
                     },
                     child: SizedBox(

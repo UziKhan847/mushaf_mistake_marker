@@ -95,7 +95,6 @@ class _JuzNumberHeaderState extends ConsumerState<JuzNumberHeader> {
                       mushafPgCtrlProv.navigateToPage(
                         targetUserPage: targetUserPage,
                         targetIndex: targetIndex,
-                        isSwipe: false,
                       );
                     },
                     child: SizedBox(

@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:mushaf_mistake_marker/constants.dart';
+import 'package:mushaf_mistake_marker/index/constants.dart';
 
 enum HighlightType {
-  unknown(0, null, null, null, null),
+  unknown(
+    0,
+    transparentColor,
+    transparentColor,
+    transparentColor,
+    transparentColor,
+  ),
   mistake(
     1,
     highlightRed,
@@ -40,10 +47,10 @@ enum HighlightType {
     this.annotDarkColor,
   );
   final int id;
-  final int? color;
-  final int? darkColor;
-  final int? annotColor;
-  final int? annotDarkColor;
+  final int color;
+  final int darkColor;
+  final int annotColor;
+  final int annotDarkColor;
 
   static HighlightType fromId(int? id) =>
       .values.firstWhere((e) => e.id == id, orElse: () => .unknown);
@@ -99,15 +106,16 @@ enum AppTheme {
 }
 
 enum IndexTab {
-  pages('Pages', Icons.auto_stories_outlined),
-  surahs('Surahs', Icons.format_list_numbered_outlined),
-  juz('Juz', Icons.segment_outlined),
-  hizb('Hizb', Icons.grid_view_outlined),
-  rubu('Rubʿ', Icons.grid_on_outlined),
-  manzil('Manzil', Icons.bolt),
-  sajdah('Sajdah', Icons.south_east_outlined);
+  pages('Pages', Icons.auto_stories_outlined, pageIndexList),
+  surahs('Surahs', Icons.format_list_numbered_outlined, surahIndexList),
+  juz('Juz', Icons.segment_outlined, juzIndexList),
+  hizb('Hizb', Icons.grid_view_outlined, hizbIndexList),
+  rubu('Rubʿ', Icons.grid_on_outlined, rubIndexList),
+  manzil('Manzil', Icons.bolt, manzilIndexList),
+  sajdah('Sajdah', Icons.south_east_outlined, sajdahIndexList);
 
-  const IndexTab(this.label, this.icon);
+  const IndexTab(this.label, this.icon, this.indexList);
   final String label;
   final IconData icon;
+  final List<Map<String, Object>> indexList;
 }

@@ -4,9 +4,11 @@ import 'package:mushaf_mistake_marker/main.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/mushaf_data.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/settings.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/user.dart';
+import 'package:mushaf_mistake_marker/providers/mushaf/page_controller.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/box/mushaf_data.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/box/settings.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/box/user.dart';
+import 'package:mushaf_mistake_marker/providers/page_mode.dart';
 import 'package:mushaf_mistake_marker/providers/shared_prefs.dart';
 
 final userProvider = NotifierProvider<UserNotifier, User>(UserNotifier.new);
@@ -38,7 +40,20 @@ class UserNotifier extends Notifier<User> {
 
   void setUser(User user) {
     ref.read(sharedPrefsProv).setInt('userId', user.id);
+
     state = user;
+  }
+
+  void naviagtePageUponChangingUser(int targetUserPage) {
+    final dualPgMode = ref.read(pageModeProvider);
+    final targetIndex = dualPgMode ? targetUserPage ~/ 2 : targetUserPage;
+
+    ref
+        .read(mushafPgCtrlProvider.notifier)
+        .navigateToPage(
+          targetUserPage: targetUserPage,
+          targetIndex: targetIndex,
+        );
   }
 
   Future<void> saveUser(User user) async {

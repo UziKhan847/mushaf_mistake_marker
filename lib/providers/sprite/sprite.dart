@@ -69,6 +69,23 @@ class SpriteNotifier extends Notifier<List<SpriteSheet>> {
     state = List.generate(604, (_) => SpriteSheet(sprMnfst: []));
   }
 
+  void clearExcept(int index) {
+    final isDualPageMode = ref.read(pageModeProvider);
+
+    if (isDualPageMode) {
+      for (int i = 0; i < 604; i++) {
+        if (i == index || i == index + 1 || i == index - 1) continue;
+        state[i] = SpriteSheet(sprMnfst: []);
+      }
+      return;
+    }
+
+    for (int i = 0; i < 604; i++) {
+      if (i == index) continue;
+      state[i] = SpriteSheet(sprMnfst: []);
+    }
+  }
+
   Future<void> preFetchPages(int initPage) async {
     final dualPgMode = ref.read(pageModeProvider);
 

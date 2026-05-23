@@ -1,29 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mushaf_mistake_marker/enums.dart';
+import 'package:mushaf_mistake_marker/index/constants.dart';
 import 'package:mushaf_mistake_marker/models/index/stats.dart';
 import 'package:mushaf_mistake_marker/objectbox/objectbox.g.dart';
 import 'package:mushaf_mistake_marker/page_data/page_data.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/box/element_mark_data.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/entities/user.dart';
 import 'package:mushaf_mistake_marker/surah/surah_names_data.dart';
-
-const List<(int, int)> sajdahLocations = [
-  (7, 206),
-  (13, 15),
-  (16, 50),
-  (17, 109),
-  (19, 58),
-  (22, 18),
-  (22, 77),
-  (25, 60),
-  (27, 26),
-  (32, 15),
-  (38, 24),
-  (41, 38),
-  (53, 62),
-  (84, 21),
-  (96, 19),
-];
 
 String surahName(int n) =>
     surahsData.firstWhere((s) => s['num'] == n)['name'] as String;
@@ -59,13 +41,13 @@ Future<IndexStats> fetchStats(Ref ref, List<String> ids) async {
 
   for (final m in marks) {
     switch (m.highlight) {
-      case HighlightType.mistake:
+      case .mistake:
         mistakes++;
-      case HighlightType.oldMistake:
+      case .oldMistake:
         oldMistakes++;
-      case HighlightType.doubt:
+      case .doubt:
         doubts++;
-      case HighlightType.tajwid:
+      case .tajwid:
         tajwid++;
       default:
         break;
@@ -79,7 +61,5 @@ Future<IndexStats> fetchStats(Ref ref, List<String> ids) async {
     tajwidMistakes: tajwid,
   );
 }
-
-const rubuQuarterIcons = ['◔', '◑', '◕', '●'];
 
 String rubuQuarterIcon(int rubuNum) => rubuQuarterIcons[(rubuNum - 1) % 4];

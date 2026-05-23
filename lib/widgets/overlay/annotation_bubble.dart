@@ -3,12 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/constants.dart';
 import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/mushaf/painters/bubble.dart';
-import 'package:mushaf_mistake_marker/providers/objectbox/box/element_mark_data.dart';
-import 'package:mushaf_mistake_marker/providers/objectbox/box/mushaf_data.dart';
-import 'package:mushaf_mistake_marker/providers/objectbox/entities/mushaf_data.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/cached_atlas.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/element.dart';
-import 'package:mushaf_mistake_marker/providers/sprite/family/page/rebuild.dart';
 
 class AnnotationBubble extends ConsumerStatefulWidget {
   const AnnotationBubble({
@@ -32,12 +28,6 @@ class AnnotationBubble extends ConsumerStatefulWidget {
 
 class _AnnotationBubbleState extends ConsumerState<AnnotationBubble> {
   late final TextEditingController txtCtrl;
-  late final elemBox = ref.read(elementMarkDataBoxProvider);
-  late final mshfData = ref.read(userMushafDataProvider)!;
-  late final mshfDataBox = ref.read(mushafDataBoxProvider);
-  late final pageRebuildProv = ref.read(
-    pageRebuildProvider(widget.pgIndex).notifier,
-  );
   late final elemProv = ref.read(elementProvider(widget.elemId).notifier);
   late final atlasCacheProv = ref.read(
     cachedAtlasProvider(widget.pgIndex).notifier,

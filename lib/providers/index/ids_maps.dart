@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mushaf_mistake_marker/helpers/index.dart';
-import 'package:mushaf_mistake_marker/providers/index/page_ids.dart';
+import 'package:mushaf_mistake_marker/index/constants.dart';
+import 'package:mushaf_mistake_marker/providers/sprite/family/page/ids.dart';
 import 'package:mushaf_mistake_marker/providers/pages_provider.dart';
 
 class IndexIdsMaps {
@@ -13,12 +13,12 @@ class IndexIdsMaps {
     required this.bySajdah,
   });
 
-  final Map<int, List<String>> bySurah;
-  final Map<int, List<String>> byJuz;
-  final Map<int, List<String>> byHizb;
-  final Map<int, List<String>> byRubu;
-  final Map<int, List<String>> byManzil;
-  final Map<int, List<String>> bySajdah;
+  final Map<int, List<String>> bySurah,
+      byJuz,
+      byHizb,
+      byRubu,
+      byManzil,
+      bySajdah;
 }
 
 final indexIdsMapsProvider =
@@ -42,9 +42,8 @@ class IndexIdsMapsNotifier extends AsyncNotifier<IndexIdsMaps> {
       final ids = await ref.watch(pageIdsProvider(p.pNum).future);
 
       for (final sr in p.srNum) {
-        final surahIds = ids.where((id) => id.startsWith('s$sr')).toList();
-        bySurah.putIfAbsent(sr, () => []).addAll(surahIds);
-      }
+        (bySurah[sr] ??= []).addAll(ids.where((id) => id.startsWith('s$sr')));
+      } //TODO:
       for (final jz in p.jzNum) {
         byJuz.putIfAbsent(jz, () => []).addAll(ids);
       }

@@ -106,7 +106,6 @@ class _SurahNumberHeaderState extends ConsumerState<SurahNumberHeader> {
                       mushafPgCtrlProv.navigateToPage(
                         targetUserPage: targetUserPage,
                         targetIndex: targetIndex,
-                        isSwipe: false,
                       );
                     },
                     child: SizedBox(

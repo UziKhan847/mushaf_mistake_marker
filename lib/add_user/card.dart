@@ -5,6 +5,7 @@ import 'package:mushaf_mistake_marker/objectbox/entities/user.dart';
 import 'package:mushaf_mistake_marker/overlay/overlay_type/popup_card.dart';
 import 'package:mushaf_mistake_marker/providers/add_user/error_message.dart';
 import 'package:mushaf_mistake_marker/providers/add_user/phase.dart';
+import 'package:mushaf_mistake_marker/providers/mushaf/page_controller.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/box/user.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/entities/user.dart';
 
@@ -67,6 +68,11 @@ class _AddUserCardState extends ConsumerState<AddUserCard> {
                 final user = User(username: textCtrl.text);
                 try {
                   await userProv.saveUser(user);
+                  ref
+                      .read(mushafPgCtrlProvider.notifier)
+                      .navigateToPageUponChangingUser(
+                        user.settings.target!.initPage,
+                      );
                   widget.onCancel?.call();
                   // TODO: Show custom snackbar for success feedback
                   phaseProv.setPhase(.initial);

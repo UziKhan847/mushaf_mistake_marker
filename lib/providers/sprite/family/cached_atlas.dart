@@ -55,15 +55,10 @@ class CachedAtlasNotifier extends Notifier<AtlasCache> {
       transformList[byteIndex + 3] = sprite.eLTWH[1];
 
       final element = elemDataMap[id];
-      final hasAnnotation = element?.annotation != null;
 
-      colorList[i] = getElemColor(element, hasAnnotation, isDarkMode);
+      colorList[i] = getElemColor(element, isDarkMode);
 
-      highlightColorList[i] = getHighlightColor(
-        element,
-        hasAnnotation,
-        isDarkMode,
-      );
+      highlightColorList[i] = getHighlightColor(element, isDarkMode);
     }
 
     return AtlasCache(
@@ -81,40 +76,34 @@ class CachedAtlasNotifier extends Notifier<AtlasCache> {
     bool isDarkMode,
     ElementMarkData? element,
   ) {
-    final hasAnnotation = element?.annotation != null;
-
-    state.colorList[atlasIndex] = getElemColor(
-      element,
-      hasAnnotation,
-      isDarkMode,
-    );
+    state.colorList[atlasIndex] = getElemColor(element, isDarkMode);
 
     state.highlightColorList[atlasIndex] = getHighlightColor(
       element,
-      hasAnnotation,
       isDarkMode,
     );
 
     ref.read(pageRebuildProvider(pgIndex).notifier).update();
   }
 
-  int getElemColor(
-    ElementMarkData? element,
-    bool hasAnnotation,
-    bool isDarkMode,
-  ) => hasAnnotation
-      ? (isDarkMode
-            ? element!.highlight.annotDarkColor ?? whiteInt
-            : element!.highlight.annotColor ?? blackInt)
-      : (isDarkMode ? whiteInt : blackInt);
+  int getElemColor(ElementMarkData? element, bool isDarkMode) {
+    if (element?.annotation != null && element?.highlight != .unknown) {
+      return isDarkMode
+          ? element!.highlight.annotDarkColor
+          : element!.highlight.annotColor;
+    }
+    return isDarkMode ? whiteInt : blackInt;
+  }
 
-  int getHighlightColor(
-    ElementMarkData? element,
-    bool hasAnnotation,
-    bool isDarkMode,
-  ) => (hasAnnotation && element?.highlight == .unknown)
-      ? (isDarkMode ? annotateDefaultDark : annotateDefault)
-      : (isDarkMode
-            ? element?.highlight.darkColor ?? transparentColor
-            : element?.highlight.color ?? transparentColor);
+  int getHighlightColor(ElementMarkData? element, bool isDarkMode) {
+    if (element?.highlight != null && element?.highlight != .unknown) {
+      return isDarkMode
+          ? element!.highlight.darkColor
+          : element!.highlight.color;
+    }
+    if (element?.annotation != null) {
+      return isDarkMode ? annotateDefaultDark : annotateDefault;
+    }
+    return transparentColor;
+  }
 }

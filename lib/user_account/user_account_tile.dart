@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/user.dart';
 import 'package:mushaf_mistake_marker/objectbox/entities/settings.dart';
+import 'package:mushaf_mistake_marker/providers/mushaf/page_controller.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/entities/user.dart';
+import 'package:mushaf_mistake_marker/providers/page_mode.dart';
 
 class UserAccountTile extends ConsumerWidget {
   const UserAccountTile({
@@ -46,6 +48,9 @@ class UserAccountTile extends ConsumerWidget {
       child: InkWell(
         onTap: () {
           if (!isSelected) userProv.setUser(user);
+          ref
+              .read(mushafPgCtrlProvider.notifier)
+              .navigateToPageUponChangingUser(user.settings.target!.initPage);
         },
         child: Padding(
           padding: const .symmetric(horizontal: 16.0, vertical: 12.0),
@@ -68,9 +73,7 @@ class UserAccountTile extends ConsumerWidget {
                   children: [
                     Text(
                       user.username,
-                      style: textTheme.titleMedium?.copyWith(
-                        fontWeight: .w600,
-                      ),
+                      style: textTheme.titleMedium?.copyWith(fontWeight: .w600),
                       overflow: .ellipsis,
                     ),
                     const SizedBox(height: 6),
@@ -114,10 +117,7 @@ class UserAccountTile extends ConsumerWidget {
                   color: colorScheme.onSurfaceVariant,
                 ),
               ),
-              Icon(
-                Icons.chevron_right,
-                color: colorScheme.onSurfaceVariant,
-              ),
+              Icon(Icons.chevron_right, color: colorScheme.onSurfaceVariant),
             ],
           ),
         ),

@@ -8,4 +8,8 @@ class IndexEntry {
     required this.subtitle,
     required this.page,
   });
+
+  @override
+  String toString() =>
+      '{"title": "$title", "subtitle": "$subtitle", "pNum": $page}';
 }
