@@ -1,20 +1,22 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mushaf_mistake_marker/index/helpers.dart';
-import 'package:mushaf_mistake_marker/models/index/stats.dart';
-import 'package:mushaf_mistake_marker/providers/index/id_maps/manzil.dart';
+import 'package:mushaf_mistake_marker/enums.dart';
 
-final indexManzilStatsProvider =
-    AsyncNotifierProvider.family<IndexManzilStatsNotifier, IndexStats, int>(
-      IndexManzilStatsNotifier.new,
+final manzilsStatsNotifierProvider =
+    NotifierProvider<ManzilsStatsNotifier, List<Map<HighlightType, int>>>(
+      ManzilsStatsNotifier.new,
     );
 
-class IndexManzilStatsNotifier extends AsyncNotifier<IndexStats> {
-  final int manzilNum;
-  IndexManzilStatsNotifier(this.manzilNum);
-
+class ManzilsStatsNotifier extends Notifier<List<Map<HighlightType, int>>> {
   @override
-  Future<IndexStats> build() async {
-    final ids = await ref.watch(indexManzilIdsProvider(manzilNum).future);
-    return fetchStats(ref, ids);
+  List<Map<HighlightType, int>> build() => List.generate(
+    7,
+    (index) => {.mistake: 0, .oldMistake: 0, .doubt: 0, .tajwid: 0},
+  );
+
+  void incrementStat(int index, HighlightType type) {
+    if (state[index][type] == null || index < 0 || index >= state.length) {
+      return;
+    }
+    state[index][type] = state[index][type]! + 1;
   }
 }

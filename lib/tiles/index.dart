@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/enums.dart';
-import 'package:mushaf_mistake_marker/models/index/stats.dart';
-import 'package:mushaf_mistake_marker/providers/index/stats/hizb.dart';
-import 'package:mushaf_mistake_marker/providers/index/stats/juz.dart';
-import 'package:mushaf_mistake_marker/providers/index/stats/manzil.dart';
-import 'package:mushaf_mistake_marker/providers/index/stats/page.dart';
-import 'package:mushaf_mistake_marker/providers/index/stats/rubu.dart';
-import 'package:mushaf_mistake_marker/providers/index/stats/surah.dart';
+import 'package:mushaf_mistake_marker/models/stats.dart';
 import 'package:mushaf_mistake_marker/widgets/index/mini_stat_row.dart';
 import 'package:mushaf_mistake_marker/widgets/index/stats_panel.dart';
 
@@ -35,15 +29,6 @@ class _IndexTileState extends ConsumerState<IndexTile>
 
   late final AnimationController animCtrl;
   late final Animation<double> rotate, expand;
-
-  IndexStats? getStats(WidgetRef ref, IndexTab tab, int index) => switch (tab) {
-    .surahs => ref.watch(indexSurahStatsProvider(index + 1)).value,
-    .juz => ref.watch(indexJuzStatsProvider(index + 1)).value,
-    .hizb => ref.watch(indexHizbStatsProvider(index + 1)).value,
-    .rubu => ref.watch(indexRubuStatsProvider(index + 1)).value,
-    .manzil => ref.watch(indexManzilStatsProvider(index + 1)).value,
-    _ => ref.watch(indexPageStatsProvider(index + 1)).value,
-  };
 
   @override
   void initState() {
@@ -83,7 +68,6 @@ class _IndexTileState extends ConsumerState<IndexTile>
     final cs = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
     final entry = widget.entry;
-    final stats = getStats(ref, widget.tab, widget.index);
 
     return Column(
       mainAxisSize: .min,
@@ -134,7 +118,7 @@ class _IndexTileState extends ConsumerState<IndexTile>
                 ),
 
                 // Mini Stats Row on the Tile without Expanding
-                MiniStatRow(stats: stats ?? const IndexStats()),
+                MiniStatRow(stats: const IndexStats()),
 
                 RotationTransition(
                   turns: rotate,
@@ -154,7 +138,7 @@ class _IndexTileState extends ConsumerState<IndexTile>
         // Expanded Stats
         SizeTransition(
           sizeFactor: expand,
-          child: StatsPanel(stats: stats ?? const IndexStats(), cs: cs, tt: tt),
+          child: StatsPanel(stats: const IndexStats(), cs: cs, tt: tt),
         ),
       ],
     );

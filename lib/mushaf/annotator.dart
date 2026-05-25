@@ -8,6 +8,7 @@ import 'package:mushaf_mistake_marker/extensions/string_extension.dart';
 import 'package:mushaf_mistake_marker/mushaf/annotator_handler.dart';
 import 'package:mushaf_mistake_marker/mushaf/painters/mushaf_page.dart';
 import 'package:mushaf_mistake_marker/providers/buttons/annotate_mode.dart';
+import 'package:mushaf_mistake_marker/providers/index/stats_lists.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/element.dart';
 import 'package:mushaf_mistake_marker/widgets/overlay/annotation_bubble.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/cached_atlas.dart';
@@ -55,6 +56,7 @@ class _MushafPageAnnotatorState extends ConsumerState<MushafPageAnnotator> {
 
     return GestureDetector(
       onTapDown: (details) async {
+        ref.read(indexStatsListsProvider);
         final sprites = ref.read(spriteProvider)[widget.index].sprMnfst;
 
         final localP = details.localPosition;

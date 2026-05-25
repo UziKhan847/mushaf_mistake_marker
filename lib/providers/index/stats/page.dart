@@ -1,20 +1,22 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mushaf_mistake_marker/index/helpers.dart';
-import 'package:mushaf_mistake_marker/models/index/stats.dart';
-import 'package:mushaf_mistake_marker/providers/sprite/family/page/ids.dart';
+import 'package:mushaf_mistake_marker/enums.dart';
 
-final indexPageStatsProvider = AsyncNotifierProvider.family
-    .autoDispose<IndexPageStatsNotifier, IndexStats, int>(
-      IndexPageStatsNotifier.new,
+final pagesStatsNotifierProvider =
+    NotifierProvider<PagesStatsNotifier, List<Map<HighlightType, int>>>(
+      PagesStatsNotifier.new,
     );
 
-class IndexPageStatsNotifier extends AsyncNotifier<IndexStats> {
-  IndexPageStatsNotifier(this.index);
-  final int index;
-
+class PagesStatsNotifier extends Notifier<List<Map<HighlightType, int>>> {
   @override
-  Future<IndexStats> build() async {
-    final ids = await ref.watch(pageIdsProvider(index).future);
-    return fetchStats(ref, ids);
+  List<Map<HighlightType, int>> build() => List.generate(
+    604,
+    (index) => {.mistake: 0, .oldMistake: 0, .doubt: 0, .tajwid: 0},
+  );
+
+  void incrementStat(int index, HighlightType type) {
+    if (state[index][type] == null || index < 0 || index >= state.length) {
+      return;
+    }
+    state[index][type] = state[index][type]! + 1;
   }
 }

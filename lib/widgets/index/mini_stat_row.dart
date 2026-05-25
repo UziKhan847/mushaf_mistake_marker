@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mushaf_mistake_marker/models/index/stats.dart';
+import 'package:mushaf_mistake_marker/models/stats.dart';
 import 'package:mushaf_mistake_marker/widgets/index/chip.dart';
 
 class MiniStatRow extends StatelessWidget {
