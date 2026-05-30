@@ -1,14 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mushaf_mistake_marker/enums.dart';
+import 'package:mushaf_mistake_marker/providers/index/stats.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/entities/mushaf_data.dart';
 
 final indexStatsListsProvider = Provider<void>((ref) {
   final elements = ref.read(userMushafDataProvider)!.elementMarkData;
 
-  final List<Map<HighlightType, int>> surahsStats = List.generate(
-    114,
-    (index) => {.mistake: 0, .oldMistake: 0, .doubt: 0, .tajwid: 0},
-  );
+  final pageStats = ref.read(statsProvider(.pages)),
+      surahsStats = ref.read(statsProvider(.surahs)),
+      juzStats = ref.read(statsProvider(.juz)),
+      hizbStats = ref.read(statsProvider(.hizb)),
+      rubHStats = ref.read(statsProvider(.rubu)),
+      manzilStats = ref.read(statsProvider(.manzil)),
+      sajdahStats = ref.read(statsProvider(.sajdah));
 
   final elementRegEx = RegExp(r'(s\d+)(v\d+)(w\d+)_(rH\d+)(j\d+)');
   final specificRegEx = RegExp(r'([A-Za-z]+)(\d+)');
@@ -27,24 +30,43 @@ final indexStatsListsProvider = Provider<void>((ref) {
 
       if (str == null) continue;
 
+      final index = int.parse(str[2] as String) - 1;
+
       switch (str[1]) {
         case 's':
-          final n = int.parse(str[2] as String);
-          surahsStats[n - 1][highlight] = surahsStats[n - 1][highlight]! + 1;
-        case 'v':
-          final n = int.parse(str[2] as String);
+          surahsStats[index][highlight] = surahsStats[index][highlight]! + 1;
 
-        case 'w':
-          final n = int.parse(str[2] as String);
+          late final int manzilNum;
 
+          switch (index + 1) {
+            case < 5:
+              manzilNum = 0;
+            case < 10:
+              manzilNum = 1;
+            case < 17:
+              manzilNum = 2;
+            case < 26:
+              manzilNum = 3;
+            case < 37:
+              manzilNum = 4;
+            case < 50:
+              manzilNum = 5;
+            default:
+              manzilNum = 6;
+          }
+
+          manzilStats[manzilNum][highlight] =
+              manzilStats[manzilNum][highlight]! + 1;
         case 'rH':
-          final n = int.parse(str[2] as String);
+          rubHStats[index][highlight] = rubHStats[index][highlight]! + 1;
 
+          final hizbIndex = (index) ~/ 4;
+          hizbStats[hizbIndex][highlight] =
+              hizbStats[hizbIndex][highlight]! + 1;
         case 'j':
-          final n = int.parse(str[2] as String);
-
+          juzStats[index][highlight] = juzStats[index][highlight]! + 1;
         default:
-          throw Exception('No match');
+          continue;
       }
     }
   }

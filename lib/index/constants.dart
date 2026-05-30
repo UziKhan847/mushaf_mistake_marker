@@ -1838,13 +1838,15 @@ const rubIndexList = [
 
 const manzilIndexList = [
   {"title": "Manzil 1", "subtitle": "Starts at Al-Fātiḥah 1:1", "pNum": 1},
-  {"title": "Manzil 2", "subtitle": "Starts at An-Nisāʾ 4:176", "pNum": 106},
+  {"title": "Manzil 2", "subtitle": "Starts at An-Nisāʾ 5:1", "pNum": 106},
   {"title": "Manzil 3", "subtitle": "Starts at Yūnus 10:1", "pNum": 208},
   {"title": "Manzil 4", "subtitle": "Starts at Al-Isrāʾ 17:1", "pNum": 282},
   {"title": "Manzil 5", "subtitle": "Starts at Ash-Shuʿarāʾ 26:1", "pNum": 367},
   {"title": "Manzil 6", "subtitle": "Starts at As-Sāffāt 37:1", "pNum": 446},
   {"title": "Manzil 7", "subtitle": "Starts at Qāf 50:1", "pNum": 518},
 ];
+
+
 
 const sajdahIndexList = [
   {"title": "Sajdah 1", "subtitle": "Starts at Al-Aʿrāf 7:206", "pNum": 1},

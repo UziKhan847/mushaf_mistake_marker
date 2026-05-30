@@ -106,16 +106,17 @@ enum AppTheme {
 }
 
 enum IndexTab {
-  pages('Pages', Icons.auto_stories_outlined, pageIndexList),
-  surahs('Surahs', Icons.format_list_numbered_outlined, surahIndexList),
-  juz('Juz', Icons.segment_outlined, juzIndexList),
-  hizb('Hizb', Icons.grid_view_outlined, hizbIndexList),
-  rubu('Rubʿ', Icons.grid_on_outlined, rubIndexList),
-  manzil('Manzil', Icons.bolt, manzilIndexList),
-  sajdah('Sajdah', Icons.south_east_outlined, sajdahIndexList);
+  pages('Pages', Icons.auto_stories_outlined, pageIndexList, 604),
+  surahs('Surahs', Icons.format_list_numbered_outlined, surahIndexList, 114),
+  juz('Juz', Icons.segment_outlined, juzIndexList, 30),
+  hizb('Hizb', Icons.grid_view_outlined, hizbIndexList, 60),
+  rubu('Rubʿ', Icons.grid_on_outlined, rubIndexList, 240),
+  manzil('Manzil', Icons.bolt, manzilIndexList, 7),
+  sajdah('Sajdah', Icons.south_east_outlined, sajdahIndexList, 15);
 
-  const IndexTab(this.label, this.icon, this.indexList);
+  const IndexTab(this.label, this.icon, this.indexList, this.totalNum);
   final String label;
   final IconData icon;
   final List<Map<String, Object>> indexList;
+  final int totalNum;
 }

@@ -1,15 +1,20 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/enums.dart';
 
-final juzsStatsNotifierProvider =
-    NotifierProvider<JuzsStatsNotifier, List<Map<HighlightType, int>>>(
-      JuzsStatsNotifier.new,
-    );
+final statsProvider =
+    NotifierProvider.family<
+      StatsNotifier,
+      List<Map<HighlightType, int>>,
+      IndexTab
+    >(StatsNotifier.new);
 
-class JuzsStatsNotifier extends Notifier<List<Map<HighlightType, int>>> {
+class StatsNotifier extends Notifier<List<Map<HighlightType, int>>> {
+  StatsNotifier(this.indexTab);
+  final IndexTab indexTab;
+
   @override
   List<Map<HighlightType, int>> build() => List.generate(
-    30,
+    indexTab.totalNum,
     (index) => {.mistake: 0, .oldMistake: 0, .doubt: 0, .tajwid: 0},
   );
 
