@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mushaf_mistake_marker/constants.dart';
-import 'package:mushaf_mistake_marker/index/constants.dart';
 
 enum HighlightType {
   unknown(
@@ -106,17 +105,17 @@ enum AppTheme {
 }
 
 enum IndexTab {
-  pages('Pages', Icons.auto_stories_outlined, pageIndexList, 604),
-  surahs('Surahs', Icons.format_list_numbered_outlined, surahIndexList, 114),
-  juz('Juz', Icons.segment_outlined, juzIndexList, 30),
-  hizb('Hizb', Icons.grid_view_outlined, hizbIndexList, 60),
-  rubu('Rubʿ', Icons.grid_on_outlined, rubIndexList, 240),
-  manzil('Manzil', Icons.bolt, manzilIndexList, 7),
-  sajdah('Sajdah', Icons.south_east_outlined, sajdahIndexList, 15);
+  pages('Pages', Icons.auto_stories_outlined, 604), //TODO: fix,
+  surahs('Surahs', Icons.format_list_numbered_outlined, 114),
+  juz('Juz', Icons.segment_outlined, 30),
+  hizb('Hizb', Icons.grid_on_outlined, 60),
+  rubu('Rubʿ', Icons.grid_on_outlined, 240),
+  manzil('Manzil', Icons.bolt, 7),
+  sajdah('Sajdah', Icons.south_east_outlined, 15);
 
-  const IndexTab(this.label, this.icon, this.indexList, this.totalNum);
+  const IndexTab(this.label, this.icon, this.totalNum);
+
   final String label;
   final IconData icon;
-  final List<Map<String, Object>> indexList;
   final int totalNum;
 }

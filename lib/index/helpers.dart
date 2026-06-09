@@ -5,12 +5,7 @@ import 'package:mushaf_mistake_marker/objectbox/objectbox.g.dart';
 import 'package:mushaf_mistake_marker/page_data/page_data.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/box/element_mark_data.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/entities/user.dart';
-import 'package:mushaf_mistake_marker/surah/surah_names_data.dart';
 
-String surahName(int n) =>
-    surahsData.firstWhere((s) => s['num'] == n)['name'] as String;
-
-String pageSubtitle(PageData page) => page.srNum.map(surahName).join(' – ');
 
 (int, int) firstVerseOnPage(PageData page) {
   final srNums = page.srNum.toList()..sort();

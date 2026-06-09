@@ -1,20 +1,20 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mushaf_mistake_marker/index/constants.dart';
 import 'package:mushaf_mistake_marker/providers/index/stats.dart';
 import 'package:mushaf_mistake_marker/providers/objectbox/entities/mushaf_data.dart';
+import 'package:mushaf_mistake_marker/providers/pages_provider.dart';
 
 final indexStatsListsProvider = Provider<void>((ref) {
-  final elements = ref.read(userMushafDataProvider)!.elementMarkData;
-
-  final pageStats = ref.read(statsProvider(.pages)),
-      surahsStats = ref.read(statsProvider(.surahs)),
-      juzStats = ref.read(statsProvider(.juz)),
-      hizbStats = ref.read(statsProvider(.hizb)),
-      rubHStats = ref.read(statsProvider(.rubu)),
-      manzilStats = ref.read(statsProvider(.manzil)),
-      sajdahStats = ref.read(statsProvider(.sajdah));
-
-  final elementRegEx = RegExp(r'(s\d+)(v\d+)(w\d+)_(rH\d+)(j\d+)');
-  final specificRegEx = RegExp(r'([A-Za-z]+)(\d+)');
+  final elements = ref.read(userMushafDataProvider)!.elementMarkData,
+      pagesData = ref.read(pagesProvider).value!.pagesData,
+      pageStats = ref.read(statsProvider(.pages).notifier),
+      surahsStats = ref.read(statsProvider(.surahs).notifier),
+      juzStats = ref.read(statsProvider(.juz).notifier),
+      hizbStats = ref.read(statsProvider(.hizb).notifier),
+      rubHizbStats = ref.read(statsProvider(.rubu).notifier),
+      manzilStats = ref.read(statsProvider(.manzil).notifier),
+      elementRegEx = RegExp(r'(s\d+)(v\d+)(w\d+)_(rH\d+)(j\d+)'),
+      specificRegEx = RegExp(r'([A-Za-z]+)(\d+)');
 
   for (final e in elements) {
     if (!e.key.contains('w')) continue;
@@ -25,49 +25,51 @@ final indexStatsListsProvider = Provider<void>((ref) {
 
     final highlight = e.highlight;
 
+    late final int srNum, vrsNum;
+
     for (int i = 1; i <= match.groupCount; i++) {
       final str = specificRegEx.firstMatch(match[i]!);
 
       if (str == null) continue;
 
-      final index = int.parse(str[2] as String) - 1;
+      final letter = str[1],
+          number = int.parse(str[2] as String),
+          index = number - 1;
 
-      switch (str[1]) {
+      switch (letter) {
         case 's':
-          surahsStats[index][highlight] = surahsStats[index][highlight]! + 1;
+          srNum = number;
+          surahsStats.incrementStat(index, highlight);
 
-          late final int manzilNum;
-
-          switch (index + 1) {
-            case < 5:
-              manzilNum = 0;
-            case < 10:
-              manzilNum = 1;
-            case < 17:
-              manzilNum = 2;
-            case < 26:
-              manzilNum = 3;
-            case < 37:
-              manzilNum = 4;
-            case < 50:
-              manzilNum = 5;
-            default:
-              manzilNum = 6;
+          for (int i = manzilIndexList.length - 1; i >= 0; i--) {
+            final srNum = (manzilIndexList[i]['location']! as (int, int)).$1;
+            if (number > srNum) {
+              manzilStats.incrementStat(i, highlight);
+              continue;
+            }
           }
-
-          manzilStats[manzilNum][highlight] =
-              manzilStats[manzilNum][highlight]! + 1;
+        case 'v':
+          vrsNum = number;
         case 'rH':
-          rubHStats[index][highlight] = rubHStats[index][highlight]! + 1;
-
-          final hizbIndex = (index) ~/ 4;
-          hizbStats[hizbIndex][highlight] =
-              hizbStats[hizbIndex][highlight]! + 1;
+          rubHizbStats.incrementStat(index, highlight);
+          hizbStats.incrementStat(index ~/ 4, highlight);
         case 'j':
-          juzStats[index][highlight] = juzStats[index][highlight]! + 1;
+          juzStats.incrementStat(index, highlight);
         default:
           continue;
       }
     }
+
+    final pgIndex = pagesData.firstWhere((e) {
+      final (first, last) = (e.srNum.first, e.srNum.last);
+      if (srNum >= first && srNum <= last ||
+          vrsNum >= e.srVrsSets[first]!.first &&
+              vrsNum <= e.srVrsSets[last]!.last) {
+        return true;
+      }
+      return false;
+    }).pNum;
+
+    pageStats.incrementStat(pgIndex, highlight);
   }
 });

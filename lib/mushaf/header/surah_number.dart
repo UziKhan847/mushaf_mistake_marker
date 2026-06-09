@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/extensions/context_extensions.dart';
+import 'package:mushaf_mistake_marker/extensions/int_extension.dart';
 import 'package:mushaf_mistake_marker/mushaf/header/variables.dart';
 import 'package:mushaf_mistake_marker/overlay/overlay_type/page_header.dart';
 import 'package:mushaf_mistake_marker/providers/mushaf/page_controller.dart';
 import 'package:mushaf_mistake_marker/providers/page_mode.dart';
-import 'package:mushaf_mistake_marker/providers/sprite/family/page/surahs.dart';
-import 'package:mushaf_mistake_marker/surah/surah_names_data.dart';
+import 'package:mushaf_mistake_marker/providers/pages_provider.dart';
 
 class SurahNumberHeader extends ConsumerStatefulWidget {
   const SurahNumberHeader({
@@ -43,20 +43,16 @@ class _SurahNumberHeaderState extends ConsumerState<SurahNumberHeader> {
   Widget build(BuildContext context) {
     final mushafPgCtrlProv = ref.read(mushafPgCtrlProvider.notifier);
     final dualPageMode = ref.watch(pageModeProvider);
-    final surahs = ref.watch(pageSurahsProvider(widget.currentPgIndex));
+    final surahNums = ref
+        .read(pagesProvider)
+        .value!
+        .pagesData[widget.currentPgIndex]
+        .srNum;
 
-    if (surahs == null || surahs.isEmpty) return const SizedBox.shrink();
-
-    final surahsListLength = surahs.length;
-    final surahsNameList = <String>{};
-    final surahNums = <int>{};
-
-    for (int i = 0; i < surahsListLength; i++) {
-      final surah = surahs[i];
-
-      surahsNameList.add(surah.name);
-      surahNums.add(surah.number);
-    }
+    final surahsNameList = List.generate(
+      surahNums.length,
+      (i) => i.surahEngName ?? 'Unknown',
+    );
 
     return TextButton(
       key: widgetKey,
@@ -77,7 +73,7 @@ class _SurahNumberHeaderState extends ConsumerState<SurahNumberHeader> {
               itemHeight: SurahNumberHeader.itemHeight,
               itemCount: 114,
               itemBuilder: (context, index) {
-                final surahName = surahsData[index]['name'] as String;
+                final surahName = (index + 1).surahEngName!;
                 final isSelected = surahsNameList.contains(surahName);
 
                 return Material(

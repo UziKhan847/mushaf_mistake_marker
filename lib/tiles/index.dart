@@ -14,7 +14,7 @@ class IndexTile extends ConsumerStatefulWidget {
     required this.onNavigate,
   });
 
-  final Map<String, Object> entry;
+  final Map<String, Object?> entry;
   final IndexTab tab;
   final int index;
   final VoidCallback onNavigate;
@@ -23,7 +23,9 @@ class IndexTile extends ConsumerStatefulWidget {
   ConsumerState<IndexTile> createState() => _IndexTileState();
 }
 
-class _IndexTileState extends ConsumerState<IndexTile>
+class _IndexTileState
+    extends
+        ConsumerState<IndexTile> //TODO: fix
     with SingleTickerProviderStateMixin {
   var expanded = false;
 

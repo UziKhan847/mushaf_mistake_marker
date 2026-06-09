@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/extensions/string_extension.dart';
+import 'package:mushaf_mistake_marker/providers/pages_provider.dart';
 import 'package:mushaf_mistake_marker/providers/sprite/family/page/juz.dart';
-import 'package:mushaf_mistake_marker/providers/sprite/family/page/surahs.dart';
 
 class MarginLantern extends ConsumerWidget {
   const MarginLantern({super.key, required this.pIndex});
@@ -11,10 +11,15 @@ class MarginLantern extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final surahs = ref.watch(pageSurahsProvider(pIndex));
     final juzNums = ref.watch(juzProvider(pIndex));
     final cs = Theme.of(context).colorScheme;
     final isDarkMode = Theme.brightnessOf(context) == .dark;
+    final surahNum = ref
+        .read(pagesProvider)
+        .value!
+        .pagesData[pIndex]
+        .srNum
+        .first;
     const squareW = 30.0;
     const imgH = squareW * 3;
 
@@ -58,13 +63,12 @@ class MarginLantern extends ConsumerWidget {
             ],
           ),
         ),
-        surahs == null
-            ? SizedBox.shrink()
-            : Text(
-                'S${surahs[0].number}'.verticalText,
-                textAlign: .center,
-                style: TextStyle(fontWeight: .w500, height: 1.0, fontSize: 12),
-              ),
+
+        Text(
+          'S$surahNum'.verticalText, 
+          textAlign: .center,
+          style: TextStyle(fontWeight: .w500, height: 1.0, fontSize: 12),
+        ),
       ],
     );
   }

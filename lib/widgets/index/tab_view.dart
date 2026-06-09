@@ -12,14 +12,14 @@ class IndexTabView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ListView.separated(
       padding: const .symmetric(vertical: 8),
-      itemCount: tab.indexList.length,
+      itemCount: tab.totalNum,
       separatorBuilder: (_, _) =>
           const Divider(height: 1, indent: 72, endIndent: 16),
-      itemBuilder: (context, i) => IndexTile(
-        entry: tab.indexList[i],
+      itemBuilder: (context, index) => IndexTile(
+        entry: {}, //TODO: implement entry
         onNavigate: () {},
         tab: tab,
-        index: i,
+        index: index,
       ),
     );
   }
