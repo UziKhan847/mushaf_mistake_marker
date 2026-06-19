@@ -7,30 +7,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/extensions/int_extension.dart';
 import 'package:mushaf_mistake_marker/providers/index/stats.dart';
 import 'package:mushaf_mistake_marker/providers/pages_provider.dart';
 import 'package:mushaf_mistake_marker/widgets/index/index_labels.dart';
+import 'package:mushaf_mistake_marker/widgets/index/index_row.dart';
 import 'package:mushaf_mistake_marker/widgets/index/mini_stat_row.dart';
 
-sealed class _Row {}
 
-class _JuzHeader extends _Row {
-  _JuzHeader(this.juz, this.page);
-  final int juz, page;
-}
-
-class _SurahHeader extends _Row {
-  _SurahHeader(this.surah, this.page);
-  final int surah, page;
-}
-
-class _PageRow extends _Row {
-  _PageRow(this.page, {this.sajdah});
-  final int page;
-  final int? sajdah;
-}
 
 class PagesTabView extends ConsumerWidget {
   const PagesTabView({super.key});
@@ -41,36 +25,36 @@ class PagesTabView extends ConsumerWidget {
     final tt = Theme.of(context).textTheme;
     final pages = ref.watch(pagesProvider).value!.pagesData;
 
-    final rows = <_Row>[];
+    final rows = <IndexRow>[];
     final seenJuz = <int>{}, seenSurah = <int>{};
     for (final p in pages) {
       for (final j in (p.jzNum.toList()..sort())) {
-        if (seenJuz.add(j)) rows.add(_JuzHeader(j, p.pNum));
+        if (seenJuz.add(j)) rows.add(JuzHeader(j, p.pNum));
       }
       for (final s in (p.srNum.toList()..sort())) {
-        if (seenSurah.add(s)) rows.add(_SurahHeader(s, p.pNum));
+        if (seenSurah.add(s)) rows.add(SurahHeader(s, p.pNum));
       }
-      rows.add(_PageRow(p.pNum, sajdah: p.sjdNum));
+      rows.add(PageRow(p.pNum, sajdah: p.sjdNum));
     }
 
     return ListView.builder(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding: const .only(bottom: 8),
       itemCount: rows.length,
       itemBuilder: (context, i) {
         final row = rows[i];
         switch (row) {
-          case _JuzHeader(:final juz, :final page):
+          case JuzHeader(:final juz, :final page):
             return Container(
               color: cs.surfaceContainerHighest,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const .symmetric(horizontal: 16, vertical: 8),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: .spaceBetween,
                 children: [
                   Text(
                     "Juzʾ $juz",
                     style: tt.titleSmall?.copyWith(
                       color: cs.onSurfaceVariant,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: .w700,
                     ),
                   ),
                   Text(
@@ -80,10 +64,10 @@ class PagesTabView extends ConsumerWidget {
                 ],
               ),
             );
-          case _SurahHeader(:final surah, :final page):
+          case SurahHeader(:final surah, :final page):
             return Container(
               color: cs.surfaceContainerHigh.withValues(alpha: 0.5),
-              padding: const EdgeInsets.fromLTRB(24, 6, 16, 6),
+              padding: const .fromLTRB(24, 6, 16, 6),
               child: Row(
                 children: [
                   Expanded(
@@ -99,21 +83,21 @@ class PagesTabView extends ConsumerWidget {
                 ],
               ),
             );
-          case _PageRow(:final page, :final sajdah):
+          case PageRow(:final page, :final sajdah):
             final stats = statsFromMap(
-              ref.watch(statsProvider(IndexTab.pages))[page - 1],
+              ref.watch(statsProvider(.pages))[page - 1],
             );
             return InkWell(
               onTap: () {}, // TODO: jump to page
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(12, 10, 16, 10),
+                padding: const .fromLTRB(12, 10, 16, 10),
                 child: Row(
                   children: [
                     SizedBox(
                       width: 52,
                       child: Text(
                         '$page',
-                        textAlign: TextAlign.center,
+                        textAlign: .center,
                         style: tt.titleMedium?.copyWith(color: cs.onSurface),
                       ),
                     ),
