@@ -1,12 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/enums.dart';
 
-final statsProvider =
-    NotifierProvider.family<
-      StatsNotifier,
-      List<Map<HighlightType, int>>,
-      IndexTab
-    >(StatsNotifier.new);
+final statsProvider = NotifierProvider.family
+    .autoDispose<StatsNotifier, List<Map<HighlightType, int>>, IndexTab>(
+      StatsNotifier.new,
+    );
 
 class StatsNotifier extends Notifier<List<Map<HighlightType, int>>> {
   StatsNotifier(this.indexTab);
@@ -19,9 +17,9 @@ class StatsNotifier extends Notifier<List<Map<HighlightType, int>>> {
   );
 
   void incrementStat(int index, HighlightType type) {
-    if (state[index][type] == null || index < 0 || index >= state.length) {
-      return;
-    }
-    state[index][type] = state[index][type]! + 1;
+    if (index < 0 || index >= state.length) return;
+    final bucket = state[index];
+    if (!bucket.containsKey(type)) return;
+    bucket[type] = bucket[type]! + 1;
   }
 }

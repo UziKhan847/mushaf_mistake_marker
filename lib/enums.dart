@@ -105,7 +105,11 @@ enum AppTheme {
 }
 
 enum IndexTab {
-  pages('Pages', Icons.auto_stories_outlined, 604), //TODO: fix,
+  pages(
+    'Pages',
+    Icons.auto_stories_outlined,
+    604,
+  ), //TODO: fix the page number, because other mushafs have diff page numbers,
   surahs('Surahs', Icons.format_list_numbered_outlined, 114),
   juz('Juz', Icons.segment_outlined, 30),
   hizb('Hizb', Icons.grid_on_outlined, 60),
@@ -118,4 +122,6 @@ enum IndexTab {
   final String label;
   final IconData icon;
   final int totalNum;
+
+  static const display = [pages, surahs, juz, rubu, manzil, sajdah];
 }
