@@ -8,13 +8,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/extensions/int_extension.dart';
-import 'package:mushaf_mistake_marker/providers/index/stats.dart';
+import 'package:mushaf_mistake_marker/index/helpers.dart';
 import 'package:mushaf_mistake_marker/providers/pages_provider.dart';
-import 'package:mushaf_mistake_marker/widgets/index/index_labels.dart';
+import 'package:mushaf_mistake_marker/tiles/index.dart';
 import 'package:mushaf_mistake_marker/widgets/index/index_row.dart';
-import 'package:mushaf_mistake_marker/widgets/index/mini_stat_row.dart';
-
-
 
 class PagesTabView extends ConsumerWidget {
   const PagesTabView({super.key});
@@ -34,7 +31,8 @@ class PagesTabView extends ConsumerWidget {
       for (final s in (p.srNum.toList()..sort())) {
         if (seenSurah.add(s)) rows.add(SurahHeader(s, p.pNum));
       }
-      rows.add(PageRow(p.pNum, sajdah: p.sjdNum));
+      final (sr, vr) = firstVerseOnPage(p);
+      rows.add(PageRow(p.pNum, sr, vr, sajdah: p.sjdNum));
     }
 
     return ListView.builder(
@@ -83,43 +81,20 @@ class PagesTabView extends ConsumerWidget {
                 ],
               ),
             );
-          case PageRow(:final page, :final sajdah):
-            final stats = statsFromMap(
-              ref.watch(statsProvider(.pages))[page - 1],
-            );
-            return InkWell(
-              onTap: () {}, // TODO: jump to page
-              child: Padding(
-                padding: const .fromLTRB(12, 10, 16, 10),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 52,
-                      child: Text(
-                        '$page',
-                        textAlign: .center,
-                        style: tt.titleMedium?.copyWith(color: cs.onSurface),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Row(
-                        children: [
-                          if (sajdah != null) ...[
-                            Icon(
-                              Icons.south_east_outlined,
-                              size: 14,
-                              color: cs.tertiary,
-                            ),
-                            const SizedBox(width: 6),
-                          ],
-                          MiniStatRow(stats: stats),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+          case PageRow(
+            :final page,
+            :final startSurah,
+            :final startVerse,
+            :final sajdah,
+          ):
+            return IndexTile(
+              tab: .pages,
+              index: page - 1,
+              onNavigate: () {}, // TODO: jump to page
+              title: startSurah.surahEngName,
+              subtitle: sajdah != null
+                  ? 'Ayah $startVerse  ·  ۩ Sajdah'
+                  : 'Ayah $startVerse',
             );
         }
       },

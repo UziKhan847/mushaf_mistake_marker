@@ -10,7 +10,7 @@ class IndexTabView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListView.separated(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const .symmetric(vertical: 8),
       itemCount: tab.totalNum,
       separatorBuilder: (_, _) =>
           const Divider(height: 1, indent: 72, endIndent: 16),

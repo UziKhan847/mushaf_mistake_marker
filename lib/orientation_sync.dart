@@ -10,7 +10,6 @@ class OrientationSync extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    //ref.read(mushafListenersProvider);
     ref.read(whiteRectProvider.notifier).generateImg();
 
     return OrientationBuilder(

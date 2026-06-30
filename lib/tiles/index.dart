@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mushaf_mistake_marker/enums.dart';
+import 'package:mushaf_mistake_marker/index/helpers.dart';
 import 'package:mushaf_mistake_marker/providers/index/page_numbers.dart';
 import 'package:mushaf_mistake_marker/providers/index/stats.dart';
 import 'package:mushaf_mistake_marker/widgets/index/index_labels.dart';
@@ -13,11 +14,15 @@ class IndexTile extends ConsumerStatefulWidget {
     required this.tab,
     required this.index,
     required this.onNavigate,
+    this.title, // overrides the derived title (used by the Pages tab)
+    this.subtitle, // overrides the derived sub-line (used by the Pages tab)
   });
 
   final IndexTab tab;
   final int index;
   final VoidCallback onNavigate;
+  final String? title;
+  final String? subtitle;
 
   @override
   ConsumerState<IndexTile> createState() => _IndexTileState();
@@ -60,38 +65,41 @@ class _IndexTileState extends ConsumerState<IndexTile>
     final tt = Theme.of(context).textTheme;
 
     final label = indexLabel(widget.tab, widget.index);
-    final stats = statsFromMap(
-      ref.watch(statsProvider(widget.tab))[widget.index],
-    );
 
-    // Jump-target page number for this row (pages tab handled separately).
+    final showStats = widget.tab != .sajdah;
+    final stats = showStats
+        ? statsFromMap(ref.watch(statsProvider(widget.tab))[widget.index])
+        : null;
+
     final pageNum = ref
         .watch(pagesNumberProvider)
         .value?[widget.tab]?[widget.index];
 
-    // Tint Ḥizb-boundary rows in the Rubʿ tab.
+    final title = widget.title ?? label.title;
+    final subLine =
+        widget.subtitle ?? (pageNum != null ? 'Page $pageNum' : label.subtitle);
+
     final tinted = label.isHizbStart;
 
     return Column(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: .min,
       children: [
         Material(
-          color: tinted ? cs.primaryContainer.withValues(alpha: 0.25) : null,
+          color: tinted ? cs.surfaceContainerHighest : null,
           child: InkWell(
             onTap: widget.onNavigate,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(12, 10, 8, 10),
+              padding: const .fromLTRB(12, 10, 8, 10),
               child: Row(
                 children: [
-                  // Big category number on the LEFT.
                   SizedBox(
                     width: 52,
                     child: Text(
                       label.big,
-                      textAlign: TextAlign.center,
+                      textAlign: .center,
                       style: tt.headlineMedium?.copyWith(
                         color: cs.onSurfaceVariant,
-                        fontWeight: FontWeight.w300,
+                        fontWeight: .w300,
                         height: 1,
                       ),
                     ),
@@ -101,30 +109,20 @@ class _IndexTileState extends ConsumerState<IndexTile>
 
                   Expanded(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: .start,
                       children: [
                         Text(
-                          label.title,
-                          style: tt.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
+                          title,
+                          style: tt.bodyLarge?.copyWith(fontWeight: .w600),
                         ),
                         const SizedBox(height: 2),
                         Row(
                           children: [
-                            if (pageNum != null) ...[
-                              Text(
-                                'Page $pageNum',
-                                style: tt.bodySmall?.copyWith(
-                                  color: cs.onSurfaceVariant,
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                            ] else if (label.subtitle != null) ...[
+                            if (subLine != null) ...[
                               Flexible(
                                 child: Text(
-                                  label.subtitle!,
-                                  overflow: TextOverflow.ellipsis,
+                                  subLine,
+                                  overflow: .ellipsis,
                                   style: tt.bodySmall?.copyWith(
                                     color: cs.onSurfaceVariant,
                                   ),
@@ -132,32 +130,42 @@ class _IndexTileState extends ConsumerState<IndexTile>
                               ),
                               const SizedBox(width: 8),
                             ],
-                            MiniStatRow(stats: stats),
+                            if (stats != null) MiniStatRow(stats: stats),
                           ],
                         ),
                       ],
                     ),
                   ),
 
-                  RotationTransition(
-                    turns: rotate,
-                    child: IconButton(
-                      visualDensity: VisualDensity.compact,
-                      icon: const Icon(Icons.expand_more_rounded),
-                      color: cs.onSurfaceVariant,
-                      onPressed: toggle,
-                      tooltip: 'Details',
+                  if (showStats)
+                    RotationTransition(
+                      turns: rotate,
+                      child: IconButton(
+                        visualDensity: .compact,
+                        icon: const Icon(Icons.expand_more_rounded),
+                        color: cs.onSurfaceVariant,
+                        onPressed: toggle,
+                        tooltip: 'Details',
+                      ),
+                    )
+                  else
+                    Padding(
+                      padding: const .only(right: 8),
+                      child: Icon(
+                        Icons.chevron_right_rounded,
+                        color: cs.onSurfaceVariant,
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),
           ),
         ),
-        SizeTransition(
-          sizeFactor: expand,
-          child: StatsPanel(stats: stats, cs: cs, tt: tt),
-        ),
+        if (stats != null)
+          SizeTransition(
+            sizeFactor: expand,
+            child: StatsPanel(stats: stats, cs: cs, tt: tt),
+          ),
       ],
     );
   }

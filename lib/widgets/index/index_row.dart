@@ -11,7 +11,7 @@ class SurahHeader extends IndexRow {
 }
 
 class PageRow extends IndexRow {
-  PageRow(this.page, {this.sajdah});
-  final int page;
+  PageRow(this.page, this.startSurah, this.startVerse, {this.sajdah});
+  final int page, startSurah, startVerse;
   final int? sajdah;
 }

@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/index/constants.dart';
 import 'package:mushaf_mistake_marker/models/stats.dart';
 import 'package:mushaf_mistake_marker/objectbox/objectbox.g.dart';
@@ -58,3 +59,10 @@ Future<IndexStats> fetchStats(Ref ref, List<String> ids) async {
 }
 
 String rubuQuarterIcon(int rubuNum) => rubuQuarterIcons[(rubuNum - 1) % 4];
+
+IndexStats statsFromMap(Map<HighlightType, int> m) => IndexStats(
+  mistakes: m[HighlightType.mistake] ?? 0,
+  oldMistakes: m[HighlightType.oldMistake] ?? 0,
+  doubts: m[HighlightType.doubt] ?? 0,
+  tajwidMistakes: m[HighlightType.tajwid] ?? 0,
+);

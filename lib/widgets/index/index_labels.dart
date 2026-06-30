@@ -1,7 +1,6 @@
 import 'package:mushaf_mistake_marker/enums.dart';
 import 'package:mushaf_mistake_marker/extensions/int_extension.dart';
 import 'package:mushaf_mistake_marker/index/helpers.dart';
-import 'package:mushaf_mistake_marker/models/stats.dart';
 
 typedef IndexLabel = ({
   String title,
@@ -51,11 +50,3 @@ IndexLabel indexLabel(IndexTab tab, int index) {
       return (title: '$n', subtitle: null, big: '$n', isHizbStart: false);
   }
 }
-
-// Bridges the StatsNotifier's Map<HighlightType,int> to your IndexStats model.
-IndexStats statsFromMap(Map<HighlightType, int> m) => IndexStats(
-  mistakes: m[HighlightType.mistake] ?? 0,
-  oldMistakes: m[HighlightType.oldMistake] ?? 0,
-  doubts: m[HighlightType.doubt] ?? 0,
-  tajwidMistakes: m[HighlightType.tajwid] ?? 0,
-);
